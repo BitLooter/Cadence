@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>No title yet</title>
+    </head>
+    <body>
+        <div id="playerPane">
+            <div id="player"></div>
+            <div id="metadata"></div>
+            <div id="logo">Home page link</div>
+        </div>
+        <div id="queue">
+        </div>
+        <script type="text/javascript">
+            function populateQueue (tracklist) {
+                var queuePane = document.getElementById("queue");
+                var queueList = document.createElement("ul");
+                for (tracknum in tracklist) {
+                    track = queue[tracknum];
+                    var trackItem = document.createElement("li");
+                    trackItem.setAttribute("onclick", "playtrack('" + track + "')");
+                    trackItem.appendChild(document.createTextNode(track));
+                    queueList.appendChild(trackItem);
+                }
+                queuePane.appendChild(queueList);
+            }
+            var queue = [
+              {% for file in media %}
+                '/static/{{ file }}',
+              {% endfor %}
+            ];
+            populateQueue(queue);
+            
+            function playtrack(url) {
+                var playerPane = document.getElementById("player");
+                playerPane.innerHTML = "<audio src=" + url + " type='audio/ogg' controls autoplay />";
+                var playerMeta = document.getElementById("metadata");
+                playerMeta.innerHTML = url;
+            }
+        </script>
+    </body>
+</html>
