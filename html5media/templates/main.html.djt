@@ -3,6 +3,7 @@
     <head>
         <title>No title yet</title>
         <script src="/static/player.js" type="text/javascript"></script>
+        <link rel="stylesheet" type="text/css" href="/static/interface.css" />
     </head>
     <body>
         <div id="playerPane">
@@ -12,9 +13,5 @@
         </div>
         <div id="queue">
         </div>
-        <script type="text/javascript">
-            var queue = requestPlaylist();
-            populateQueue(queue);
-        </script>
     </body>
 </html>
