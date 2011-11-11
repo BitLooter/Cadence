@@ -7,7 +7,9 @@
     </head>
     <body>
         <div id="playerPane">
-            <div id="player"></div>
+            <div id="player">
+                <audio id="audioPlayer" src="" type='audio/ogg' controls />
+            </div>
             <div id="metadata"></div>
             <div id="logo">Home page link</div>
         </div>
