@@ -4,6 +4,7 @@ import json
 
 def getplaylist_view(request):
     #TODO: decouple data/view
-    files = os.listdir("C:/Develop/html5media/html5media/main/static/")
-    files = ["/static/" + f.replace(" ", "%20") for f in files if ".ogg" in f]
+    #TODO: check parameters
+    files = os.listdir("C:/Develop/html5media/html5media/main/static/" + request.GET["name"])
+    files = ["/static/" + request.GET["name"] + "/" + f.replace(" ", "%20") for f in files if ".ogg" in f]
     return HttpResponse(json.dumps(files))

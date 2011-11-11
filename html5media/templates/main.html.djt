@@ -8,12 +8,21 @@
     <body>
         <div id="playerPane">
             <div id="player">
-                <audio id="audioPlayer" src="" type='audio/ogg' controls />
+                <audio id="audioPlayer" src="" type='audio/ogg' controls></audio>
             </div>
             <div id="metadata"></div>
             <div id="logo">Home page link</div>
         </div>
+        
+        <div id="sidebarPane">
+            <!-- TODO: clean this up -->
+            <b>Playlists</b>
+            <a href="javascript: queuePlaylist('misc')">Some random tracks</a>
+            <a href="javascript: queuePlaylist('mirror')">Mirror's Edge OST</a>
+        </div>
+        
         <div id="queue">
+            No playlist loaded
         </div>
     </body>
 </html>
