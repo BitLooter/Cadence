@@ -1,7 +1,7 @@
 /********************************************************************
  * player.js - Functions for the media player part of the page
  ********************************************************************/
-
+//TODO: Cache commonly used DOM nodes
 //BUG: Chrome freaks out and becomes unresponsive if you play the last item
 // in the queue. Untested on other browsers.
 
@@ -10,7 +10,7 @@
  **********/
 
 /* Definition for the Queue class, which manages the current playlist.
- * The queue is basically a specialized, anonymous playlist that other
+ * The queue is basically a wrapper for an anonymous playlist that other
  * code uses to control the player. There should only be one instance
  * of the queue, because more than one doesn't make sense. If for some
  * reason you need more you should probably just use a regular playlist */
@@ -18,12 +18,14 @@ function Queue() {
     this.currentlyPlaying = null;   // null == nothing playing
 }
     Queue.prototype.playItem = function( trackIndex ) {
-        var url = this.playlist[trackIndex];
+        var track = this.playlist[trackIndex]
         var player = document.getElementById("audioPlayer");
-        player.src = url;
-        player.play();
+        player.src = track.url;
+        // TODO: more detailed metadata display
         var playerMeta = document.getElementById("metadata");
-        playerMeta.innerHTML = url;
+        playerMeta.innerHTML = track.title;
+        // Start playing
+        player.play();
         // Update currently playing highlight
         if (this.currentlyPlaying != null) {
             this.listElements[this.currentlyPlaying].classList.remove("currentlyPlaying");
@@ -41,14 +43,14 @@ function Queue() {
         clearElement(queuePane);
         var queueList = document.createElement("ul");
         for (tracknum in this.playlist) {
-            track = this.playlist[tracknum];
+            trackTitle = this.playlist[tracknum].title;
             var trackItem = document.createElement("li");
             trackItem.trackIndex = tracknum;
             trackItem.onclick = function(){
                 queue.playItem(this.trackIndex);
             }
             this.listElements.push(trackItem);
-            trackItem.appendChild(document.createTextNode(unescape(track.replace("/static/", ""))));
+            trackItem.appendChild(document.createTextNode(unescape(trackTitle)));
             queueList.appendChild(trackItem);
         }
         queuePane.appendChild(queueList);
@@ -61,7 +63,8 @@ function Queue() {
 function requestPlaylist(playlistName) {
     var request = new XMLHttpRequest();
     //TODO: validate this data, security hole
-    request.open("GET", "http://127.0.0.1:8000/data/getplaylist/?name=" + playlistName, false);
+    //TODO: make asynchronous, check for errors
+    request.open("GET", "http://localhost/html5media/data/getplaylist/?name=" + playlistName, false);
     request.send(null);
     return JSON.parse(request.responseText);
 }
@@ -101,7 +104,7 @@ function playerInit() {
     //TODO: implement default playlist
     
     // Display the queue on the page
-    // (only needed for default playlists, do that first)
+    // (only needed for default playlists, implement that first)
     //queue.updatePage();
 }
 
