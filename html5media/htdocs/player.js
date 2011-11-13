@@ -71,7 +71,7 @@ function requestPlaylist(playlistName) {
 
 // Called when a track is done playing and starts the next track
 function trackFinished() {
-    if (queue.currentlyPlaying < queue.playlist.length) {
+    if (queue.currentlyPlaying < queue.playlist.length-1) {
         //TODO: vary behavior depending on options (autoplay off, shuffle, etc.)
         queue.playItem(queue.currentlyPlaying + 1);
     }
