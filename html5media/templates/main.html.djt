@@ -2,8 +2,8 @@
 <html>
     <head>
         <title>No title yet</title>
-        <script src="/html5media/player.js" type="text/javascript"></script>
-        <link rel="stylesheet" type="text/css" href="/html5media/interface.css" />
+        <script src="/html5media/static/player.js" type="text/javascript"></script>
+        <link rel="stylesheet" type="text/css" href="/html5media/static/interface.css" />
     </head>
     <body>
         <div id="playerPane">

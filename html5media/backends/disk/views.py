@@ -5,7 +5,7 @@ import json
 def getplaylist_view(request):
     #TODO: decouple data/view
     #TODO: check parameters
-    files = os.listdir("C:/Develop/html5media/html5media/htdocs/media/" + request.GET["name"])
+    files = os.listdir("C:/Develop/html5media/html5media/media/" + request.GET["name"])
     files = ["/html5media/media/" + request.GET["name"] + "/" + f for f in files if ".ogg" in f]
     playlist = []
     for pathname in files:

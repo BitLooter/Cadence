@@ -8,7 +8,7 @@ urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'html5media.views.home', name='home'),
     # url(r'^html5media/', include('html5media.foo.urls')),
-    url(r"^$", "html5media.main.views.index", name='home'),
+    url(r"^$", "html5media.player.views.index", name='home'),
     url(r"^data/getplaylist/$", "html5media.backends.disk.views.getplaylist_view"),
 
     # Uncomment the admin/doc line below to enable admin documentation:
