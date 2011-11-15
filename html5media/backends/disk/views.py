@@ -2,7 +2,7 @@ from django.http import HttpResponse
 import os
 import json
 
-def getplaylist_view(request):
+def getplaylist(request):
     #TODO: decouple data/view
     #TODO: check parameters
     files = os.listdir("C:/Develop/html5media/html5media/media/" + request.GET["name"])
