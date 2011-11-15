@@ -19,13 +19,11 @@ function Queue() {
 }
     Queue.prototype.playItem = function( trackIndex ) {
         var track = this.playlist[trackIndex]
-        var player = document.getElementById("audioPlayer");
-        player.src = track.url;
+        dom.audio.src = track.url;
         // TODO: more detailed metadata display
-        var playerMeta = document.getElementById("metadata");
-        playerMeta.innerHTML = track.title;
+        dom.meta.innerHTML = track.title;
         // Start playing
-        player.play();
+        dom.audio.play();
         // Update currently playing highlight
         if (this.currentlyPlaying != null) {
             this.listElements[this.currentlyPlaying].classList.remove("currentlyPlaying");
@@ -39,13 +37,13 @@ function Queue() {
     Queue.prototype.updatePage = function() {
         // listElements is used to associate playlist items with DOM elements
         this.listElements = [];
-        var queuePane = document.getElementById("queue");
-        clearElement(queuePane);
+        clearElement(dom.queue);
         var queueList = document.createElement("ul");
         for (tracknum in this.playlist) {
             trackTitle = this.playlist[tracknum].title;
             var trackItem = document.createElement("li");
             trackItem.trackIndex = tracknum;
+            //TODO: use eventListener here?
             trackItem.onclick = function(){
                 queue.playItem(this.trackIndex);
             }
@@ -53,7 +51,7 @@ function Queue() {
             trackItem.appendChild(document.createTextNode(unescape(trackTitle)));
             queueList.appendChild(trackItem);
         }
-        queuePane.appendChild(queueList);
+        dom.queue.appendChild(queueList);
     }
 
 
@@ -94,11 +92,14 @@ function clearElement( node ) {
 /* Init code 
  ************/
 function playerInit() {
+    // Build our DOM look up table
+    bindElementList();
+    
     // Instance the queue
     window.queue = new Queue();
     
     // Sent up events
-    document.getElementById("audioPlayer").addEventListener("ended", trackFinished, false);
+    dom.audio.addEventListener("ended", trackFinished, false);
     
     // Get default playlist
     //TODO: implement default playlist

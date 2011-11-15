@@ -3,6 +3,7 @@
     <head>
         <title>No title yet</title>
         <script src="/html5media/static/player.js" type="text/javascript"></script>
+        <script src="/html5media/static/interface.js" type="text/javascript"></script>
         <link rel="stylesheet" type="text/css" href="/html5media/static/interface.css" />
     </head>
     <body>
@@ -21,7 +22,7 @@
             <a href="javascript: queuePlaylist('mirror')">Mirror's Edge OST</a>
         </div>
         
-        <div id="queue">
+        <div id="queuePane">
             No playlist loaded
         </div>
     </body>
