@@ -9,7 +9,7 @@ urlpatterns = patterns('',
     # url(r'^$', 'html5media.views.home', name='home'),
     # url(r'^html5media/', include('html5media.foo.urls')),
     url(r"^$", "html5media.player.views.index"),
-    url(r"^data/", include("html5media.backends.disk.urls")),
+    url(r"^data/", include("html5media.backends.urls")),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
