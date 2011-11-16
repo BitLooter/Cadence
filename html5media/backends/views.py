@@ -7,3 +7,7 @@ def getplaylist(request):
     #TODO: HTTP errors
     playlist = models.getPlaylist(request.GET["name"])
     return HttpResponse(json.dumps(playlist))
+
+def playlistlist(request):
+    lists = models.getPlaylistList()
+    return HttpResponse(json.dumps(lists))

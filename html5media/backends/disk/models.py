@@ -12,3 +12,7 @@ def getPlaylist(name):
         playlist.append( {"title": os.path.basename(pathname),
                           "url":   urllib.quote(pathname) } ) #NOTE: urllib.parse in Py3.x
     return playlist
+
+def getPlaylistList():
+    dirs = os.listdir("C:/Develop/html5media/html5media/media")
+    return dirs

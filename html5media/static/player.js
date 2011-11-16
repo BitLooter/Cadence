@@ -2,6 +2,7 @@
  * player.js - Functions for the media player part of the page
  ********************************************************************/
 //TODO: Cache commonly used DOM nodes
+//TODO: Create an object to handle the sidebar?
 //BUG: Chrome freaks out and becomes unresponsive if you play the last item
 // in the queue. Untested on other browsers.
 
@@ -67,6 +68,14 @@ function requestPlaylist(playlistName) {
     return JSON.parse(request.responseText);
 }
 
+function requestPlaylistList() {
+    var request = new XMLHttpRequest();
+    //TODO: make asynchronous, check for errors
+    request.open("GET", "http://localhost/html5media/data/playlistlist/", false);
+    request.send(null);
+    return JSON.parse(request.responseText);
+}
+
 // Called when a track is done playing and starts the next track
 function trackFinished() {
     if (queue.currentlyPlaying < queue.playlist.length-1) {
@@ -80,6 +89,19 @@ function queuePlaylist( playlistName ) {
     playlist = requestPlaylist(playlistName);
     queue.setPlaylist(playlist);
     queue.updatePage();
+}
+
+// Updates the list of available playlists in the sidebar
+function updatePlaylists() {
+    lists = requestPlaylistList();
+    //TODO: this only works when only playlists are here, play nice and don't blow things away
+    clearElement(dom.sidebar);
+    //TODO: really ugly hack resulting from me doing this at 10:30 at night, use the DOM
+    newHTML = ""
+    for (i in lists) {
+        newHTML += '<a href="javascript: queuePlaylist(\'' + lists[i] + '\')">' + lists[i] + '</a> ';
+    }
+    dom.sidebar.innerHTML = newHTML;
 }
 
 // Removes all children from a DOM element
@@ -100,6 +122,9 @@ function playerInit() {
     
     // Sent up events
     dom.audio.addEventListener("ended", trackFinished, false);
+    
+    // Set up the sidebar
+    updatePlaylists();
     
     // Get default playlist
     //TODO: implement default playlist
