@@ -1,7 +1,6 @@
 /********************************************************************
  * player.js - Functions for the media player part of the page
  ********************************************************************/
-//TODO: Cache commonly used DOM nodes
 //TODO: Create an object to handle the sidebar?
 //BUG: Chrome freaks out and becomes unresponsive if you play the last item
 // in the queue. Untested on other browsers.
@@ -16,6 +15,12 @@
  * of the queue, because more than one doesn't make sense. If for some
  * reason you need more you should probably just use a regular playlist */
 function Queue() {
+    this.listControl = new ListViewControl();
+    //TODO: see if there's an 'official' way of doing custom events in javascript
+    this.listControl.onrowclicked = function(rowIndex) {
+        queue.playItem(rowIndex);
+    }
+    dom.queue.appendChild(this.listControl.listElement);
     this.currentlyPlaying = null;   // null == nothing playing
 }
     Queue.prototype.playItem = function( trackIndex ) {
@@ -36,23 +41,12 @@ function Queue() {
         this.playlist = playlist;
     }
     Queue.prototype.updatePage = function() {
-        // listElements is used to associate playlist items with DOM elements
-        this.listElements = [];
-        clearElement(dom.queue);
-        var queueList = document.createElement("ul");
+        this.listControl.clear();
+        // var list = new ListViewControl();
         for (tracknum in this.playlist) {
             trackTitle = this.playlist[tracknum].title;
-            var trackItem = document.createElement("li");
-            trackItem.trackIndex = tracknum;
-            //TODO: use eventListener here?
-            trackItem.onclick = function(){
-                queue.playItem(this.trackIndex);
-            }
-            this.listElements.push(trackItem);
-            trackItem.appendChild(document.createTextNode(unescape(trackTitle)));
-            queueList.appendChild(trackItem);
+            this.listControl.appendRow(trackTitle)
         }
-        dom.queue.appendChild(queueList);
     }
 
 
