@@ -7,6 +7,8 @@ function ListViewControl() {
     // Put a reference here so we can get to it from event handlers
     this.listElement.listControl = this;
     this.rows = [];
+    this.rowElements = [];
+    this.currentHighlight = null;
 }
     ListViewControl.prototype.appendRow = function(rowData) {
         // rowData is an array containing all the columns for a row
@@ -14,6 +16,7 @@ function ListViewControl() {
         rowElement.index = this.rows.length;
         this.listElement.appendChild(rowElement);
         this.rows.push( rowData );
+        this.rowElements.push( rowElement );
     }
     // Delete all the rows, reset it to before data was added
     ListViewControl.prototype.clear = function() {
@@ -21,13 +24,26 @@ function ListViewControl() {
         this.render();
     }
     // Generates the DOM tree from the list's data
+    //TODO: is this function even needed?
     ListViewControl.prototype.render = function() {
         clearElement(this.listElement);
+        this.rowElements = [];
         for (index in this.rows) {
             row = this.rows[index];
             rowElement = this._createRow(row);
             rowElement.index = index;
+            this.rowElements.push(rowElement);
         }
+    }
+    // Highlights a specific row
+    ListViewControl.prototype.highlightRow = function(index) {
+        //TODO: rename currentlyPlaying when CSS rules are added to the control
+        // Only one row can be highlighted
+        if (this.currentHighlight != null) {
+            this.rowElements[this.currentHighlight].classList.remove("currentlyPlaying");
+        }
+        this.rowElements[index].classList.add("currentlyPlaying");
+        this.currentHighlight = index;
     }
     /// Private functions --------------
     ListViewControl.prototype._handleRowClick = function(e) {

@@ -16,6 +16,8 @@
         </div>
         
         <div id="sidebarPane">
+            <span class="sidebarHeader">Playlists</span>
+            <div class="sidebarContainer" id=""></div>
         </div>
         
         <div id="queuePane"></div>

@@ -31,10 +31,7 @@ function Queue() {
         // Start playing
         dom.audio.play();
         // Update currently playing highlight
-        if (this.currentlyPlaying != null) {
-            this.listElements[this.currentlyPlaying].classList.remove("currentlyPlaying");
-        }
-        this.listElements[trackIndex].classList.add("currentlyPlaying");
+        this.listControl.highlightRow(parseInt(trackIndex));
         this.currentlyPlaying = parseInt(trackIndex);
     }
     Queue.prototype.setPlaylist = function( playlist ) {
@@ -88,7 +85,7 @@ function queuePlaylist( playlistName ) {
 // Updates the list of available playlists in the sidebar
 function updatePlaylists() {
     lists = requestPlaylistList();
-    //TODO: this only works when only playlists are here, play nice and don't blow things away
+    //TODO: this only works when the sidebar is only playlists, play nice and don't blow things away
     clearElement(dom.sidebar);
     //TODO: really ugly hack resulting from me doing this at 10:30 at night, use the DOM
     newHTML = ""
