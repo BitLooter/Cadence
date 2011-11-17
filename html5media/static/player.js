@@ -75,9 +75,8 @@ function trackFinished() {
     }
 }
 
-// Fills the queue with a named playlist
-function queuePlaylist( playlistName ) {
-    playlist = requestPlaylist(playlistName);
+function playlistClicked(e) {
+    playlist = requestPlaylist(e.target.playlistID);
     queue.setPlaylist(playlist);
     queue.updatePage();
 }
@@ -85,14 +84,18 @@ function queuePlaylist( playlistName ) {
 // Updates the list of available playlists in the sidebar
 function updatePlaylists() {
     lists = requestPlaylistList();
-    //TODO: this only works when the sidebar is only playlists, play nice and don't blow things away
-    clearElement(dom.sidebar);
-    //TODO: really ugly hack resulting from me doing this at 10:30 at night, use the DOM
+    plElement = document.getElementById("sbPlaylists");
+    clearElement(plElement);
     newHTML = ""
     for (i in lists) {
-        newHTML += '<a href="javascript: queuePlaylist(\'' + lists[i] + '\')">' + lists[i] + '</a> ';
+        listItem = document.createElement("a");
+        listItem.appendChild(document.createTextNode(lists[i] + " "));
+        listItem.playlistID = lists[i];
+        listItem.addEventListener("click", playlistClicked, false);
+        //TODO: remove this line once we start styling things
+        listItem.style.color = "blue";
+        plElement.appendChild(listItem);
     }
-    dom.sidebar.innerHTML = newHTML;
 }
 
 // Removes all children from a DOM element

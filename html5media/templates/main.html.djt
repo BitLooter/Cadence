@@ -17,7 +17,7 @@
         
         <div id="sidebarPane">
             <span class="sidebarHeader">Playlists</span>
-            <div class="sidebarContainer" id=""></div>
+            <div class="sidebarContainer" id="sbPlaylists"></div>
         </div>
         
         <div id="queuePane"></div>
