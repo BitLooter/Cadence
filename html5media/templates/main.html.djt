@@ -18,6 +18,7 @@
         <div id="sidebarPane">
             <span class="sidebarHeader">Playlists</span>
             <div class="sidebarContainer" id="sbPlaylists"></div>
+            <a href="/html5media/scanner/">Run scanner</a>
         </div>
         
         <div id="queuePane"></div>
