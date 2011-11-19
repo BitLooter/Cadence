@@ -1,5 +1,4 @@
 from django.db import models
-import urllib
 
 class Track(models.Model):
     title  = models.CharField(max_length=127)
@@ -16,8 +15,7 @@ def getPlaylist(name):
     playlist = []
     for track in Track.objects.all():
         playlist.append({"title": track.title,
-                         #TODO: store url in database quoted
-                         "url":   urllib.quote(track.url) }) #NOTE: change to urllib.parse in Py3
+                         "url":   track.url })
     return playlist
 
 def getPlaylistList():
@@ -27,5 +25,5 @@ def getLibraryItems():
     items = []
     for track in Track.objects.all():
         items.append({"title": track.title,
-                      "url":   urllib.quote(track.url) }) #NOTE: change to urllib.parse in Py3
+                      "url":   track.url })
     return items

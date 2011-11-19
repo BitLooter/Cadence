@@ -1,5 +1,6 @@
 from django.shortcuts import HttpResponse
 import os
+import urllib   #TODO: use urllib.parse in Python 3.x
 import mutagen
 import models
 
@@ -21,7 +22,7 @@ def scan():
         t.title = audio["title"][0] if "title" in audio else "<No title>"
         t.artist = audio["artist"][0] if "title" in audio else "<No artist>"
         t.album = audio["album"][0] if "title" in audio else "<No album>"
-        t.url = "/html5media/media/" + f
+        t.url = urllib.quote("/html5media/media/" + f)
         t.save()
     return True
 
