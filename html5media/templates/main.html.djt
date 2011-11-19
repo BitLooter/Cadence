@@ -28,6 +28,7 @@
         
         <div id="queueContainer">
             <h1>Queue</h1>
+            <button id="savePlaylistButton" type="button">Save playlist</button>
             <div id="queuePane"></div>
         </div>
     </body>

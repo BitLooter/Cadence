@@ -41,8 +41,19 @@ function Queue() {
         this.listControl.clear();
         for (tracknum in this.playlist) {
             trackTitle = this.playlist[tracknum].title;
-            this.listControl.appendRow(trackTitle)
+            this.listControl.appendRow(trackTitle, playlist[tracknum]);
         }
+    }
+    // Returns of list of selected track IDs
+    Queue.prototype.getSelectedTracks = function() {
+        // First get selected row indexes
+        rows = this.listControl.getSelected();
+        // Then get track IDs from it
+        tracks = new Array();
+        for (i in rows) {
+            tracks.push(this.listControl.rowsExtra[rows[i]].id);
+        }
+        return tracks;
     }
 
 
@@ -140,8 +151,14 @@ function playerInit() {
     // Instance the queue
     window.queue = new Queue();
     
-    // Sent up events
+    // Set up events
     dom.audio.addEventListener("ended", trackFinished, false);
+    document.getElementById("savePlaylistButton").addEventListener("click",
+        function(e){
+            alert("<" + queue.getSelectedTracks() + ">");
+        },
+        false
+    )
     
     // Set up the sidebar
     updatePlaylists();

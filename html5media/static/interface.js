@@ -7,15 +7,22 @@ function ListViewControl() {
     // Put a reference here so we can get to it from event handlers
     this.listElement.listControl = this;
     this.rows = [];
+    this.rowsExtra = [];
     this.rowElements = [];
     this.currentHighlight = null;
 }
-    ListViewControl.prototype.appendRow = function(rowData) {
+    ListViewControl.prototype.appendRow = function(rowData, rowExtra) {
         // rowData is an array containing all the columns for a row
         rowElement = this._createRow(rowData);
         rowElement.index = this.rows.length;
         this.listElement.appendChild(rowElement);
         this.rows.push( rowData );
+        if (rowExtra != undefined) {
+            this.rowsExtra.push(rowExtra);
+        }
+        else {
+            this.rowsExtra.push(null);
+        }
         this.rowElements.push( rowElement );
     }
     // Delete all the rows, reset it to before data was added
@@ -35,6 +42,19 @@ function ListViewControl() {
             this.rowElements.push(rowElement);
         }
     }
+    ListViewControl.prototype.getSelected = function() {
+        //TODO: we can probably speed this up by handling click events
+        var checkedList = new Array();
+        for (i in this.rowElements) {
+            var element = this.rowElements[i];
+            // Checkbox will be the first input element in the row
+            var checkbox = element.getElementsByTagName("input")[0];
+            if (checkbox.checked) {
+                checkedList.push(i);
+            }
+        }
+        return checkedList;
+    }
     // Highlights a specific row
     ListViewControl.prototype.highlightRow = function(index) {
         //TODO: rename currentlyPlaying when CSS rules are added to the control
@@ -53,6 +73,13 @@ function ListViewControl() {
     }
     ListViewControl.prototype._createRow = function(data) {
         rowElement = document.createElement("tr");
+        // Selection checkbox
+        rowSelect = document.createElement("input");
+        rowSelect.type = "checkbox";
+        rowSelectTD = document.createElement("td");
+        rowSelectTD.appendChild(rowSelect);
+        rowElement.appendChild(rowSelectTD);
+        // Table data
         element = document.createElement("td");
         element.appendChild(document.createTextNode(data));
         element.data = data;
