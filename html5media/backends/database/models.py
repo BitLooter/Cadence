@@ -18,13 +18,14 @@ class Playlist(models.Model):
 def getPlaylist(name):
     playlistObj = Playlist.objects.all()[0]
     #TODO: make this part a method of Playlist
-    playlist = []
+    playlist = {"name": playlistObj.name,
+                "tracks": []}
     for track in playlistObj.tracks.all():
-        playlist.append({"id":     track.id,
-                         "title":  track.title,
-                         "artist": track.artist,
-                         "album":  track.album,
-                         "url":    track.url })
+        playlist["tracks"].append({"id":     track.id,
+                                   "title":  track.title,
+                                   "artist": track.artist,
+                                   "album":  track.album,
+                                   "url":    track.url })
     return playlist
 
 def getPlaylistList():
@@ -36,8 +37,14 @@ def getPlaylistList():
                         "tracks": [t.id for t in playlist.tracks.all()]})
     return listout
 
-def savePlaylist(tracks):
-    pass
+def savePlaylist(trackList, name):
+    tracks = Track.objects.filter(pk__in=trackList)
+    playlist = Playlist()
+    #TODO: see if there's a better way than saving twice
+    playlist.save()
+    playlist.tracks.add(*tracks)
+    playlist.name = name
+    playlist.save()
 
 def getLibraryItems():
     items = []

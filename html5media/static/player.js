@@ -10,48 +10,37 @@
  **********/
 
 /* Definition for the Queue class, which manages the current playlist.
- * The queue is basically a wrapper for an anonymous playlist that other
- * code uses to control the player. There should only be one instance
- * of the queue, because more than one doesn't make sense. If for some
- * reason you need more you should probably just use a regular playlist */
-function Queue() {
-    this.listControl = new ListViewControl();
+ * The queue is basically a specialized subclass of a TrackListControl
+ * that adds methods for controlling the player. */
+function QueueControl() {
+    TrackListControl.apply(this, arguments);
     //TODO: see if there's an 'official' way of doing custom events in javascript
-    this.listControl.onrowclicked = function(rowIndex) {
-        queue.playItem(rowIndex);
+    this.onrowclicked = function(rowIndex) {
+        this.playItem(rowIndex);
     }
-    dom.queue.appendChild(this.listControl.listElement);
+    document.getElementById("queueContainer").appendChild(this.listElement);
     this.currentlyPlaying = null;   // null == nothing playing
 }
-    Queue.prototype.playItem = function( trackIndex ) {
-        var track = this.playlist[trackIndex]
+    QueueControl.prototype = new TrackListControl();
+    QueueControl.prototype.playItem = function( trackIndex ) {
+        var track = this.playlist.tracks[trackIndex];
         dom.audio.src = track.url;
         // TODO: more detailed metadata display
         dom.meta.innerHTML = track.title;
         // Start playing
         dom.audio.play();
         // Update currently playing highlight
-        this.listControl.highlightRow(parseInt(trackIndex));
+        this.highlightRow(parseInt(trackIndex));
         this.currentlyPlaying = parseInt(trackIndex);
     }
-    Queue.prototype.setPlaylist = function( playlist ) {
-        this.playlist = playlist;
-    }
-    Queue.prototype.updatePage = function() {
-        this.listControl.clear();
-        for (tracknum in this.playlist) {
-            trackTitle = this.playlist[tracknum].title;
-            this.listControl.appendRow(trackTitle, playlist[tracknum]);
-        }
-    }
     // Returns of list of selected track IDs
-    Queue.prototype.getSelectedTracks = function() {
+    QueueControl.prototype.getSelectedTracks = function() {
         // First get selected row indexes
         rows = this.listControl.getSelected();
         // Then get track IDs from it
         tracks = new Array();
         for (i in rows) {
-            tracks.push(this.listControl.rowsExtra[rows[i]].id);
+            tracks.push(this.rowsExtra[rows[i]].id);
         }
         return tracks;
     }
@@ -96,7 +85,6 @@ function trackFinished() {
 function playlistClicked(e) {
     playlist = requestPlaylist(e.target.playlistID);
     queue.setPlaylist(playlist);
-    queue.updatePage();
 }
 
 // Updates the list of available playlists in the sidebar
@@ -123,13 +111,15 @@ function savePlaylist(tracks) {
     request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     request.send("tracks=" + tracks.join());
     //TODO: check response
+    updatePlaylists();
 }
 
 function populateLibrary(items) {
-    var list = new ListViewControl();
+    //TODO: aaaggh, globals BAD
+    list = new ListViewControl();
     for (i in items) {
         trackTitle = items[i].title;
-        list.appendRow(trackTitle);
+        list.appendRow(trackTitle, items[i]);
     }
     clearElement(dom.library);
     dom.library.appendChild(list.listElement);
@@ -149,13 +139,41 @@ function playerInit() {
     bindElementList();
     
     // Instance the queue
-    window.queue = new Queue();
+    window.queue = new QueueControl();
     
     // Set up events
     dom.audio.addEventListener("ended", trackFinished, false);
+    document.getElementById("queueButton").addEventListener("click",
+        function(e){
+            selected = list.getSelected();
+            for (i in selected) {
+                track = list.rowsExtra[selected[i]];
+                queue.playlist.push(track);
+                queue.updatePage();
+            }
+        },
+        false
+    )
     document.getElementById("savePlaylistButton").addEventListener("click",
         function(e){
-            alert("<" + queue.getSelectedTracks() + ">");
+            // name = prompt("Enter a name for the playlist:");
+            p = [];
+            //TODO: get a list comprehension working
+            for (i in queue.playlist) {
+                p.push(queue.playlist[i].id);
+            }
+            savePlaylist(p)
+        },
+        false
+    )
+    document.getElementById("removeButton").addEventListener("click",
+        function(e){
+            //BUG: it's skipping some items
+            var items = queue.listControl.getSelected();
+            for (i in items) {
+                queue.playlist.splice(items[i], 1);
+            }
+            queue.updatePage();
         },
         false
     )

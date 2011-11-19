@@ -15,7 +15,8 @@ def playlistlist(request):
 
 def saveplaylist(request):
     tracks = request.POST["tracks"].split(",")
-    models.savePlaylist(tracks)
+    models.savePlaylist(tracks, "fastname")
+    return HttpResponse("done!")
 
 def libraryitems(request):
     return HttpResponse(json.dumps(models.getLibraryItems()))

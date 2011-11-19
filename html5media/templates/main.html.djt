@@ -2,8 +2,9 @@
 <html>
     <head>
         <title>No title yet</title>
-        <script src="/html5media/static/player.js" type="text/javascript"></script>
+        <script src="/html5media/static/controls.js" type="text/javascript"></script>
         <script src="/html5media/static/interface.js" type="text/javascript"></script>
+        <script src="/html5media/static/player.js" type="text/javascript"></script>
         <link rel="stylesheet" type="text/css" href="/html5media/static/interface.css" />
     </head>
     <body>
@@ -23,13 +24,17 @@
         
         <div id="libraryContainer">
             <h1>Library</h1>
+            <button id="queueButton" type="button">Queue</button>
             <div id="libraryPane"></div>
         </div>
         
-        <div id="queueContainer">
+        <section id="queuePane">
             <h1>Queue</h1>
-            <button id="savePlaylistButton" type="button">Save playlist</button>
-            <div id="queuePane"></div>
+            <div id="queueToolbar">
+                <button id="savePlaylistButton" type="button">Save playlist</button>
+                <button id="removeButton" type="button">Remove</button>
+            </div>
+            <div id="queueContainer"></div>
         </div>
     </body>
 </html>
