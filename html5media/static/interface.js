@@ -3,7 +3,7 @@
 
 function ListViewControl() {
     //TODO: handle indexes better once insertion and deletion are added
-    this.listElement = document.createElement("ul");
+    this.listElement = document.createElement("table");
     // Put a reference here so we can get to it from event handlers
     this.listElement.listControl = this;
     this.rows = [];
@@ -52,11 +52,13 @@ function ListViewControl() {
         }
     }
     ListViewControl.prototype._createRow = function(data) {
-        element = document.createElement("li");
+        rowElement = document.createElement("tr");
+        element = document.createElement("td");
         element.appendChild(document.createTextNode(data));
         element.data = data;
         element.addEventListener("click", this._handleRowClick, false);
-        return element;
+        rowElement.appendChild(element)
+        return rowElement;
     }
 
 /* Functions
