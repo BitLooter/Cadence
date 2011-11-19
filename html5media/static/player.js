@@ -53,7 +53,7 @@ function requestPlaylist(playlistName) {
     var request = new XMLHttpRequest();
     //TODO: validate this data, security hole
     //TODO: make asynchronous, check for errors
-    request.open("GET", "http://localhost/html5media/data/getplaylist/?name=" + playlistName, false);
+    request.open("GET", "http://localhost/html5media/data/playlist/?name=" + playlistName, false);
     request.send(null);
     return JSON.parse(request.responseText);
 }

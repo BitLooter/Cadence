@@ -2,8 +2,7 @@ from django.http import HttpResponse
 import json
 from database import models
 
-#TODO: change getplaylist to playlist
-def getplaylist(request):
+def playlist(request):
     #TODO: check parameters
     #TODO: HTTP errors
     playlist = models.getPlaylist(request.GET["name"])
