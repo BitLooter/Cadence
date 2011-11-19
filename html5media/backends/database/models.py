@@ -11,19 +11,40 @@ class Track(models.Model):
         #TODO: this still needs work
         return u"<Track: {} - {}".format(self.album, self.title)
 
+class Playlist(models.Model):
+    tracks = models.ManyToManyField(Track)
+    name   = models.CharField(max_length=63)
+
 def getPlaylist(name):
+    playlistObj = Playlist.objects.all()[0]
+    #TODO: make this part a method of Playlist
     playlist = []
-    for track in Track.objects.all():
-        playlist.append({"title": track.title,
-                         "url":   track.url })
+    for track in playlistObj.tracks.all():
+        playlist.append({"id":     track.id,
+                         "title":  track.title,
+                         "artist": track.artist,
+                         "album":  track.album,
+                         "url":    track.url })
     return playlist
 
 def getPlaylistList():
-    return ["none"]
+    lists = Playlist.objects.all()
+    listout = []
+    for playlist in lists:
+        listout.append({"id": playlist.id,
+                        "name": playlist.name,
+                        "tracks": [t.id for t in playlist.tracks.all()]})
+    return listout
+
+def savePlaylist(tracks):
+    pass
 
 def getLibraryItems():
     items = []
     for track in Track.objects.all():
-        items.append({"title": track.title,
-                      "url":   track.url })
+        items.append({"id":     track.id,
+                      "title":  track.title,
+                      "artist": track.artist,
+                      "album":  track.album,
+                      "url":    track.url })
     return items

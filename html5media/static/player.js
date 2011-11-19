@@ -49,11 +49,11 @@ function Queue() {
 /* Functions
  ************/
 
-function requestPlaylist(playlistName) {
+function requestPlaylist(id) {
     var request = new XMLHttpRequest();
     //TODO: validate this data, security hole
     //TODO: make asynchronous, check for errors
-    request.open("GET", "http://localhost/html5media/data/playlist/?name=" + playlistName, false);
+    request.open("GET", "http://localhost/html5media/data/playlist/?id=" + id, false);
     request.send(null);
     return JSON.parse(request.responseText);
 }
@@ -93,16 +93,25 @@ function updatePlaylists() {
     lists = requestPlaylistList();
     plElement = document.getElementById("sbPlaylists");
     clearElement(plElement);
-    newHTML = ""
     for (i in lists) {
         listItem = document.createElement("a");
-        listItem.appendChild(document.createTextNode(lists[i] + " "));
-        listItem.playlistID = lists[i];
+        listItem.appendChild(document.createTextNode(lists[i].name + " "));
+        listItem.playlistID = lists[i].id;
         listItem.addEventListener("click", playlistClicked, false);
         //TODO: remove this line once we start styling things
         listItem.style.color = "blue";
         plElement.appendChild(listItem);
     }
+}
+
+function savePlaylist(tracks) {
+    var request = new XMLHttpRequest();
+    //TODO: make asynchronous, check for errors
+    //TODO: use encodeURIComponent here
+    request.open("POST", "http://localhost/html5media/data/saveplaylist/", false);
+    request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    request.send("tracks=" + tracks.join());
+    //TODO: check response
 }
 
 function populateLibrary(items) {
