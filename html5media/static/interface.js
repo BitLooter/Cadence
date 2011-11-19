@@ -68,6 +68,7 @@ function bindElementList() {
     
     list.queue =   document.getElementById("queuePane");
     list.sidebar = document.getElementById("sidebarPane");
+    list.library = document.getElementById("libraryPane");
     list.audio =   document.getElementById("audioPlayer");
     list.meta =    document.getElementById("metadata");
     

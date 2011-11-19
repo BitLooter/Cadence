@@ -21,6 +21,14 @@
             <a href="/html5media/scanner/">Run scanner</a>
         </div>
         
-        <div id="queuePane"></div>
+        <div id="libraryContainer">
+            <h1>Library</h1>
+            <div id="libraryPane"></div>
+        </div>
+        
+        <div id="queueContainer">
+            <h1>Queue</h1>
+            <div id="queuePane"></div>
+        </div>
     </body>
 </html>

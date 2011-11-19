@@ -39,7 +39,6 @@ function Queue() {
     }
     Queue.prototype.updatePage = function() {
         this.listControl.clear();
-        // var list = new ListViewControl();
         for (tracknum in this.playlist) {
             trackTitle = this.playlist[tracknum].title;
             this.listControl.appendRow(trackTitle)
@@ -63,6 +62,14 @@ function requestPlaylistList() {
     var request = new XMLHttpRequest();
     //TODO: make asynchronous, check for errors
     request.open("GET", "http://localhost/html5media/data/playlistlist/", false);
+    request.send(null);
+    return JSON.parse(request.responseText);
+}
+
+function requestLibraryItems() {
+    var request = new XMLHttpRequest();
+    //TODO: make asynchronous, check for errors
+    request.open("GET", "http://localhost/html5media/data/libraryitems/", false);
     request.send(null);
     return JSON.parse(request.responseText);
 }
@@ -98,6 +105,16 @@ function updatePlaylists() {
     }
 }
 
+function populateLibrary(items) {
+    var list = new ListViewControl();
+    for (i in items) {
+        trackTitle = items[i].title;
+        list.appendRow(trackTitle);
+    }
+    clearElement(dom.library);
+    dom.library.appendChild(list.listElement);
+}
+
 // Removes all children from a DOM element
 function clearElement( node ) {
     while (node.hasChildNodes()) {
@@ -119,6 +136,10 @@ function playerInit() {
     
     // Set up the sidebar
     updatePlaylists();
+    
+    // Display the library
+    //TODO: do not display library on init
+    populateLibrary(requestLibraryItems());
     
     // Get default playlist
     //TODO: implement default playlist

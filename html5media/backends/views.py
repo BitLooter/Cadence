@@ -1,7 +1,8 @@
 from django.http import HttpResponse
 import json
-from disk import models
+from database import models
 
+#TODO: change getplaylist to playlist
 def getplaylist(request):
     #TODO: check parameters
     #TODO: HTTP errors
@@ -11,3 +12,6 @@ def getplaylist(request):
 def playlistlist(request):
     lists = models.getPlaylistList()
     return HttpResponse(json.dumps(lists))
+
+def libraryitems(request):
+    return HttpResponse(json.dumps(models.getLibraryItems()))
