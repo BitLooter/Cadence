@@ -121,8 +121,9 @@ function populateLibrary(items) {
         trackTitle = items[i].title;
         list.appendRow(trackTitle, items[i]);
     }
-    clearElement(dom.library);
-    dom.library.appendChild(list.listElement);
+    lib = document.getElementById("libraryContainer");
+    clearElement(lib);
+    lib.appendChild(list.listElement);
 }
 
 // Removes all children from a DOM element
