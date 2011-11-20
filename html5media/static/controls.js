@@ -10,45 +10,44 @@
 function ListViewControl() {
     //TODO: handle indexes better once insertion and deletion are added
     this.listElement = document.createElement("table");
+    this.listBody = document.createElement("tbody");
+    this.listElement.appendChild(this.listBody);
     // Put a reference here so we can get to it from event handlers
     this.listElement.listControl = this;
+    // Rows are stored as an array of DOM elements, with the values (visible
+    //  data) and extra (associated data) as attributes on each
     this.rows = [];
-    this.rowsExtra = [];
-    this.rowElements = [];
+    // this.rowsExtra = [];
+    // this.rowElements = [];
     this.currentHighlight = null;
 }
-    ListViewControl.prototype.appendRow = function(rowData, rowExtra) {
-        // rowData is an array containing all the columns for a row
-        rowElement = this._createRow(rowData);
-        rowElement.index = this.rows.length;
-        this.listElement.appendChild(rowElement);
-        this.rows.push( rowData );
-        if (rowExtra != undefined) {
-            this.rowsExtra.push(rowExtra);
-        }
-        else {
-            this.rowsExtra.push(null);
-        }
-        this.rowElements.push( rowElement );
+    ListViewControl.prototype.appendRow = function(rowValues, rowExtra) {
+        element = this._createRow(rowValues);
+        // Add additional row data
+        element.listIndex = this.rows.length;
+        element.values = rowValues;
+        element.extra = rowExtra;
+        this.rows.push( element );
+        // Done setting it up, stick it on the DOM
+        this.listBody.appendChild(element);
     }
     // Delete all the rows, reset it to before data was added
     ListViewControl.prototype.clear = function() {
         this.rows = [];
-        this.rowsExtra = [];
-        this.render();
+        clearElement(this.listBody);
     }
     // Generates the DOM tree from the list's data
     //TODO: is this function even needed?
-    ListViewControl.prototype.render = function() {
-        clearElement(this.listElement);
-        this.rowElements = [];
-        for (index in this.rows) {
-            row = this.rows[index];
-            rowElement = this._createRow(row);
-            rowElement.index = index;
-            this.rowElements.push(rowElement);
-        }
-    }
+    // ListViewControl.prototype.render = function() {
+        // clearElement(this.listElement);
+        // this.rowElements = [];
+        // for (index in this.rows) {
+            // row = this.rows[index];
+            // rowElement = this._createRow(row);
+            // rowElement.index = index;
+            // this.rowElements.push(rowElement);
+        // }
+    // }
     ListViewControl.prototype.getSelected = function() {
         //TODO: we can probably speed this up by handling click events
         var checkedList = new Array();
@@ -75,15 +74,18 @@ function ListViewControl() {
         //TODO: rename currentlyPlaying when CSS rules are added to the control
         // Only one row can be highlighted
         if (this.currentHighlight != null) {
-            this.rowElements[this.currentHighlight].classList.remove("currentlyPlaying");
+            this.rows[this.currentHighlight].classList.remove("currentlyPlaying");
         }
-        this.rowElements[index].classList.add("currentlyPlaying");
+        this.rows[index].classList.add("currentlyPlaying");
         this.currentHighlight = index;
     }
     /// Private functions --------------
     ListViewControl.prototype._handleRowClick = function(e) {
-        e.currentTarget.parentNode.listControl.onrowclicked(e.currentTarget.index);
+        // parent is <tbody>, and its parent is the <table> where we get to listControl
+        //TODO: this may need changing if we upgrade the event handling
+        e.currentTarget.parentNode.parentNode.listControl.onrowclicked(e.currentTarget.listIndex);
     }
+    // _createRow handles the DOM stuff, code should normally use appendRow
     ListViewControl.prototype._createRow = function(data) {
         rowElement = document.createElement("tr");
         // Selection checkbox

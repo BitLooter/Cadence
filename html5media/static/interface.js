@@ -16,6 +16,7 @@
  *************************************/
 function TrackListControl() {
     ListViewControl.apply(this, arguments);
+    // clearPlaylist will reset things to a default state
     this.clearPlaylist();
 }
     TrackListControl.prototype = new ListViewControl();
@@ -28,6 +29,17 @@ function TrackListControl() {
         this.playlist = playlist;
         //TODO: Probably better to set up the row information then call parent's _render
         this._render();
+    }
+    // Returns of list of selected track IDs
+    TrackListControl.prototype.getSelectedTracks = function() {
+        // First get selected row indexes
+        rows = this.listControl.getSelected();
+        // Then get track IDs from it
+        tracks = new Array();
+        for (i in rows) {
+            tracks.push(this.rowsExtra[rows[i]].id);
+        }
+        return tracks;
     }
     // Private methods --------------
     // Recreates every row

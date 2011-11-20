@@ -33,17 +33,6 @@ function QueueControl() {
         this.highlightRow(parseInt(trackIndex));
         this.currentlyPlaying = parseInt(trackIndex);
     }
-    // Returns of list of selected track IDs
-    QueueControl.prototype.getSelectedTracks = function() {
-        // First get selected row indexes
-        rows = this.listControl.getSelected();
-        // Then get track IDs from it
-        tracks = new Array();
-        for (i in rows) {
-            tracks.push(this.rowsExtra[rows[i]].id);
-        }
-        return tracks;
-    }
 
 
 /* Functions
@@ -126,12 +115,6 @@ function populateLibrary(items) {
     lib.appendChild(list.listElement);
 }
 
-// Removes all children from a DOM element
-function clearElement( node ) {
-    while (node.hasChildNodes()) {
-        node.removeChild(node.lastChild);
-    }
-}
 
 /* Init code 
  ************/
