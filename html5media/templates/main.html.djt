@@ -22,11 +22,13 @@
             <a href="/html5media/scanner/">Run scanner</a>
         </div>
         
-        <div id="libraryContainer">
+        <section id="libraryPane">
             <h1>Library</h1>
-            <button id="queueButton" type="button">Queue</button>
-            <div id="libraryPane"></div>
-        </div>
+            <div id="libraryToolbar">
+                <button id="queueButton" type="button">Queue</button>
+            </div>
+            <div id="libraryContainer"></div>
+        </section>
         
         <section id="queuePane">
             <h1>Queue</h1>

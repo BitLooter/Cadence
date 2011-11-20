@@ -1,3 +1,16 @@
 .currentlyPlaying {
     background-color: gray;
 }
+
+#libraryPane {
+    display: inline-block;
+    float: left;
+    clear: none;
+    width: 40%;
+}
+
+#queuePane {
+    display: inline-block;
+    float: right;
+    width: 40%;
+}
