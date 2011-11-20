@@ -6,10 +6,6 @@
 // in the queue. Untested on other browsers.
 
 
-/* Classes
- **********/
-
-
 /* Functions
  ************/
 
@@ -36,14 +32,6 @@ function requestLibraryItems() {
     request.open("GET", "http://localhost/html5media/data/libraryitems/", false);
     request.send(null);
     return JSON.parse(request.responseText);
-}
-
-// Called when a track is done playing and starts the next track
-function trackFinished() {
-    if (queue.currentlyPlaying < queue.playlist.length-1) {
-        //TODO: vary behavior depending on options (autoplay off, shuffle, etc.)
-        queue.playItem(queue.currentlyPlaying + 1);
-    }
 }
 
 function playlistClicked(e) {
@@ -77,6 +65,7 @@ function savePlaylist(tracks, name) {
     //TODO: use encodeURIComponent here
     //TODO: check to make sure data is cleaned here and on the server
     request.open("POST", "http://localhost/html5media/data/saveplaylist/", false);
+    //TODO: probably better to send this as JSON, not form data
     request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     request.send("name=" + name + "&tracks=" + idList.join());
     //TODO: check response
@@ -84,15 +73,9 @@ function savePlaylist(tracks, name) {
 }
 
 function populateLibrary(items) {
-    //TODO: aaaggh, globals BAD
-    list = new TrackListControl();
     for (i in items) {
-        trackTitle = items[i].title;
-        list.appendRow(trackTitle, items[i]);
+        library.appendRow(items[i].title, items[i]);
     }
-    lib = document.getElementById("libraryContainer");
-    clearElement(lib);
-    lib.appendChild(list.listElement);
 }
 
 
@@ -102,14 +85,15 @@ function playerInit() {
     // Build our DOM look up table
     bindElementList();
     
-    // Instance the queue
+    // Instance the queue and other objects
     window.queue = new QueueControl();
+    window.library = new TrackListControl();
+    document.getElementById("libraryContainer").appendChild(library.listElement);
     
     // Set up events
-    dom.audio.addEventListener("ended", trackFinished, false);
     document.getElementById("queueButton").addEventListener("click",
         function(e){
-            tracks = list.getSelectedTracks();
+            tracks = library.getSelectedTracks();
             //TODO: this should add tracks, not replace the whole thing
             queue.setPlaylist(new Playlist(tracks));
         },
@@ -141,10 +125,6 @@ function playerInit() {
     
     // Get default playlist
     //TODO: implement default playlist
-    
-    // Display the queue on the page
-    // (only needed for default playlists, implement that first)
-    //queue.updatePage();
 }
 
 window.addEventListener("load", playerInit, false);

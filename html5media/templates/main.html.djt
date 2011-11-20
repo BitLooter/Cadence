@@ -13,7 +13,7 @@
             <div id="player">
                 <audio id="audioPlayer" src="" type='audio/ogg' controls></audio>
             </div>
-            <div id="metadata"></div>
+            <div id="metadata">Nothing playing</div>
             <div id="logo">Home page link</div>
         </div>
         

@@ -64,6 +64,8 @@ function TrackListControl() {
  *************************************/
 function QueueControl() {
     TrackListControl.apply(this, arguments);
+    // Events
+    dom.audio.addEventListener("ended", this.trackFinished, false);
     //TODO: see if there's an 'official' way of doing custom events in javascript
     this.onrowclicked = function(rowIndex) {
         this.playItem(rowIndex);
@@ -89,6 +91,13 @@ function QueueControl() {
         // Update currently playing highlight
         this.highlightRow(parseInt(trackIndex));
         this.currentlyPlaying = parseInt(trackIndex);
+    }
+    // Event handlers -----------
+    QueueControl.prototype.trackFinished = function(e) {
+        if (queue.currentlyPlaying < queue.tracks.length-1) {
+            //TODO: vary behavior depending on options (autoplay off, shuffle, etc.)
+            queue.playItem(queue.currentlyPlaying + 1);
+        }
     }
 
 function Playlist(tracks, name) {
