@@ -9,11 +9,14 @@ class Track(models.Model):
     
     def __unicode__(self):
         #TODO: this still needs work
-        return u"<Track: {} - {}".format(self.album, self.title)
+        return u"<Track: {} - {}>".format(self.album, self.title)
 
 class Playlist(models.Model):
     tracks = models.ManyToManyField(Track)
     name   = models.CharField(max_length=63)
+    
+    def __unicode__(self):
+        return u"Playlist #{} - {} ({} tracks)".format(self.id, self.name, self.tracks.count())
 
 def getPlaylist(id):
     playlistObj = Playlist.objects.get(pk=id)
