@@ -15,10 +15,11 @@ class Playlist(models.Model):
     tracks = models.ManyToManyField(Track)
     name   = models.CharField(max_length=63)
 
-def getPlaylist(name):
-    playlistObj = Playlist.objects.all()[0]
+def getPlaylist(id):
+    playlistObj = Playlist.objects.get(pk=id)
     #TODO: make this part a method of Playlist
-    playlist = {"name": playlistObj.name,
+    playlist = {"id": playlistObj.id,
+                "name": playlistObj.name,
                 "tracks": []}
     for track in playlistObj.tracks.all():
         playlist["tracks"].append({"id":     track.id,

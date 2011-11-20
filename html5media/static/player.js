@@ -9,31 +9,6 @@
 /* Classes
  **********/
 
-/* Definition for the Queue class, which manages the current playlist.
- * The queue is basically a specialized subclass of a TrackListControl
- * that adds methods for controlling the player. */
-function QueueControl() {
-    TrackListControl.apply(this, arguments);
-    //TODO: see if there's an 'official' way of doing custom events in javascript
-    this.onrowclicked = function(rowIndex) {
-        this.playItem(rowIndex);
-    }
-    document.getElementById("queueContainer").appendChild(this.listElement);
-    this.currentlyPlaying = null;   // null == nothing playing
-}
-    QueueControl.prototype = new TrackListControl();
-    QueueControl.prototype.playItem = function( trackIndex ) {
-        var track = this.playlist.tracks[trackIndex];
-        dom.audio.src = track.url;
-        // TODO: more detailed metadata display
-        dom.meta.innerHTML = track.title;
-        // Start playing
-        dom.audio.play();
-        // Update currently playing highlight
-        this.highlightRow(parseInt(trackIndex));
-        this.currentlyPlaying = parseInt(trackIndex);
-    }
-
 
 /* Functions
  ************/
@@ -72,17 +47,17 @@ function trackFinished() {
 }
 
 function playlistClicked(e) {
-    playlist = requestPlaylist(e.target.playlistID);
+    var playlist = requestPlaylist(e.target.playlistID);
     queue.setPlaylist(playlist);
 }
 
 // Updates the list of available playlists in the sidebar
 function updatePlaylists() {
-    lists = requestPlaylistList();
-    plElement = document.getElementById("sbPlaylists");
+    var lists = requestPlaylistList();
+    var plElement = document.getElementById("sbPlaylists");
     clearElement(plElement);
-    for (i in lists) {
-        listItem = document.createElement("a");
+    for (var i in lists) {
+        var listItem = document.createElement("a");
         listItem.appendChild(document.createTextNode(lists[i].name + " "));
         listItem.playlistID = lists[i].id;
         listItem.addEventListener("click", playlistClicked, false);
@@ -92,20 +67,25 @@ function updatePlaylists() {
     }
 }
 
-function savePlaylist(tracks) {
+function savePlaylist(tracks, name) {
     var request = new XMLHttpRequest();
+    var idList= [];
+    for (i in tracks) {
+        idList.push(tracks[i].id);
+    }
     //TODO: make asynchronous, check for errors
     //TODO: use encodeURIComponent here
+    //TODO: check to make sure data is cleaned here and on the server
     request.open("POST", "http://localhost/html5media/data/saveplaylist/", false);
     request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    request.send("tracks=" + tracks.join());
+    request.send("name=" + name + "&tracks=" + idList.join());
     //TODO: check response
     updatePlaylists();
 }
 
 function populateLibrary(items) {
     //TODO: aaaggh, globals BAD
-    list = new ListViewControl();
+    list = new TrackListControl();
     for (i in items) {
         trackTitle = items[i].title;
         list.appendRow(trackTitle, items[i]);
@@ -129,35 +109,25 @@ function playerInit() {
     dom.audio.addEventListener("ended", trackFinished, false);
     document.getElementById("queueButton").addEventListener("click",
         function(e){
-            selected = list.getSelected();
-            for (i in selected) {
-                track = list.rowsExtra[selected[i]];
-                queue.playlist.push(track);
-                queue.updatePage();
-            }
+            tracks = list.getSelectedTracks();
+            //TODO: this should add tracks, not replace the whole thing
+            queue.setPlaylist(new Playlist(tracks));
         },
         false
     )
     document.getElementById("savePlaylistButton").addEventListener("click",
         function(e){
-            // name = prompt("Enter a name for the playlist:");
-            p = [];
-            //TODO: get a list comprehension working
-            for (i in queue.playlist) {
-                p.push(queue.playlist[i].id);
-            }
-            savePlaylist(p)
+            name = prompt("Enter a name for the playlist:", "<Unnamed>");
+            savePlaylist(queue.tracks, name);
         },
         false
     )
     document.getElementById("removeButton").addEventListener("click",
         function(e){
-            //BUG: it's skipping some items
-            var items = queue.listControl.getSelected();
+            var items = queue.getSelected().reverse();
             for (i in items) {
-                queue.playlist.splice(items[i], 1);
+                queue.deleteItem(items[i]);
             }
-            queue.updatePage();
         },
         false
     )

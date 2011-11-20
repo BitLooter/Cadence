@@ -51,8 +51,8 @@ function ListViewControl() {
     ListViewControl.prototype.getSelected = function() {
         //TODO: we can probably speed this up by handling click events
         var checkedList = new Array();
-        for (i in this.rowElements) {
-            var element = this.rowElements[i];
+        for (i in this.rows) {
+            var element = this.rows[i];
             // Checkbox will be the first input element in the row
             var checkbox = element.getElementsByTagName("input")[0];
             if (checkbox.checked) {
@@ -63,11 +63,9 @@ function ListViewControl() {
     }
     ListViewControl.prototype.deleteItem = function(index) {
         //TODO: merge these into one
+        removed = this.rows[index];
         this.rows.splice(index, 1);
-        this.rowsExtra.splice(index, 1);
-        this.rowElements.splice(index, 1);
-        //TODO: speed this up by only deleting the relevant node
-        this.render();
+        this.listBody.removeChild(removed);
     }
     // Highlights a specific row
     ListViewControl.prototype.highlightRow = function(index) {
@@ -83,6 +81,7 @@ function ListViewControl() {
     ListViewControl.prototype._handleRowClick = function(e) {
         // parent is <tbody>, and its parent is the <table> where we get to listControl
         //TODO: this may need changing if we upgrade the event handling
+        //TODO: don't do anything if it was the checkbox that was clicked
         e.currentTarget.parentNode.parentNode.listControl.onrowclicked(e.currentTarget.listIndex);
     }
     // _createRow handles the DOM stuff, code should normally use appendRow
