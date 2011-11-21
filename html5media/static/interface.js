@@ -68,7 +68,7 @@ function QueueControl() {
     TrackListControl.call(this);
     this.currentlyPlaying = null;   // null == nothing playing
     // Events
-    dom.audio.addEventListener("ended", this.trackFinished, false);
+    page.audio.addEventListener("ended", this.trackFinished, false);
     this.listElement.addEventListener("rowclick", function(e) {
         // Subtract one here to correct for the header row
         e.listControl.playItem(e.row.rowIndex-1);
@@ -86,11 +86,11 @@ function QueueControl() {
     }
     QueueControl.prototype.playItem = function( trackIndex ) {
         var track = this.playlist.tracks[trackIndex];
-        dom.audio.src = track.url;
+        page.audio.src = track.url;
         // TODO: more detailed metadata display
-        dom.meta.innerHTML = track.title;
+        page.meta.innerHTML = track.title;
         // Start playing
-        dom.audio.play();
+        page.audio.play();
         // Update currently playing highlight
         this.highlightRow(parseInt(trackIndex));
         this.currentlyPlaying = parseInt(trackIndex);
@@ -128,5 +128,5 @@ function bindElementList() {
     list.meta =    document.getElementById("metadata");
     
     // Place it in the global namespace for easy access
-    window.dom = list;
+    window.page = list;
 }
