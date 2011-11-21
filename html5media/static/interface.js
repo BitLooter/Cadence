@@ -64,14 +64,15 @@ function TrackListControl() {
  *************************************/
 function QueueControl() {
     TrackListControl.apply(this, arguments);
+    this.currentlyPlaying = null;   // null == nothing playing
     // Events
     dom.audio.addEventListener("ended", this.trackFinished, false);
-    //TODO: see if there's an 'official' way of doing custom events in javascript
-    this.onrowclicked = function(rowIndex) {
-        this.playItem(rowIndex);
-    }
+    this.listElement.addEventListener("rowclick", function(e) {
+        //TODO: rowIndex will be different once we add headers
+        e.listControl.playItem(e.row.rowIndex);
+    }, false);
+    // Stick it in the DOM
     document.getElementById("queueContainer").appendChild(this.listElement);
-    this.currentlyPlaying = null;   // null == nothing playing
 }
     QueueControl.prototype = new TrackListControl();
     QueueControl.prototype.clearPlaylist = function() {

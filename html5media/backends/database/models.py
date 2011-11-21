@@ -8,54 +8,58 @@ class Track(models.Model):
     url    = models.CharField(max_length=255)
     
     def __unicode__(self):
-        #TODO: this still needs work
-        return u"<Track: {} - {}>".format(self.album, self.title)
+        return u"Track #{}: {} ({}) - {}".format(self.id, self.album, self.artist, self.title)
+    
+    # Data source API helper methods
+    @staticmethod
+    def getLibraryItems():
+        items = []
+        for track in Track.objects.all():
+            items.append({"id":     track.id,
+                          "title":  track.title,
+                          "artist": track.artist,
+                          "album":  track.album,
+                          "url":    track.url })
+        return items
 
 class Playlist(models.Model):
     tracks = models.ManyToManyField(Track)
     name   = models.CharField(max_length=63)
     
     def __unicode__(self):
-        return u"Playlist #{} - {} ({} tracks)".format(self.id, self.name, self.tracks.count())
-
-def getPlaylist(id):
-    playlistObj = Playlist.objects.get(pk=id)
-    #TODO: make this part a method of Playlist
-    playlist = {"id": playlistObj.id,
-                "name": playlistObj.name,
-                "tracks": []}
-    for track in playlistObj.tracks.all():
-        playlist["tracks"].append({"id":     track.id,
-                                   "title":  track.title,
-                                   "artist": track.artist,
-                                   "album":  track.album,
-                                   "url":    track.url })
-    return playlist
-
-def getPlaylistList():
-    lists = Playlist.objects.all()
-    listout = []
-    for playlist in lists:
-        listout.append({"id": playlist.id,
-                        "name": playlist.name,
-                        "tracks": [t.id for t in playlist.tracks.all()]})
-    return listout
-
-def savePlaylist(trackList, name):
-    tracks = Track.objects.filter(pk__in=trackList)
-    playlist = Playlist()
-    #TODO: see if there's a better way than saving twice
-    playlist.save()
-    playlist.tracks.add(*tracks)
-    playlist.name = name
-    playlist.save()
-
-def getLibraryItems():
-    items = []
-    for track in Track.objects.all():
-        items.append({"id":     track.id,
-                      "title":  track.title,
-                      "artist": track.artist,
-                      "album":  track.album,
-                      "url":    track.url })
-    return items
+        return u"Playlist #{}: {} ({} tracks)".format(self.id, self.name, self.tracks.count())
+    
+    # Data source API helper methods
+    @staticmethod
+    def getPlaylist(playlistID):
+        playlistObj = Playlist.objects.get(pk=playlistID)
+        playlist = {"id": playlistObj.id,
+                    "name": playlistObj.name,
+                    "tracks": []}
+        for track in playlistObj.tracks.all():
+            playlist["tracks"].append({"id":     track.id,
+                                       "title":  track.title,
+                                       "artist": track.artist,
+                                       "album":  track.album,
+                                       "url":    track.url })
+        return playlist
+    
+    @staticmethod
+    def getPlaylistList():
+        lists = Playlist.objects.all()
+        listout = []
+        for playlist in lists:
+            listout.append({"id": playlist.id,
+                            "name": playlist.name,
+                            "tracks": [t.id for t in playlist.tracks.all()]})
+        return listout
+    
+    @staticmethod
+    def savePlaylist(trackList, name):
+        tracks = Track.objects.filter(pk__in=trackList)
+        playlist = Playlist()
+        #TODO: see if there's a better way than saving twice
+        playlist.save()
+        playlist.tracks.add(*tracks)
+        playlist.name = name
+        playlist.save()

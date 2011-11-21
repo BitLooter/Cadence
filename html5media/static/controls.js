@@ -17,8 +17,6 @@ function ListViewControl() {
     // Rows are stored as an array of DOM elements, with the values (visible
     //  data) and extra (associated data) as attributes on each
     this.rows = [];
-    // this.rowsExtra = [];
-    // this.rowElements = [];
     this.currentHighlight = null;
 }
     ListViewControl.prototype.appendRow = function(rowValues, rowExtra) {
@@ -79,10 +77,15 @@ function ListViewControl() {
     }
     /// Private functions --------------
     ListViewControl.prototype._handleRowClick = function(e) {
-        // parent is <tbody>, and its parent is the <table> where we get to listControl
-        //TODO: this may need changing if we upgrade the event handling
-        //TODO: don't do anything if it was the checkbox that was clicked
-        e.currentTarget.parentNode.parentNode.listControl.onrowclicked(e.currentTarget.listIndex);
+        // Don't do anything if it was the checkbox that was clicked
+        if (e.target.tagName != "INPUT") {
+            rowEvent = document.createEvent("CustomEvent");
+            rowEvent.initEvent("rowclick", true, true);
+            rowEvent.row = e.currentTarget;
+            rowEvent.listControl = e.currentTarget.parentNode.parentNode.listControl
+            // parent is <tbody>, and its parent is the <table> where we dispatch the event
+            e.currentTarget.parentNode.parentNode.dispatchEvent(rowEvent);
+        }
     }
     // _createRow handles the DOM stuff, code should normally use appendRow
     ListViewControl.prototype._createRow = function(data) {
@@ -90,7 +93,7 @@ function ListViewControl() {
         // Selection checkbox
         rowSelect = document.createElement("input");
         rowSelect.type = "checkbox";
-        rowSelectTD = document.createElement("td");
+        rowSelectTD = document.createElement("th");
         rowSelectTD.appendChild(rowSelect);
         rowElement.appendChild(rowSelectTD);
         // Table data
