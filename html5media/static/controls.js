@@ -1,15 +1,25 @@
 /* ***************************************************************************
  * controls.js
- * -----------
+ * ===========
  * Reusable complex UI controls implemented in Javascript are placed here.
  *****************************************************************************/
 
 /* Classes
  **********/
 
+/*************************************
+ ListViewControl
+ ---------------
+ Manages a tabular data view, similar to the ListView controls you find in
+ OS APIs.
+ *************************************/
 function ListViewControl() {
     //TODO: handle indexes better once insertion and deletion are added
+    // Create initial DOM framework
     this.listElement = document.createElement("table");
+    this.listHead = document.createElement("thead");
+    this.listHead.appendChild(document.createElement("tr"));
+    this.listElement.appendChild(this.listHead);
     this.listBody = document.createElement("tbody");
     this.listElement.appendChild(this.listBody);
     // Put a reference here so we can get to it from event handlers
@@ -19,6 +29,24 @@ function ListViewControl() {
     this.rows = [];
     this.currentHighlight = null;
 }
+    ListViewControl.prototype.changeHeader = function(headers) {
+        var headRow = document.createElement("tr");
+        // Create the select-all checkbox
+        var toggleAllCheck = document.createElement("input");
+        toggleAllCheck.type = "checkbox";
+        toggleAllCheck.style.display = "none"; // Remove this line when toggle all is implemented
+        var toggleAllCell = document.createElement("th");
+        toggleAllCell.appendChild(toggleAllCheck);
+        headRow.appendChild(toggleAllCell);
+        // Add the headers
+        for (var i in headers) {
+            var thisHead = document.createElement("th");
+            thisHead.appendChild(document.createTextNode(headers[i]));
+            headRow.appendChild(thisHead);
+        }
+        clearElement(this.listHead);
+        this.listHead.appendChild(headRow);
+    }
     ListViewControl.prototype.appendRow = function(rowValues, rowExtra) {
         element = this._createRow(rowValues);
         // Add additional row data

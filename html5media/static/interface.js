@@ -15,7 +15,9 @@
  a subclass of this to add queue control functionality.
  *************************************/
 function TrackListControl() {
-    ListViewControl.apply(this, arguments);
+    ListViewControl.call(this);
+    headers = ["Title"];
+    this.changeHeader(headers);
     // clearPlaylist will reset things to a default state
     this.clearTracks();
 }
@@ -63,13 +65,13 @@ function TrackListControl() {
  that adds methods for controlling the player and playlist management.
  *************************************/
 function QueueControl() {
-    TrackListControl.apply(this, arguments);
+    TrackListControl.call(this);
     this.currentlyPlaying = null;   // null == nothing playing
     // Events
     dom.audio.addEventListener("ended", this.trackFinished, false);
     this.listElement.addEventListener("rowclick", function(e) {
-        //TODO: rowIndex will be different once we add headers
-        e.listControl.playItem(e.row.rowIndex);
+        // Subtract one here to correct for the header row
+        e.listControl.playItem(e.row.rowIndex-1);
     }, false);
     // Stick it in the DOM
     document.getElementById("queueContainer").appendChild(this.listElement);
