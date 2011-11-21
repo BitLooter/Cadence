@@ -18,7 +18,7 @@ function TrackListControl() {
     ListViewControl.call(this);
     headers = ["Title"];
     this.changeHeader(headers);
-    // clearPlaylist will reset things to a default state
+    // clearTracks will reset things to a default state
     this.clearTracks();
 }
     TrackListControl.prototype = new ListViewControl();
@@ -30,6 +30,10 @@ function TrackListControl() {
         this.tracks = tracks;
         //TODO: Probably better to set up the row information then call parent's _render
         this._render();
+    }
+    TrackListControl.prototype.appendTrack = function(track) {
+        this.tracks.push(track);
+        this.appendRow(track.title, track);
     }
     // Returns of list of selected track IDs
     TrackListControl.prototype.getSelectedTracks = function() {

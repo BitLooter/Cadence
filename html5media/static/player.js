@@ -94,8 +94,11 @@ function playerInit() {
     document.getElementById("queueButton").addEventListener("click",
         function(e){
             tracks = library.getSelectedTracks();
+            for (var i in tracks) {
+                queue.appendTrack(tracks[i]);
+            }
             //TODO: this should add tracks, not replace the whole thing
-            queue.setPlaylist(new Playlist(tracks));
+            // queue.setPlaylist(new Playlist(tracks));
         },
         false
     )
