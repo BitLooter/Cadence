@@ -1,7 +1,3 @@
-.currentlyPlaying {
-    background-color: gray;
-}
-
 #libraryPane {
     display: inline-block;
     float: left;
@@ -13,4 +9,8 @@
     display: inline-block;
     float: right;
     width: 40%;
+}
+
+.uilcHighlight {
+    background-color: gray;
 }
