@@ -17,7 +17,7 @@ def scan():
     files = [f for f in files if ".ogg" in f]
     for f in files:
         audio = mutagen.File(path + f)
-        t = models.Track()
+        t = models.Media()
         #TODO: note that this catches missing tags but not blank tags
         t.title = audio["title"][0] if "title" in audio else "<No title>"
         t.artist = audio["artist"][0] if "title" in audio else "<No artist>"

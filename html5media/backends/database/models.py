@@ -1,6 +1,6 @@
 from django.db import models
 
-class Track(models.Model):
+class Media(models.Model):
     title  = models.CharField(max_length=127)
     #TODO: the following fields will be normalized to their own tables
     artist = models.CharField(max_length=100)
@@ -8,26 +8,26 @@ class Track(models.Model):
     url    = models.CharField(max_length=255)
     
     def __unicode__(self):
-        return u"Track #{}: {} ({}) - {}".format(self.id, self.album, self.artist, self.title)
+        return u"Media #{}: {} ({}) - {}".format(self.id, self.album, self.artist, self.title)
     
     # Data source API helper methods
     @staticmethod
     def getLibraryItems():
         items = []
-        for track in Track.objects.all():
-            items.append({"id":     track.id,
-                          "title":  track.title,
-                          "artist": track.artist,
-                          "album":  track.album,
-                          "url":    track.url })
+        for item in Media.objects.all():
+            items.append({"id":     item.id,
+                          "title":  item.title,
+                          "artist": item.artist,
+                          "album":  item.album,
+                          "url":    item.url })
         return items
 
 class Playlist(models.Model):
-    tracks = models.ManyToManyField(Track)
-    name   = models.CharField(max_length=63)
+    items = models.ManyToManyField(Media)
+    name  = models.CharField(max_length=63)
     
     def __unicode__(self):
-        return u"Playlist #{}: {} ({} tracks)".format(self.id, self.name, self.tracks.count())
+        return u"Playlist #{}: {} ({} items)".format(self.id, self.name, self.items.count())
     
     # Data source API helper methods
     @staticmethod
@@ -35,13 +35,13 @@ class Playlist(models.Model):
         playlistObj = Playlist.objects.get(pk=playlistID)
         playlist = {"id": playlistObj.id,
                     "name": playlistObj.name,
-                    "tracks": []}
-        for track in playlistObj.tracks.all():
-            playlist["tracks"].append({"id":     track.id,
-                                       "title":  track.title,
-                                       "artist": track.artist,
-                                       "album":  track.album,
-                                       "url":    track.url })
+                    "items": []}
+        for item in playlistObj.items.all():
+            playlist["items"].append({"id":     item.id,
+                                      "title":  item.title,
+                                      "artist": item.artist,
+                                      "album":  item.album,
+                                      "url":    item.url })
         return playlist
     
     @staticmethod
@@ -50,16 +50,15 @@ class Playlist(models.Model):
         listout = []
         for playlist in lists:
             listout.append({"id": playlist.id,
-                            "name": playlist.name,
-                            "tracks": [t.id for t in playlist.tracks.all()]})
+                            "name": playlist.name})
         return listout
     
     @staticmethod
-    def savePlaylist(trackList, name):
-        tracks = Track.objects.filter(pk__in=trackList)
+    def savePlaylist(idList, name):
+        items = Media.objects.filter(pk__in=idList)
         playlist = Playlist()
         #TODO: see if there's a better way than saving twice
         playlist.save()
-        playlist.tracks.add(*tracks)
+        playlist.items.add(*items)
         playlist.name = name
         playlist.save()

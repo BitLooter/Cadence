@@ -86,10 +86,10 @@ function QueueControl() {
     }
     QueueControl.prototype.setPlaylist = function( playlist ) {
         this.playlist = playlist;
-        this.setTracks.call(this, playlist.tracks);
+        this.setTracks.call(this, playlist.items);
     }
     QueueControl.prototype.playItem = function( trackIndex ) {
-        var track = this.playlist.tracks[trackIndex];
+        var track = this.playlist.items[trackIndex];
         page.audio.src = track.url;
         // TODO: more detailed metadata display
         page.meta.innerHTML = track.title;
@@ -107,14 +107,14 @@ function QueueControl() {
         }
     }
 
-function Playlist(tracks, name) {
-    if (tracks == undefined) {
-        tracks = [];
+function Playlist(items, name) {
+    if (items == undefined) {
+        items = [];
     }
     if (name == undefined) {
         name = "<Unnamed>";
     }
-    this.tracks = tracks;
+    this.items = items;
     this.name = name;
 }
 
