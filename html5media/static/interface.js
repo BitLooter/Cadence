@@ -16,7 +16,7 @@
  *************************************/
 function TrackListControl() {
     ListViewControl.call(this);
-    headers = ["Title"];
+    var headers = ["Title"];
     this.changeHeader(headers);
     // clearTracks will reset things to a default state
     this.clearTracks();
@@ -38,9 +38,9 @@ function TrackListControl() {
     // Returns of list of selected track IDs
     TrackListControl.prototype.getSelectedTracks = function() {
         // First get selected row indexes
-        selected = this.getSelected();
+        var selected = this.getSelected();
         // Then get track IDs from it
-        tracks = new Array();
+        var tracks = new Array();
         for (i in selected) {
             tracks.push(this.rows[selected[i]].extra);
         }
@@ -56,7 +56,7 @@ function TrackListControl() {
     TrackListControl.prototype._render = function() {
         this.clear();
         for (var tracknum in this.tracks) {
-            trackTitle = this.tracks[tracknum].title;
+            var trackTitle = this.tracks[tracknum].title;
             this.appendRow(trackTitle, this.tracks[tracknum]);
         }
     }
@@ -86,7 +86,7 @@ function QueueControl() {
     }
     QueueControl.prototype.setPlaylist = function( playlist ) {
         this.playlist = playlist;
-        this.setTracks.call(this, playlist.items);
+        this.setTracks(playlist.items);
     }
     QueueControl.prototype.playItem = function( trackIndex ) {
         var track = this.playlist.items[trackIndex];

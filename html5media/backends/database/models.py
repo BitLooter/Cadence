@@ -62,3 +62,4 @@ class Playlist(models.Model):
         playlist.items.add(*items)
         playlist.name = name
         playlist.save()
+        return playlist.id

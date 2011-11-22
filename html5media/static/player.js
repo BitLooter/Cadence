@@ -9,12 +9,21 @@
 /* Functions
  ************/
 
+/*************************************
+ requestPlaylist
+ ---------------
+ Tries to recieve the playlist with the given id from the server.
+ 
+ Exceptions raised: ServerPlaylistError
+ *************************************/
 function requestPlaylist(id) {
     var request = new XMLHttpRequest();
-    //TODO: validate this data, security hole
-    //TODO: make asynchronous, check for errors
+    //TODO: make asynchronous
     request.open("GET", "http://localhost/html5media/data/playlist/?id=" + id, false);
     request.send(null);
+    if (request.status != 200) {
+        throw new ServerPlaylistError(request);
+    }
     return JSON.parse(request.responseText);
 }
 
@@ -23,6 +32,9 @@ function requestPlaylistList() {
     //TODO: make asynchronous, check for errors
     request.open("GET", "http://localhost/html5media/data/playlistlist/", false);
     request.send(null);
+    if (request.status != 200) {
+        throw new ServerPlaylistListError(request);
+    }
     return JSON.parse(request.responseText);
 }
 
@@ -34,14 +46,40 @@ function requestLibraryItems() {
     return JSON.parse(request.responseText);
 }
 
+function savePlaylist(tracks, name) {
+    var request = new XMLHttpRequest();
+    var idList= [];
+    for (i in tracks) {
+        idList.push(parseInt(tracks[i].id));
+    }
+    text = JSON.stringify({"name": name, "tracks": idList});
+    //TODO: make asynchronous
+    request.open("POST", "http://localhost/html5media/data/saveplaylist/", false);
+    request.send(text);
+    if (request.status != 201) {
+        throw new ServerPlaylistError(request);
+    }
+    updatePlaylists();
+}
+
 function playlistClicked(e) {
-    var playlist = requestPlaylist(e.target.playlistID);
+    try {
+        var playlist = requestPlaylist(e.target.playlistID);
+    } catch (error) {
+        alert(error.message);
+        throw error;
+    }
     queue.setPlaylist(playlist);
 }
 
 // Updates the list of available playlists in the sidebar
 function updatePlaylists() {
-    var lists = requestPlaylistList();
+    try {
+        var lists = requestPlaylistList();
+    } catch (error) {
+        alert(error.message);
+        throw error;
+    }
     var plElement = document.getElementById("sbPlaylists");
     clearElement(plElement);
     for (var i in lists) {
@@ -53,23 +91,6 @@ function updatePlaylists() {
         listItem.style.color = "blue";
         plElement.appendChild(listItem);
     }
-}
-
-function savePlaylist(tracks, name) {
-    var request = new XMLHttpRequest();
-    var idList= [];
-    for (i in tracks) {
-        idList.push(tracks[i].id);
-    }
-    //TODO: make asynchronous, check for errors
-    //TODO: use encodeURIComponent here
-    //TODO: check to make sure data is cleaned here and on the server
-    request.open("POST", "http://localhost/html5media/data/saveplaylist/", false);
-    //TODO: probably better to send this as JSON, not form data
-    request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    request.send("name=" + name + "&tracks=" + idList.join());
-    //TODO: check response
-    updatePlaylists();
 }
 
 function populateLibrary(items) {
@@ -97,15 +118,17 @@ function playerInit() {
             for (var i in tracks) {
                 queue.appendTrack(tracks[i]);
             }
-            //TODO: this should add tracks, not replace the whole thing
-            // queue.setPlaylist(new Playlist(tracks));
         },
         false
     )
     document.getElementById("savePlaylistButton").addEventListener("click",
         function(e){
             name = prompt("Enter a name for the playlist:", "<Unnamed>");
-            savePlaylist(queue.tracks, name);
+            try {
+                savePlaylist(queue.tracks, name);
+            } catch(error) {
+                alert(error.message);
+            }
         },
         false
     )
