@@ -1,14 +1,26 @@
 from django.db import models
 
+class Artist(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    
+    def __unicode__(self):
+        return u"Artist #{}: {}".format(self.id, self.name)
+
+class Album(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    
+    def __unicode__(self):
+        return u"Album #{}: {}".format(self.id, self.name)
+
 class Media(models.Model):
     title  = models.CharField(max_length=127)
     #TODO: the following fields will be normalized to their own tables
-    artist = models.CharField(max_length=100)
-    album  = models.CharField(max_length=100)
+    artist = models.ForeignKey(Artist)
+    album  = models.ForeignKey(Album)
     url    = models.CharField(max_length=255)
     
     def __unicode__(self):
-        return u"Media #{}: {} ({}) - {}".format(self.id, self.album, self.artist, self.title)
+        return u"#{}: {} ({}) - {}".format(self.id, self.album.name, self.artist.name, self.title)
     
     # Data source API helper methods
     @staticmethod
@@ -17,8 +29,8 @@ class Media(models.Model):
         for item in Media.objects.all():
             items.append({"id":     item.id,
                           "title":  item.title,
-                          "artist": item.artist,
-                          "album":  item.album,
+                          "artist": item.artist.name,
+                          "album":  item.album.name,
                           "url":    item.url })
         return items
 
