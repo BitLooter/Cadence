@@ -77,6 +77,7 @@ function QueueControl() {
         // Subtract one here to correct for the header row
         e.listControl.playItem(e.row.rowIndex-1);
     }, false);
+    this.clearPlaylist();
     // Stick it in the DOM
     document.getElementById("queueContainer").appendChild(this.listElement);
 }
