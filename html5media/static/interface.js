@@ -67,6 +67,7 @@ function TrackListControl() {
  Definition for the Queue class, which manages the current playlist.
  The queue is basically a specialized subclass of a TrackListControl
  that adds methods for controlling the player and playlist management.
+ //TODO: rename to QueueManager?
  *************************************/
 function QueueControl() {
     TrackListControl.call(this);
@@ -107,6 +108,49 @@ function QueueControl() {
             queue.playItem(queue.currentlyPlaying + 1);
         }
     }
+
+/*************************************
+ NavigationManager
+ -----------------
+ Handles sidebar tasks, such as the available playlists, library access, links,
+ and other navigation elements.
+ *************************************/
+function NavigationManager() {
+    this.updatePlaylists();
+}
+    // Updates the list of available playlists in the sidebar
+    NavigationManager.prototype.updatePlaylists = function() {
+        try {
+            var lists = requestPlaylistList();
+        } catch (error) {
+            alert(error.message);
+            throw error;
+        }
+        var plElement = document.getElementById("sbPlaylists");
+        clearElement(plElement);
+        for (var i in lists) {
+            var listItem = document.createElement("li");
+            var linkItem = document.createElement("a");
+            linkItem.appendChild(document.createTextNode(lists[i].name));
+            listItem.appendChild(linkItem);
+            listItem.playlistID = lists[i].id;
+            listItem.addEventListener("click", this._playlistClicked, false);
+            //TODO: remove this line once we start styling things
+            listItem.style.color = "blue";
+            plElement.appendChild(listItem);
+        }
+    }
+    // -- Events ---------
+    NavigationManager.prototype._playlistClicked = function(e) {
+        try {
+            var playlist = requestPlaylist(e.currentTarget.playlistID);
+        } catch (error) {
+            alert(error.message);
+            throw error;
+        }
+        queue.setPlaylist(playlist);
+    }
+
 
 function Playlist(items, name) {
     if (items == undefined) {

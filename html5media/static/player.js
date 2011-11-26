@@ -2,8 +2,6 @@
  * player.js - Functions for the media player part of the page
  ********************************************************************/
 //TODO: Create an object to handle the sidebar?
-//BUG: Chrome freaks out and becomes unresponsive if you play the last item
-// in the queue. Untested on other browsers.
 
 
 /* Functions
@@ -46,6 +44,7 @@ function requestLibraryItems() {
     return JSON.parse(request.responseText);
 }
 
+//TODO: move savePlaylist to a QueueControl method?
 function savePlaylist(tracks, name) {
     var request = new XMLHttpRequest();
     var idList= [];
@@ -59,38 +58,7 @@ function savePlaylist(tracks, name) {
     if (request.status != 201) {
         throw new ServerPlaylistError(request);
     }
-    updatePlaylists();
-}
-
-function playlistClicked(e) {
-    try {
-        var playlist = requestPlaylist(e.target.playlistID);
-    } catch (error) {
-        alert(error.message);
-        throw error;
-    }
-    queue.setPlaylist(playlist);
-}
-
-// Updates the list of available playlists in the sidebar
-function updatePlaylists() {
-    try {
-        var lists = requestPlaylistList();
-    } catch (error) {
-        alert(error.message);
-        throw error;
-    }
-    var plElement = document.getElementById("sbPlaylists");
-    clearElement(plElement);
-    for (var i in lists) {
-        var listItem = document.createElement("a");
-        listItem.appendChild(document.createTextNode(lists[i].name + " "));
-        listItem.playlistID = lists[i].id;
-        listItem.addEventListener("click", playlistClicked, false);
-        //TODO: remove this line once we start styling things
-        listItem.style.color = "blue";
-        plElement.appendChild(listItem);
-    }
+    nav.updatePlaylists();
 }
 
 function populateLibrary(items) {
@@ -143,7 +111,7 @@ function playerInit() {
     )
     
     // Set up the sidebar
-    updatePlaylists();
+    window.nav = new NavigationManager();
     
     // Display the library
     //TODO: do not display library on init
