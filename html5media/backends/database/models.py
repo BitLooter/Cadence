@@ -51,8 +51,8 @@ class Playlist(models.Model):
         for item in playlistObj.items.all():
             playlist["items"].append({"id":     item.id,
                                       "title":  item.title,
-                                      "artist": item.artist,
-                                      "album":  item.album,
+                                      "artist": item.artist.name,
+                                      "album":  item.album.name,
                                       "url":    item.url })
         return playlist
     
