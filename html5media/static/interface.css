@@ -1,3 +1,15 @@
+#logo {
+    position: absolute;
+    top: 0; right: 0;
+}
+
+#sidebarPane {
+    display: inline-block;
+    float: left;
+    clear: none;
+    width: 15%;
+}
+
 #libraryPane {
     display: inline-block;
     float: left;

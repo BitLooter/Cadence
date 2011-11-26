@@ -13,8 +13,8 @@
         <div id="playerPane">
             <div id="player">
                 <audio id="audioPlayer" src="" type='audio/ogg' controls></audio>
+                <div id="metadata">Nothing playing</div>
             </div>
-            <div id="metadata">Nothing playing</div>
             <div id="logo">Home page link</div>
         </div>
         
