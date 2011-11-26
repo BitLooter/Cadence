@@ -46,15 +46,15 @@ def scan():
         artistEntries[artist] = models.Artist.objects.get_or_create(name=artist)[0]
     
     # Now process the media files
-    for file in pathnames:
+    for filename in pathnames:
         media = models.Media()
-        if "title" in meta[file] and meta[file]["title"] != "":
-            title = meta[file]["title"][0]
+        if "title" in meta[filename] and meta[filename]["title"] != "":
+            title = meta[filename]["title"][0]
         else:
             title = "<No title>"
         media.title = title
-        media.artist = artistEntries[meta[file]["artist"][0]]
-        media.album = albumEntries[meta[file]["album"][0]]
+        media.artist = artistEntries[meta[filename]["artist"][0]]
+        media.album = albumEntries[meta[filename]["album"][0]]
         urlseg = file.replace(MEDIA_ROOT, "").replace(os.sep, "/")
         media.url = urllib.quote(URL_ROOT + urlseg)
         media.save()
