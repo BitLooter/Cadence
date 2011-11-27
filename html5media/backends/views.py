@@ -38,7 +38,12 @@ def saveplaylist(request):
     return response
 
 def libraryitems(request):
-    #TODO: check parameters
-    #TODO: HTTP errors
     #TODO: logging
-    return HttpResponse(json.dumps(models.Media.getLibraryItems()))
+    # Make sure no one's trying anything funny with the queries and database access
+    if set(request.GET.keys()) <= set(models.allowedFilters):
+        response = HttpResponse(json.dumps(models.Media.getLibraryItems(request.GET)))
+    else:
+        badFilters = list(set(request.GET.keys()) - set(models.allowedFilters))
+        response = HttpResponseBadRequest("Error: Unrecognized filter(s): {}".format(", ".join(badFilters)),
+                                          mimetype="text/plain")
+    return response

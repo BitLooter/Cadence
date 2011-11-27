@@ -1,5 +1,14 @@
 from django.db import models
 
+
+# Constants
+############
+allowedFilters = ["album"]
+
+
+# Classes
+##########
+
 class Artist(models.Model):
     name = models.CharField(max_length=100, unique=True)
     
@@ -24,9 +33,13 @@ class Media(models.Model):
     
     # Data source API helper methods
     @staticmethod
-    def getLibraryItems():
+    def getLibraryItems(filters):
+        request_kwargs = {}
+        for arg, param in filters.items():
+            request_kwargs[arg] = param
+        
         items = []
-        for item in Media.objects.all():
+        for item in Media.objects.filter(**request_kwargs):
             items.append({"id":     item.id,
                           "title":  item.title,
                           "artist": item.artist.name,
