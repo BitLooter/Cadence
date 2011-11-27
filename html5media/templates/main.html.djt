@@ -21,7 +21,9 @@
         <nav id="sidebarPane">
             <h1>Navigation</h1>
             <h2>Playlists</h2>
-            <ul class="sidebarContainer" id="sbPlaylists"></ul>
+            <ul id="sbPlaylists"></ul>
+            <h2>Library</h2>
+            <ul id="sbLibrary"></ul>
             <h2>Other</h2>
             <a href="/html5media/scanner/">Run scanner</a>
         </nav>

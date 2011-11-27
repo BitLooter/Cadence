@@ -117,6 +117,9 @@ function QueueControl() {
  *************************************/
 function NavigationManager() {
     this.updatePlaylists();
+    //TODO: replace this hardcoded data
+    var libList = document.getElementById("sbLibrary");
+    libList.innerHTML = "<li onclick='javascript: nav._libraryClicked()'>Mirror</li>"
 }
     // Updates the list of available playlists in the sidebar
     NavigationManager.prototype.updatePlaylists = function() {
@@ -141,6 +144,9 @@ function NavigationManager() {
         }
     }
     // -- Events ---------
+    NavigationManager.prototype._libraryClicked = function(e) {
+        populateLibrary(requestLibraryItems("?album=1"));
+    }
     NavigationManager.prototype._playlistClicked = function(e) {
         try {
             var playlist = requestPlaylist(e.currentTarget.playlistID);

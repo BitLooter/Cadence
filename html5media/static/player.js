@@ -36,10 +36,11 @@ function requestPlaylistList() {
     return JSON.parse(request.responseText);
 }
 
-function requestLibraryItems() {
+function requestLibraryItems(query) {
+    //TODO: better query system
     var request = new XMLHttpRequest();
     //TODO: make asynchronous, check for errors
-    request.open("GET", "http://localhost/html5media/data/libraryitems/", false);
+    request.open("GET", "http://localhost/html5media/data/libraryitems/" + query, false);
     request.send(null);
     return JSON.parse(request.responseText);
 }
@@ -62,6 +63,7 @@ function savePlaylist(tracks, name) {
 }
 
 function populateLibrary(items) {
+    library.clearTracks()
     for (i in items) {
         library.appendRow(items[i].title, items[i]);
     }
@@ -115,7 +117,7 @@ function playerInit() {
     
     // Display the library
     //TODO: do not display library on init
-    populateLibrary(requestLibraryItems());
+    populateLibrary(requestLibraryItems(""));
     
     // Get default playlist
     //TODO: implement default playlist
