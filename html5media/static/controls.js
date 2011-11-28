@@ -118,8 +118,11 @@ function ListViewControl() {
         if (this.currentHighlight != null) {
             this.rows[this.currentHighlight].classList.remove("uilcHighlight");
         }
-        this.rows[index].classList.add("uilcHighlight");
-        this.currentHighlight = index;
+        // If no index was passed, highlight nothing
+        if (index != undefined) {
+            this.rows[index].classList.add("uilcHighlight");
+            this.currentHighlight = index;
+        }
     }
     /// Private functions --------------
     ListViewControl.prototype._handleRowClick = function(e) {

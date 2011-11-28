@@ -8,35 +8,35 @@
  **********/
 
 /*************************************
- TrackListControl
+ TrackListManager
  ----------------
  Specialized version of a ListViewControl made to display media items - 
  specifically, playlists. May be subclassed, e.g. the queue makes use of
  a subclass of this to add queue control functionality.
  *************************************/
-function TrackListControl() {
+function TrackListManager() {
     ListViewControl.call(this);
     var headers = ["Title"];
     this.changeHeader(headers);
     // clearTracks will reset things to a default state
     this.clearTracks();
 }
-    TrackListControl.prototype = new ListViewControl();
-    // clearPlaylist() is like clear(), but also sets the playlist to an empty one
-    TrackListControl.prototype.clearTracks = function() {
+    TrackListManager.prototype = new ListViewControl();
+    // clearTracks() is like clear(), but also sets the playlist to an empty one
+    TrackListManager.prototype.clearTracks = function() {
         this.setTracks([]);
     }
-    TrackListControl.prototype.setTracks = function( tracks ) {
+    TrackListManager.prototype.setTracks = function( tracks ) {
         this.tracks = tracks;
         //TODO: Probably better to set up the row information then call parent's _render
         this._render();
     }
-    TrackListControl.prototype.appendTrack = function(track) {
+    TrackListManager.prototype.appendTrack = function(track) {
         this.tracks.push(track);
         this.appendRow(track.title, track);
     }
     // Returns of list of selected track IDs
-    TrackListControl.prototype.getSelectedTracks = function() {
+    TrackListManager.prototype.getSelectedTracks = function() {
         // First get selected row indexes
         var selected = this.getSelected();
         // Then get track IDs from it
@@ -47,17 +47,17 @@ function TrackListControl() {
         return tracks;
     }
     // Extends base class to also remove the item from the track list
-    TrackListControl.prototype.deleteItem = function(index) {
+    TrackListManager.prototype.deleteItem = function(index) {
         this.tracks.splice(index, 1);
         ListViewControl.prototype.deleteItem.call(this, index);
     }
     // Private methods --------------
     // Recreates every row
-    TrackListControl.prototype._render = function() {
+    TrackListManager.prototype._render = function() {
         this.clear();
-        for (var tracknum in this.tracks) {
-            var trackTitle = this.tracks[tracknum].title;
-            this.appendRow(trackTitle, this.tracks[tracknum]);
+        for (var i = 0; i < this.tracks.length; i++) {
+            var trackTitle = this.tracks[i].title;
+            this.appendRow(trackTitle, this.tracks[i]);
         }
     }
 
@@ -65,12 +65,12 @@ function TrackListControl() {
  QueueControl
  ------------
  Definition for the Queue class, which manages the current playlist.
- The queue is basically a specialized subclass of a TrackListControl
+ The queue is basically a specialized subclass of a TrackListManager
  that adds methods for controlling the player and playlist management.
  //TODO: rename to QueueManager?
  *************************************/
 function QueueControl() {
-    TrackListControl.call(this);
+    TrackListManager.call(this);
     this.currentlyPlaying = null;   // null == nothing playing
     // Events
     page.audio.addEventListener("ended", this.trackFinished, false);
@@ -78,20 +78,21 @@ function QueueControl() {
         // Subtract one here to correct for the header row
         e.listControl.playItem(e.row.rowIndex-1);
     }, false);
-    this.clearPlaylist();
     // Stick it in the DOM
     document.getElementById("queueContainer").appendChild(this.listElement);
 }
-    QueueControl.prototype = new TrackListControl();
-    QueueControl.prototype.clearPlaylist = function() {
-        this.setPlaylist(new Playlist());
-    }
-    QueueControl.prototype.setPlaylist = function( playlist ) {
-        this.playlist = playlist;
-        this.setTracks(playlist.items);
+    QueueControl.prototype = new TrackListManager();
+    QueueControl.prototype.setTracks = function( tracks ) {
+        // We need to do some extra queue management when we set a playlist
+        TrackListManager.prototype.setTracks.call(this, tracks);
+        // Set up the queue so the first item starts playing after the current
+        // track - but only if something is playing
+        if (this.currentlyPlaying != null) {
+            this.currentlyPlaying = -1;
+        }
     }
     QueueControl.prototype.playItem = function( trackIndex ) {
-        var track = this.playlist.items[trackIndex];
+        var track = this.tracks[trackIndex];
         page.audio.src = track.url;
         // TODO: more detailed metadata display
         page.meta.innerHTML = track.title;
@@ -106,8 +107,31 @@ function QueueControl() {
         if (queue.currentlyPlaying < queue.tracks.length-1) {
             //TODO: vary behavior depending on options (autoplay off, shuffle, etc.)
             queue.playItem(queue.currentlyPlaying + 1);
+        } else {
+            // If it's at the end of the playlist, mark currentlyPlaying as such
+            queue.currentlyPlaying = null;
+            queue.highlightRow();
         }
     }
+
+
+/*************************************
+ LibraryManager
+ --------------
+ Takes care of the library view on the page.
+ *************************************/
+function LibraryManager() {
+    TrackListManager.call(this);
+    // Stick it in the DOM
+    document.getElementById("libraryContainer").appendChild(this.listElement);
+}
+    LibraryManager.prototype = new TrackListManager();
+    LibraryManager.prototype.populate = function(query) {
+        //TODO: better query system
+        items = requestLibraryItems(query);
+        this.setTracks(items)
+    }
+
 
 /*************************************
  NavigationManager
@@ -145,7 +169,7 @@ function NavigationManager() {
     }
     // -- Events ---------
     NavigationManager.prototype._libraryClicked = function(e) {
-        populateLibrary(requestLibraryItems("?album=1"));
+        library.populate("?album=1");
     }
     NavigationManager.prototype._playlistClicked = function(e) {
         try {
@@ -154,20 +178,9 @@ function NavigationManager() {
             alert(error.message);
             throw error;
         }
-        queue.setPlaylist(playlist);
+        queue.setTracks(playlist);
     }
 
-
-function Playlist(items, name) {
-    if (items == undefined) {
-        items = [];
-    }
-    if (name == undefined) {
-        name = "<Unnamed>";
-    }
-    this.items = items;
-    this.name = name;
-}
 
 /* Functions
  ************/

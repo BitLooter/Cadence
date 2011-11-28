@@ -22,7 +22,11 @@ function requestPlaylist(id) {
     if (request.status != 200) {
         throw new ServerPlaylistError(request);
     }
-    return JSON.parse(request.responseText);
+    response = JSON.parse(request.responseText);
+    playlist = response.items;
+    playlist.id = response.id;
+    playlist.name = response.name;
+    return playlist;
 }
 
 function requestPlaylistList() {
@@ -37,6 +41,9 @@ function requestPlaylistList() {
 }
 
 function requestLibraryItems(query) {
+    if (query == undefined) {
+        query = "";
+    }
     //TODO: better query system
     var request = new XMLHttpRequest();
     //TODO: make asynchronous, check for errors
@@ -62,12 +69,12 @@ function savePlaylist(tracks, name) {
     nav.updatePlaylists();
 }
 
-function populateLibrary(items) {
-    library.clearTracks()
-    for (i in items) {
-        library.appendRow(items[i].title, items[i]);
-    }
-}
+// function populateLibrary(items) {
+    // library.clearTracks()
+    // for (i in items) {
+        // library.appendRow(items[i].title, items[i]);
+    // }
+// }
 
 
 /* Init code 
@@ -78,8 +85,7 @@ function playerInit() {
     
     // Instance the queue and other objects
     window.queue = new QueueControl();
-    window.library = new TrackListControl();
-    document.getElementById("libraryContainer").appendChild(library.listElement);
+    window.library = new LibraryManager();
     
     // Set up events
     document.getElementById("queueButton").addEventListener("click",
@@ -117,7 +123,8 @@ function playerInit() {
     
     // Display the library
     //TODO: do not display library on init
-    populateLibrary(requestLibraryItems(""));
+    library.populate();
+    //populateLibrary(requestLibraryItems(""));
     
     // Get default playlist
     //TODO: implement default playlist
