@@ -10,6 +10,28 @@
  **********/
 
 /*************************************
+ ToolbarControl
+ --------------
+ Used for creating a set of controls to issue commands to the application by
+ the user.
+ 
+ Parameters
+  container
+   The DOM element that controls are put in. Will be cleared at init.
+ *************************************/
+function ToolbarControl(container) {
+    clearElement(container);
+    this.element = container;
+}
+    ToolbarControl.prototype.addButton = function(label, callback) {
+        button = document.createElement("button");
+        button.type = "button";
+        button.appendChild(document.createTextNode(label));
+        button.addEventListener("click", callback, false);
+        this.element.appendChild(button);
+    }
+
+/*************************************
  ListViewControl
  ---------------
  Manages a tabular data view, similar to the ListView controls you find in
