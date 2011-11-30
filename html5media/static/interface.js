@@ -62,14 +62,14 @@ function TrackListManager() {
     }
 
 /*************************************
- QueueControl
+ QueueManager
  ------------
  Definition for the Queue class, which manages the current playlist.
  The queue is basically a specialized subclass of a TrackListManager
  that adds methods for controlling the player and playlist management.
  //TODO: rename to QueueManager?
  *************************************/
-function QueueControl() {
+function QueueManager() {
     TrackListManager.call(this);
     this.currentlyPlaying = null;   // null == nothing playing
     // Events
@@ -81,8 +81,8 @@ function QueueControl() {
     // Stick it in the DOM
     document.getElementById("queueContainer").appendChild(this.listElement);
 }
-    QueueControl.prototype = new TrackListManager();
-    QueueControl.prototype.setTracks = function( tracks ) {
+    QueueManager.prototype = new TrackListManager();
+    QueueManager.prototype.setTracks = function( tracks ) {
         // We need to do some extra queue management when we set a playlist
         TrackListManager.prototype.setTracks.call(this, tracks);
         // Set up the queue so the first item starts playing after the current
@@ -91,7 +91,7 @@ function QueueControl() {
             this.currentlyPlaying = -1;
         }
     }
-    QueueControl.prototype.playItem = function( trackIndex ) {
+    QueueManager.prototype.playItem = function( trackIndex ) {
         var track = this.tracks[trackIndex];
         page.audio.src = track.url;
         // TODO: more detailed metadata display
@@ -103,7 +103,7 @@ function QueueControl() {
         this.currentlyPlaying = parseInt(trackIndex);
     }
     // Event handlers -----------
-    QueueControl.prototype.trackFinished = function(e) {
+    QueueManager.prototype.trackFinished = function(e) {
         if (queue.currentlyPlaying < queue.tracks.length-1) {
             //TODO: vary behavior depending on options (autoplay off, shuffle, etc.)
             queue.playItem(queue.currentlyPlaying + 1);

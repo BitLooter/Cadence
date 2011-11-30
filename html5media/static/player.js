@@ -52,7 +52,6 @@ function requestLibraryItems(query) {
     return JSON.parse(request.responseText);
 }
 
-//TODO: move savePlaylist to a QueueControl method?
 function savePlaylist(tracks, name) {
     var request = new XMLHttpRequest();
     var idList= [];
@@ -84,7 +83,7 @@ function playerInit() {
     bindElementList();
     
     // Instance the queue and other objects
-    window.queue = new QueueControl();
+    window.queue = new QueueManager();
     window.library = new LibraryManager();
     
     // Set up events
