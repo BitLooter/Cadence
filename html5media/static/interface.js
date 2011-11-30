@@ -67,7 +67,6 @@ function TrackListManager() {
  Definition for the Queue class, which manages the current playlist.
  The queue is basically a specialized subclass of a TrackListManager
  that adds methods for controlling the player and playlist management.
- //TODO: rename to QueueManager?
  *************************************/
 function QueueManager() {
     TrackListManager.call(this);

@@ -23,7 +23,6 @@ class Album(models.Model):
 
 class Media(models.Model):
     title  = models.CharField(max_length=127)
-    #TODO: the following fields will be normalized to their own tables
     artist = models.ForeignKey(Artist)
     album  = models.ForeignKey(Album)
     url    = models.CharField(max_length=255)
@@ -82,7 +81,6 @@ class Playlist(models.Model):
     def savePlaylist(idList, name):
         items = Media.objects.filter(pk__in=idList)
         playlist = Playlist()
-        #TODO: see if there's a better way than saving twice
         playlist.save()
         playlist.items.add(*items)
         playlist.name = name

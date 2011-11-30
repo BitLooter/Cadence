@@ -1,6 +1,6 @@
 from django.shortcuts import HttpResponse
 import os
-import urllib   #TODO: use urllib.parse in Python 3.x
+import urllib   #NOTE: use urllib.parse in Python 3.x
 import logging
 import mutagen
 import models

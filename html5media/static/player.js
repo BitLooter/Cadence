@@ -1,7 +1,6 @@
 /********************************************************************
  * player.js - Functions for the media player part of the page
  ********************************************************************/
-//TODO: Create an object to handle the sidebar?
 
 
 /* Functions
