@@ -84,39 +84,6 @@ function playerInit() {
     // Instance the queue and other objects
     window.queue = new QueueManager();
     window.library = new LibraryManager();
-    
-    // Set up events
-    document.getElementById("queueButton").addEventListener("click",
-        function(e){
-            tracks = library.getSelectedTracks();
-            for (var i in tracks) {
-                queue.appendTrack(tracks[i]);
-            }
-        },
-        false
-    )
-    document.getElementById("savePlaylistButton").addEventListener("click",
-        function(e){
-            name = prompt("Enter a name for the playlist:", "<Unnamed>");
-            try {
-                savePlaylist(queue.tracks, name);
-            } catch(error) {
-                alert(error.message);
-            }
-        },
-        false
-    )
-    document.getElementById("removeButton").addEventListener("click",
-        function(e){
-            var items = queue.getSelected().reverse();
-            for (i in items) {
-                queue.deleteItem(items[i]);
-            }
-        },
-        false
-    )
-    
-    // Set up the sidebar
     window.nav = new NavigationManager();
     
     // Display the library

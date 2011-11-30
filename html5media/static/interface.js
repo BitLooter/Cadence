@@ -71,8 +71,12 @@ function TrackListManager() {
 function QueueManager() {
     TrackListManager.call(this);
     this.currentlyPlaying = null;   // null == nothing playing
+    // Set up toolbar
+    this.toolbar = new ToolbarControl(document.getElementById("queueToolbar"));
+    this.toolbar.addButton("Save playlist", this._savePlaylistClicked);
+    this.toolbar.addButton("Remove", this._removeItemClicked);
     // Events
-    page.audio.addEventListener("ended", this.trackFinished, false);
+    page.audio.addEventListener("ended", this._trackFinished, false);
     this.listElement.addEventListener("rowclick", function(e) {
         // Subtract one here to correct for the header row
         e.listControl.playItem(e.row.rowIndex-1);
@@ -101,8 +105,23 @@ function QueueManager() {
         this.highlightRow(parseInt(trackIndex));
         this.currentlyPlaying = parseInt(trackIndex);
     }
-    // Event handlers -----------
-    QueueManager.prototype.trackFinished = function(e) {
+    // -- Event handlers -----------
+    QueueManager.prototype._savePlaylistClicked = function(e) {
+        var name = prompt("Enter a name for the playlist:", "<Unnamed>");
+        try {
+            savePlaylist(queue.tracks, name);
+        } catch(error) {
+            alert(error.message);
+        }
+    }
+    QueueManager.prototype._removeItemClicked = function(e) {
+        // Process the list in reverse, because indexes change when we remove items
+        var items = queue.getSelected().reverse();
+        for (i in items) {
+            queue.deleteItem(items[i]);
+        }
+    }
+    QueueManager.prototype._trackFinished = function(e) {
         if (queue.currentlyPlaying < queue.tracks.length-1) {
             //TODO: vary behavior depending on options (autoplay off, shuffle, etc.)
             queue.playItem(queue.currentlyPlaying + 1);
@@ -123,6 +142,8 @@ function LibraryManager() {
     TrackListManager.call(this);
     // Stick it in the DOM
     document.getElementById("libraryContainer").appendChild(this.listElement);
+    this.toolbar = new ToolbarControl(document.getElementById("libraryToolbar"));
+    this.toolbar.addButton("Queue", this._queueEvent);
 }
     LibraryManager.prototype = new TrackListManager();
     LibraryManager.prototype.populate = function(query) {
@@ -130,6 +151,15 @@ function LibraryManager() {
         items = requestLibraryItems(query);
         this.setTracks(items)
     }
+    // -- Event handlers ----------
+    LibraryManager.prototype._queueEvent = function(e) {
+        // Find all selected tracks and stick them on the queue
+        tracks = library.getSelectedTracks();
+        for (var i in tracks) {
+            queue.appendTrack(tracks[i]);
+        }
+    }
+    
 
 
 /*************************************

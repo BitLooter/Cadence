@@ -30,18 +30,13 @@
         
         <section id="libraryPane">
             <h1>Library</h1>
-            <div id="libraryToolbar">
-                <button id="queueButton" type="button">Queue</button>
-            </div>
+            <div id="libraryToolbar"></div>
             <div id="libraryContainer"></div>
         </section>
         
         <section id="queuePane">
             <h1>Queue</h1>
-            <div id="queueToolbar">
-                <button id="savePlaylistButton" type="button">Save playlist</button>
-                <button id="removeButton" type="button">Remove</button>
-            </div>
+            <div id="queueToolbar"></div>
             <div id="queueContainer"></div>
         </div>
     </body>
