@@ -9,6 +9,7 @@ import models
 ############
 UNKNOWN_ALBUM = "<Unknown album>"
 UNKNOWN_ARTIST = "<Unknown artist>"
+NO_TITLE = "<No title>"
 MEDIA_ROOT = "C:/Develop/html5media/html5media/media/"
 URL_ROOT = "/html5media/media/"
 
@@ -48,14 +49,14 @@ def scan():
     # Now process the media files
     for filename in pathnames:
         media = models.Media()
-        if "title" in meta[filename] and meta[filename]["title"] != "":
+        if "title" in meta[filename] and meta[filename]["title"][0] != "":
             title = meta[filename]["title"][0]
         else:
-            title = "<No title>"
+            title = NO_TITLE
         media.title = title
         media.artist = artistEntries[meta[filename]["artist"][0]]
         media.album = albumEntries[meta[filename]["album"][0]]
-        urlseg = file.replace(MEDIA_ROOT, "").replace(os.sep, "/")
+        urlseg = filename.replace(MEDIA_ROOT, "").replace(os.sep, "/")
         media.url = urllib.quote(URL_ROOT + urlseg)
         media.save()
     
