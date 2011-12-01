@@ -37,7 +37,7 @@ def saveplaylist(request):
     
     return response
 
-def libraryitems(request):
+def library(request):
     #TODO: logging
     # Make sure no one's trying anything funny with the queries and database access
     if set(request.GET.keys()) <= set(models.allowedFilters):

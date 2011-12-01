@@ -46,7 +46,7 @@ function requestLibraryItems(query) {
     //TODO: better query system
     var request = new XMLHttpRequest();
     //TODO: make asynchronous, check for errors
-    request.open("GET", "http://localhost/html5media/data/libraryitems/" + query, false);
+    request.open("GET", "http://localhost/html5media/data/library/" + query, false);
     request.send(null);
     return JSON.parse(request.responseText);
 }
