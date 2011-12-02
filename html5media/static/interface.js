@@ -61,6 +61,7 @@ function TrackListManager() {
         }
     }
 
+
 /*************************************
  QueueManager
  ------------
@@ -103,10 +104,12 @@ function QueueManager() {
     // -- Event handlers -----------
     QueueManager.prototype._savePlaylistClicked = function(e) {
         var name = prompt("Enter a name for the playlist:", "<Unnamed>");
-        try {
-            savePlaylist(queue.tracks, name);
-        } catch(error) {
-            alert(error.message);
+        if (name != null) {
+            try {
+                savePlaylist(queue.tracks, name);
+            } catch(error) {
+                alert(error.message);
+            }
         }
     }
     QueueManager.prototype._removeItemClicked = function(e) {
