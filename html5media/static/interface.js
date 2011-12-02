@@ -95,12 +95,12 @@ function QueueManager() {
         }
     }
     QueueManager.prototype.playItem = function( trackIndex ) {
-        var track = this.tracks[trackIndex];
-        page.audio.src = track.url;
+        player.playTrack(this.tracks[trackIndex]);
+        /*page.audio.src = track.url;
         // TODO: more detailed metadata display
         page.meta.innerHTML = track.title;
         // Start playing
-        page.audio.play();
+        page.audio.play();*/
         // Update currently playing highlight
         this.highlightRow(parseInt(trackIndex));
         this.currentlyPlaying = parseInt(trackIndex);
@@ -159,7 +159,6 @@ function LibraryManager() {
             queue.appendTrack(tracks[i]);
         }
     }
-    
 
 
 /*************************************
@@ -175,10 +174,6 @@ function NavigationManager() {
     // Fill data
     this.updatePlaylists();
     this.updateLibTree();
-    
-    //TODO: replace this hardcoded data
-    // var libList = document.getElementById("sbLibrary");
-    // libList.innerHTML = "<li onclick='javascript: nav._libraryClicked()'>Mirror</li>"
 }
     // Updates the list of available playlists in the sidebar
     NavigationManager.prototype.updatePlaylists = function() {
@@ -232,6 +227,23 @@ function NavigationManager() {
             throw error;
         }
         queue.setTracks(playlist);
+    }
+
+
+/*************************************
+ PlayerManager
+ -------------
+ Code used to control the player, providing methods to play, stop, pause, etc.
+ *************************************/
+function PlayerManager() {
+    this.audioElement = document.getElementById("audioPlayer");
+    this.metaElement = document.getElementById("metadata");
+}
+    PlayerManager.prototype.playTrack = function(track) {
+        this.audioElement.src = track.url;
+        // TODO: more detailed metadata display
+        this.metaElement.innerText = track.title;
+        this.audioElement.play();
     }
 
 

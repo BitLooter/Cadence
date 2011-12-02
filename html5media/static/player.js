@@ -13,6 +13,7 @@ function playerInit() {
     window.queue = new QueueManager();
     window.library = new LibraryManager();
     window.nav = new NavigationManager();
+    window.player = new PlayerManager();
     
     // Display the library
     //TODO: do not display library on init
