@@ -169,10 +169,16 @@ function LibraryManager() {
  and other navigation elements.
  *************************************/
 function NavigationManager() {
+    // Set DOM elements
+    this.libTree = document.getElementById("sbLibrary");
+    
+    // Fill data
     this.updatePlaylists();
+    this.updateLibTree();
+    
     //TODO: replace this hardcoded data
-    var libList = document.getElementById("sbLibrary");
-    libList.innerHTML = "<li onclick='javascript: nav._libraryClicked()'>Mirror</li>"
+    // var libList = document.getElementById("sbLibrary");
+    // libList.innerHTML = "<li onclick='javascript: nav._libraryClicked()'>Mirror</li>"
 }
     // Updates the list of available playlists in the sidebar
     NavigationManager.prototype.updatePlaylists = function() {
@@ -196,9 +202,27 @@ function NavigationManager() {
             plElement.appendChild(listItem);
         }
     }
+    // Updates the library catagories
+    NavigationManager.prototype.updateLibTree = function() {
+        clearElement(this.libTree);
+        var albumHead = document.createElement("li");
+        albumHead.appendChild(document.createTextNode("Albums"));
+        this.libTree.appendChild(albumHead);
+        var albums = requestAlbumList();
+        //TODO: implement a treeview control
+        var albumUL = document.createElement("ul");
+        for (var album in albums) {
+            var albumLI = document.createElement("li");
+            albumLI.appendChild(document.createTextNode(albums[album].name));
+            albumLI.albumID = albums[album].id;
+            albumLI.addEventListener("click", this._libraryClicked, false);
+            albumUL.appendChild(albumLI);
+        }
+        this.libTree.appendChild(albumUL);
+    }
     // -- Events ---------
     NavigationManager.prototype._libraryClicked = function(e) {
-        library.populate("?album=1");
+        library.populate("?album=" + e.target.albumID);
     }
     NavigationManager.prototype._playlistClicked = function(e) {
         try {
