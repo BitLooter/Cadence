@@ -76,7 +76,7 @@ function QueueManager() {
     this.toolbar.addButton("Save playlist", this._savePlaylistClicked);
     this.toolbar.addButton("Remove", this._removeItemClicked);
     // Events
-    page.audio.addEventListener("ended", this._trackFinished, false);
+    player.audioElement.addEventListener("ended", this._trackFinished, false);
     this.listElement.addEventListener("rowclick", function(e) {
         // Subtract one here to correct for the header row
         e.listControl.playItem(e.row.rowIndex-1);
@@ -96,11 +96,6 @@ function QueueManager() {
     }
     QueueManager.prototype.playItem = function( trackIndex ) {
         player.playTrack(this.tracks[trackIndex]);
-        /*page.audio.src = track.url;
-        // TODO: more detailed metadata display
-        page.meta.innerHTML = track.title;
-        // Start playing
-        page.audio.play();*/
         // Update currently playing highlight
         this.highlightRow(parseInt(trackIndex));
         this.currentlyPlaying = parseInt(trackIndex);
@@ -245,21 +240,3 @@ function PlayerManager() {
         this.metaElement.innerText = track.title;
         this.audioElement.play();
     }
-
-
-/* Functions
- ************/
-
-// Helper function that gets called at page load and builds a LUT for DOM elements
-function bindElementList() {
-    list = new Object();
-    
-    list.queue =   document.getElementById("queuePane");
-    list.sidebar = document.getElementById("sidebarPane");
-    list.library = document.getElementById("libraryPane");
-    list.audio =   document.getElementById("audioPlayer");
-    list.meta =    document.getElementById("metadata");
-    
-    // Place it in the global namespace for easy access
-    window.page = list;
-}

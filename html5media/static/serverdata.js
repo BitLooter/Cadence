@@ -69,10 +69,10 @@ function requestAlbumList() {
 function savePlaylist(tracks, name) {
     var request = new XMLHttpRequest();
     var idList= [];
-    for (i in tracks) {
+    for (var i in tracks) {
         idList.push(parseInt(tracks[i].id));
     }
-    text = JSON.stringify({"name": name, "tracks": idList});
+    var text = JSON.stringify({"name": name, "tracks": idList});
     //TODO: make asynchronous
     request.open("POST", "http://localhost/html5media/data/saveplaylist/", false);
     request.send(text);
