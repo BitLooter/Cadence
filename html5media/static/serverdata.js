@@ -16,7 +16,7 @@
 function requestPlaylist(id) {
     var request = new XMLHttpRequest();
     //TODO: make asynchronous
-    request.open("GET", "http://localhost/html5media/data/playlist/?id=" + id, false);
+    request.open("GET", "http://localhost/html5media/data/playlist/"+id+"/", false);
     request.send(null);
     if (request.status != 200) {
         throw new ServerPlaylistError(request);

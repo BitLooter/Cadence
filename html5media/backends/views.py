@@ -5,18 +5,14 @@ from database import models
 
 #TODO: document API parameters
 #TODO: check for external errors like database access problems
-def playlist(request):
+def playlist(request, playlistID):
     #TODO: logging
-    #If ID contains anything but numbers, it's an error
-    playlistID = request.GET["id"]
-    if playlistID.isdigit():
-        try:
-            playlist = models.Playlist.getPlaylist(playlistID)
-            response = HttpResponse(json.dumps(playlist), mimetype="text/plain")
-        except ObjectDoesNotExist:
-            response = HttpResponseNotFound("Error: Playlist not found", mimetype="text/plain")
-    else:
-        response = HttpResponseBadRequest("Error: ID is not a number", mimetype="text/plain")
+    try:
+        playlist = models.Playlist.getPlaylist(playlistID)
+        response = HttpResponse(json.dumps(playlist), mimetype="text/plain")
+    except ObjectDoesNotExist:
+        response = HttpResponseNotFound("Error: Playlist not found", mimetype="text/plain")
+    
     return response
 
 def playlistlist(request):
