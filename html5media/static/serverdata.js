@@ -51,6 +51,14 @@ function requestLibraryItems(query) {
     return JSON.parse(request.responseText);
 }
 
+function requestAlbumList() {
+    var request = new XMLHttpRequest();
+    //TODO: make asynchronous, check for errors
+    request.open("GET", "http://localhost/html5media/data/library/albums/", false);
+    request.send(null);
+    return JSON.parse(request.responseText);
+}
+
 /*************************************
  savePlaylist
  ------------

@@ -20,6 +20,14 @@ class Album(models.Model):
     
     def __unicode__(self):
         return u"Album #{}: {}".format(self.id, self.name)
+    
+    @staticmethod
+    def getAlbums():
+        albums = []
+        for album in Album.objects.all():
+            albums.append({"id":     album.id,
+                           "name":   album.name })
+        return albums
 
 class Media(models.Model):
     title  = models.CharField(max_length=127)

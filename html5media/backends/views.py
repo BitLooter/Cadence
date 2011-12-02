@@ -22,7 +22,7 @@ def playlist(request):
 def playlistlist(request):
     #TODO: logging
     lists = models.Playlist.getPlaylistList()
-    return HttpResponse(json.dumps(lists))
+    return HttpResponse(json.dumps(lists), mimetype="text/plain")
 
 def saveplaylist(request):
     #TODO: logging
@@ -41,9 +41,14 @@ def library(request):
     #TODO: logging
     # Make sure no one's trying anything funny with the queries and database access
     if set(request.GET.keys()) <= set(models.allowedFilters):
-        response = HttpResponse(json.dumps(models.Media.getLibraryItems(request.GET)))
+        response = HttpResponse(json.dumps(models.Media.getLibraryItems(request.GET)), mimetype="text/plain")
     else:
         badFilters = list(set(request.GET.keys()) - set(models.allowedFilters))
         response = HttpResponseBadRequest("Error: Unrecognized filter(s): {}".format(", ".join(badFilters)),
                                           mimetype="text/plain")
+    return response
+
+def library_albums(request):
+    #TODO: logging
+    response = HttpResponse(json.dumps(models.Album.getAlbums()), mimetype="text/plain")
     return response
