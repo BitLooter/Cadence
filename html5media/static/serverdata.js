@@ -69,7 +69,7 @@ function requestAlbumList() {
 function savePlaylist(tracks, name) {
     var request = new XMLHttpRequest();
     var idList = [];
-    for (var i in tracks) {
+    for (var i = 0; i < tracks.length; i++) {
         idList.push(parseInt(tracks[i].id));
     }
     var text = JSON.stringify({"name": name, "tracks": idList});
