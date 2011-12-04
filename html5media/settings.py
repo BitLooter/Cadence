@@ -147,7 +147,7 @@ LOGGING = {
             'class': 'logging.NullHandler'
         },
         'file': {
-            'level': 'INFO',
+            'level': 'DEBUG',
             'class': 'logging.FileHandler',
             'filename': 'C:/Develop/html5media/log.txt',
             'formatter': 'verbose'
@@ -165,7 +165,7 @@ LOGGING = {
         },
         'apps': {
             'handlers': ['file'],
-            'level': 'INFO',
+            'level': 'DEBUG',
             'propagate': True,
         },
     }
