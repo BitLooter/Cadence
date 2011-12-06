@@ -33,6 +33,7 @@ class Media(models.Model):
     title  = models.CharField(max_length=127)
     artist = models.ForeignKey(Artist)
     album  = models.ForeignKey(Album)
+    length = models.FloatField()
     url    = models.CharField(max_length=255)
     
     def __unicode__(self):

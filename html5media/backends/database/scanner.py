@@ -56,6 +56,7 @@ def scan():
         media.title = title
         media.artist = artistEntries[meta[filename]["artist"][0]]
         media.album = albumEntries[meta[filename]["album"][0]]
+        media.length = meta[filename].info.length
         urlseg = filename.replace(MEDIA_ROOT, "").replace(os.sep, "/")
         media.url = urllib.quote(URL_ROOT + urlseg)
         media.save()
