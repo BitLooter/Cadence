@@ -78,10 +78,7 @@ function QueueManager() {
     this.toolbar.addButton("Remove", this._removeItemClicked);
     // Events
     player.audioElement.addEventListener("ended", this._trackFinished, false);
-    this.listElement.addEventListener("rowclick", function(e) {
-        // Subtract one here to correct for the header row
-        e.listControl.playItem(e.row.rowIndex-1);
-    }, false);
+    this.listElement.addEventListener("rowclick", this._rowClicked, false);
     // Stick it in the DOM
     document.getElementById("queueContainer").appendChild(this.listElement);
 }
@@ -100,6 +97,28 @@ function QueueManager() {
         // Update currently playing highlight
         this.highlightRow(parseInt(trackIndex));
         this.currentlyPlaying = parseInt(trackIndex);
+    }
+    QueueManager.prototype.playNext = function( trackIndex ) {
+        if (queue.currentlyPlaying < queue.tracks.length-1) {
+            //TODO: vary behavior depending on options (autoplay off, shuffle, etc.)
+            queue.playItem(queue.currentlyPlaying + 1);
+        } else {
+            // If it's at the end of the playlist, mark currentlyPlaying as such
+            this.currentlyPlaying = null;
+            this.highlightRow();
+            // Stop playing, if a track is in progress
+            player.clearMeta();
+            player.stop();
+        }
+    }
+    QueueManager.prototype.playPrev = function( trackIndex ) {
+        if (queue.currentlyPlaying > 0) {
+            //TODO: if too far into the track, skip to beginning instead of previous track
+            queue.playItem(queue.currentlyPlaying - 1);
+        } else {
+            // If it's at the beginning of the playlist, play first track again
+            queue.playItem(0);
+        }
     }
     // -- Event handlers -----------
     QueueManager.prototype._savePlaylistClicked = function(e) {
@@ -120,14 +139,11 @@ function QueueManager() {
         }
     }
     QueueManager.prototype._trackFinished = function(e) {
-        if (queue.currentlyPlaying < queue.tracks.length-1) {
-            //TODO: vary behavior depending on options (autoplay off, shuffle, etc.)
-            queue.playItem(queue.currentlyPlaying + 1);
-        } else {
-            // If it's at the end of the playlist, mark currentlyPlaying as such
-            queue.currentlyPlaying = null;
-            queue.highlightRow();
-        }
+        queue.playNext();
+    }
+    QueueManager.prototype._rowClicked = function(e) {
+        // Subtract one here to correct for the header row
+        e.listControl.playItem(e.row.rowIndex-1);
     }
 
 
@@ -234,12 +250,90 @@ function NavigationManager() {
  Code used to control the player, providing methods to play, stop, pause, etc.
  *************************************/
 function PlayerManager() {
+    // Get some common elements
     this.audioElement = document.getElementById("audioPlayer");
+    this.titleElement = document.getElementById("playerTitle");
+    this.artistElement = document.getElementById("playerArtist");
+    this.albumElement = document.getElementById("playerAlbum");
+    this.timeElement = document.getElementById("playerTime");
+    this.lengthElement = document.getElementById("playerLength");
     this.metaElement = document.getElementById("metadata");
+    
+    // Prepare metadata elements
+    clearElement(this.titleElement);
+    clearElement(this.artistElement);
+    clearElement(this.albumElement);
+    clearElement(this.timeElement);
+    clearElement(this.lengthElement);
+    this.titleText = document.createTextNode();
+    this.artistText = document.createTextNode();
+    this.albumText = document.createTextNode();
+    this.timeText = document.createTextNode();
+    this.lengthText = document.createTextNode();
+    this.titleElement.appendChild(this.titleText);
+    this.artistElement.appendChild(this.artistText);
+    this.albumElement.appendChild(this.albumText);
+    this.timeElement.appendChild(this.timeText);
+    this.lengthElement.appendChild(this.lengthText);
+    
+    // Set player to default state
+    this.clearMeta();
+    
+    // Assign events
+    this.audioElement.addEventListener("timeupdate", this.timeUpdate, false);
+    document.getElementById("playerPlay").addEventListener("click", this.playClicked, false);
+    document.getElementById("playerStop").addEventListener("click", this.stopClicked, false);
+    document.getElementById("playerNext").addEventListener("click", this.nextClicked, false);
+    document.getElementById("playerPrev").addEventListener("click", this.prevClicked, false);
 }
     PlayerManager.prototype.playTrack = function(track) {
         this.audioElement.src = track.url;
         // TODO: more detailed metadata display
-        this.metaElement.innerText = track.title;
+        // this.metaElement.innerText = track.title;
+        // TODO: length from database, not the player
+        this.titleText.nodeValue = track.title;
+        this.artistText.nodeValue = track.artist;
+        this.albumText.nodeValue = track.album;
+        this.lengthText.nodeValue = this._makeTimeStr(track.length);
         this.audioElement.play();
+    }
+    PlayerManager.prototype.stop = function() {
+        this.audioElement.pause();
+        this.audioElement.currentTime = 0;
+    }
+    // Resets to player to a default state with no track loaded
+    PlayerManager.prototype.clearMeta = function() {
+        this.titleText.nodeValue = "Nothing playing";
+        this.artistText.nodeValue = "--";
+        this.albumText.nodeValue = "--";
+        this.timeText.nodeValue = "-:--";
+        this.lengthText.nodeValue = "-:--";
+    }
+    // -- Event handlers -----------
+    PlayerManager.prototype.playClicked = function(e) {
+        if (player.audioElement.paused) {
+            player.audioElement.play();
+        } else {
+            player.audioElement.pause();
+        }
+    }
+    PlayerManager.prototype.stopClicked = function(e) {
+        player.stop();
+    }
+    PlayerManager.prototype.prevClicked = function(e) {
+        queue.playPrev();
+    }
+    PlayerManager.prototype.nextClicked = function(e) {
+        queue.playNext();
+    }
+    PlayerManager.prototype.timeUpdate = function(e) {
+        player.timeText.nodeValue = player._makeTimeStr(e.target.currentTime);
+    }
+    // -- Private functions ----------
+    PlayerManager.prototype._makeTimeStr = function(time) {
+        minutes = Math.floor(time/60);
+        // Round down so we don't get edge cases like 2:60
+        seconds = Math.floor(time - minutes*60);
+        //TODO: seconds should always be two digits
+        return minutes + ":" + seconds;
     }

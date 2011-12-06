@@ -14,7 +14,16 @@
         <div id="playerPane">
             <div id="player">
                 <audio id="audioPlayer" src="" type='audio/ogg' controls></audio>
-                <div id="metadata">Nothing playing</div>
+                <a id="playerPlay">[Play/Pause]</a>
+                <a id="playerStop">[Stop]</a>
+                <a id="playerPrev">[Previous]</a>
+                <a id="playerNext">[Next]</a>
+                <div id="metadata">
+                    <span id="playerTime"></span>/<span id="playerLength"></span> - 
+                    <span id="playerTitle"></span> -
+                    <span id="playerArtist"></span> /
+                    <span id="playerAlbum"></span>
+                </div>
             </div>
             <div id="logo">Home page link</div>
         </div>
