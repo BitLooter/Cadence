@@ -29,6 +29,7 @@
         </div>
         
         <nav id="sidebarPane">
+            <a href="/html5media/admin/">Admin</a>
             <h1>Navigation</h1>
             <h2>Playlists</h2>
             <ul id="sbPlaylists"></ul>
