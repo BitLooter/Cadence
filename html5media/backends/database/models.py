@@ -39,6 +39,14 @@ class Media(models.Model):
     def __unicode__(self):
         return u"#{}: {} ({}) - {}".format(self.id, self.album.name, self.artist.name, self.title)
     
+    def make_dict(self):
+        return {"id":     self.id,
+                "title":  self.title,
+                "artist": self.artist.name,
+                "album":  self.album.name,
+                "length": self.length,
+                "url":    self.url }
+    
     # Data source API helper methods
     @staticmethod
     def getLibraryItems(filters):
@@ -48,11 +56,7 @@ class Media(models.Model):
         
         items = []
         for item in Media.objects.filter(**request_kwargs):
-            items.append({"id":     item.id,
-                          "title":  item.title,
-                          "artist": item.artist.name,
-                          "album":  item.album.name,
-                          "url":    item.url })
+            items.append(item.make_dict())
         return items
 
 class Playlist(models.Model):
@@ -70,11 +74,7 @@ class Playlist(models.Model):
                     "name": playlistObj.name,
                     "items": []}
         for item in playlistObj.items.all():
-            playlist["items"].append({"id":     item.id,
-                                      "title":  item.title,
-                                      "artist": item.artist.name,
-                                      "album":  item.album.name,
-                                      "url":    item.url })
+            playlist["items"].append(item.make_dict())
         return playlist
     
     @staticmethod
