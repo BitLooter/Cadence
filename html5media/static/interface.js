@@ -28,8 +28,11 @@ function TrackListManager() {
     }
     TrackListManager.prototype.setTracks = function( tracks ) {
         this.tracks = tracks;
-        //TODO: Probably better to set up the row information then call parent's _render
-        this._render();
+        this.clear();
+        for (var i = 0; i < this.tracks.length; i++) {
+            var trackTitle = this.tracks[i].title;
+            this.appendRow(trackTitle, this.tracks[i]);
+        }
     }
     TrackListManager.prototype.appendTrack = function(track) {
         this.tracks.push(track);
@@ -50,15 +53,6 @@ function TrackListManager() {
     TrackListManager.prototype.deleteItem = function(index) {
         this.tracks.splice(index, 1);
         ListViewControl.prototype.deleteItem.call(this, index);
-    }
-    // Private methods --------------
-    // Recreates every row
-    TrackListManager.prototype._render = function() {
-        this.clear();
-        for (var i = 0; i < this.tracks.length; i++) {
-            var trackTitle = this.tracks[i].title;
-            this.appendRow(trackTitle, this.tracks[i]);
-        }
     }
 
 
@@ -113,8 +107,13 @@ function QueueManager() {
     }
     QueueManager.prototype.playPrev = function( trackIndex ) {
         if (queue.currentlyPlaying > 0) {
-            //TODO: if too far into the track, skip to beginning instead of previous track
-            queue.playItem(queue.currentlyPlaying - 1);
+            // If we're close to the beginning of the track, skip to the one before
+            if (player.audioElement.currentTime < 5) {
+                queue.playItem(queue.currentlyPlaying - 1);
+            } else {
+                player.stop();
+                player.play();
+            }
         } else {
             // If it's at the beginning of the playlist, play first track again
             queue.playItem(0);
@@ -289,9 +288,6 @@ function PlayerManager() {
 }
     PlayerManager.prototype.playTrack = function(track) {
         this.audioElement.src = track.url;
-        // TODO: more detailed metadata display
-        // this.metaElement.innerText = track.title;
-        // TODO: length from database, not the player
         this.titleText.nodeValue = track.title;
         this.artistText.nodeValue = track.artist;
         this.albumText.nodeValue = track.album;
@@ -301,6 +297,10 @@ function PlayerManager() {
     PlayerManager.prototype.stop = function() {
         this.audioElement.pause();
         this.audioElement.currentTime = 0;
+    }
+    PlayerManager.prototype.play = function() {
+        //TODO: take a parameter indicating start position
+        this.audioElement.play();
     }
     // Resets to player to a default state with no track loaded
     PlayerManager.prototype.clearMeta = function() {
