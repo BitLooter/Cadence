@@ -13,7 +13,7 @@
     <body>
         <div id="playerPane">
             <div id="player">
-                <audio id="audioPlayer" src="" type='audio/ogg' controls></audio>
+                <audio id="playerAudio" src="" type='audio/ogg' controls></audio>
                 <a id="playerPlay">[Play/Pause]</a>
                 <a id="playerStop">[Stop]</a>
                 <a id="playerPrev">[Previous]</a>

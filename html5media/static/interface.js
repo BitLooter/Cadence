@@ -251,7 +251,7 @@ function NavigationManager() {
  *************************************/
 function PlayerManager() {
     // Get some common elements
-    this.audioElement = document.getElementById("audioPlayer");
+    this.audioElement = document.getElementById("playerAudio");
     this.titleElement = document.getElementById("playerTitle");
     this.artistElement = document.getElementById("playerArtist");
     this.albumElement = document.getElementById("playerAlbum");
