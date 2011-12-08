@@ -76,6 +76,7 @@ function ListViewControl() {
     // Rows are stored as an array of DOM elements, with the values (visible
     //  data) and extra (associated data) as attributes on each
     this.rows = [];
+    this.selectedRows = [];
     this.currentHighlight = null;
 }
     ListViewControl.prototype.changeHeader = function(headers) {
@@ -84,8 +85,12 @@ function ListViewControl() {
         // Create the select-all checkbox
         var selectAllCheck = document.createElement("input");
         selectAllCheck.type = "checkbox";
-        selectAllCheck.style.display = "none"; // Remove this line when toggle all is implemented
         selectAllCheck.className = "uilcHeadSelect";
+        selectAllCheck.addEventListener("click", this._allSelected, false);
+        // Add a reference to the list control for the event handler to find
+        selectAllCheck.listControl = this;
+        // And a reference to the checkbox on the control for other code to find
+        this.selectAllCheck = selectAllCheck;
         var selectAllCell = document.createElement("th");
         selectAllCell.appendChild(selectAllCheck);
         selectAllCell.className = "uilcHeadSelect";
@@ -133,6 +138,9 @@ function ListViewControl() {
         removed = this.rows[index];
         this.listBody.removeChild(removed);
         this.rows.splice(index, 1);
+        // Correct for an edge case - without this, removing all leaves the
+        // 'select all' box status undefined when the the list is emptied
+        this.selectAllCheck.checked = false;
     }
     // Highlights a specific row
     ListViewControl.prototype.highlightRow = function(index) {
@@ -146,7 +154,7 @@ function ListViewControl() {
             this.currentHighlight = index;
         }
     }
-    /// Private functions --------------
+    // -- Event handlers --------------
     ListViewControl.prototype._handleRowClick = function(e) {
         // Don't do anything if it was the checkbox that was clicked
         if (e.target.tagName != "INPUT") {
@@ -158,18 +166,52 @@ function ListViewControl() {
             rowEvent.listControl.listElement.dispatchEvent(rowEvent);
         }
     }
+    ListViewControl.prototype._rowSelected = function(e) {
+        var row = e.target.parentElement.parentElement;
+        var selectedIndex = e.target.listControl.selectedRows.indexOf(row);
+        if (selectedIndex == -1) {
+            e.target.listControl.selectedRows.push(row);
+        } else {
+            e.target.listControl.selectedRows.splice(selectedIndex, 1);
+        }
+        e.target.listControl._updateSelectAllBox();
+    }
+    ListViewControl.prototype._allSelected = function(e) {
+        var selectedRows = e.target.listControl.selectedRows;
+        var rows = e.target.listControl.rows;
+        var control = e.target.listControl;
+        // If all selected, deselect all rows
+        if (e.target.listControl.selectedRows.length == e.target.listControl.rows.length) {
+            for (var i = 0; i < rows.length; i++) {
+                rows[i].firstChild.firstChild.checked = false;
+                control.selectedRows = [];
+            }
+        // Otherwise select them all
+        } else {
+            for (var i = 0; i < rows.length; i++) {
+                rows[i].firstChild.firstChild.checked = true;
+                control.selectedRows = rows.slice(0);
+            }
+        }
+    }
+    // -- Private functions --------------
     // _createRow handles the DOM stuff, code should normally use appendRow
     ListViewControl.prototype._createRow = function(data) {
         rowElement = document.createElement("tr");
         rowElement.className = "uilcRow";
+        
         // Selection checkbox
         rowSelect = document.createElement("input");
         rowSelect.className = "uilcSelect";
         rowSelect.type = "checkbox";
+        rowSelect.addEventListener("click", this._rowSelected, false);
+        // Place a reference to the controlfor the event handler
+        rowSelect.listControl = this;
         rowSelectCell = document.createElement("th");
         rowSelectCell.className = "uilcSelectBox";
         rowSelectCell.appendChild(rowSelect);
         rowElement.appendChild(rowSelectCell);
+        
         // Table data
         element = document.createElement("td");
         element.className = "uilcCell";
@@ -178,4 +220,11 @@ function ListViewControl() {
         rowElement.addEventListener("click", this._handleRowClick, false);
         rowElement.appendChild(element)
         return rowElement;
+    }
+    ListViewControl.prototype._updateSelectAllBox = function() {
+        if (this.selectedRows.length == this.rows.length) {
+            this.selectAllCheck.checked = true;
+        } else {
+            this.selectAllCheck.checked = false;
+        }
     }
