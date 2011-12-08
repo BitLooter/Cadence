@@ -11,3 +11,10 @@ function clearElement( node ) {
         node.removeChild(node.lastChild);
     }
 }
+
+// Sends a click event to an element
+function simulateClick(element) {
+    var e = document.createEvent("MouseEvents");
+    e.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+    element.dispatchEvent(e);
+}
