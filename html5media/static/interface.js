@@ -285,6 +285,7 @@ function PlayerManager() {
     document.getElementById("playerStop").addEventListener("click", this.stopClicked, false);
     document.getElementById("playerNext").addEventListener("click", this.nextClicked, false);
     document.getElementById("playerPrev").addEventListener("click", this.prevClicked, false);
+    document.getElementById("playerMute").addEventListener("click", this.muteClicked, false);
 }
     PlayerManager.prototype.playTrack = function(track) {
         this.audioElement.src = track.url;
@@ -328,6 +329,9 @@ function PlayerManager() {
     }
     PlayerManager.prototype.timeUpdate = function(e) {
         player.timeText.nodeValue = player._makeTimeStr(e.target.currentTime);
+    }
+    PlayerManager.prototype.muteClicked = function(e) {
+        player.audioElement.muted = player.audioElement.muted == false ? true : false;
     }
     // -- Private functions ----------
     PlayerManager.prototype._makeTimeStr = function(time) {

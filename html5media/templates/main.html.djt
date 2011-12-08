@@ -18,6 +18,7 @@
                 <a id="playerStop">[Stop]</a>
                 <a id="playerPrev">[Previous]</a>
                 <a id="playerNext">[Next]</a>
+                <a id="playerMute">[Mute]</a>
                 <div id="metadata">
                     <span id="playerTime"></span>/<span id="playerLength"></span> - 
                     <span id="playerTitle"></span> -
