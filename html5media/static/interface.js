@@ -338,6 +338,5 @@ function PlayerManager() {
         minutes = Math.floor(time/60);
         // Round down so we don't get edge cases like 2:60
         seconds = Math.floor(time - minutes*60);
-        //TODO: seconds should always be two digits
-        return minutes + ":" + seconds;
+        return minutes + ":" + (seconds < 10 ? "0" + seconds.toString() : seconds.toString());
     }
