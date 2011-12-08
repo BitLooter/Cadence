@@ -31,12 +31,12 @@ function TrackListManager() {
         this.clear();
         for (var i = 0; i < this.tracks.length; i++) {
             var trackTitle = this.tracks[i].title;
-            this.appendRow(trackTitle, this.tracks[i]);
+            this._appendTrackRow(tracks[i]);
         }
     }
     TrackListManager.prototype.appendTrack = function(track) {
         this.tracks.push(track);
-        this.appendRow(track.title, track);
+        this._appendTrackRow(track);
     }
     // Returns of list of selected track IDs
     TrackListManager.prototype.getSelectedTracks = function() {
@@ -53,6 +53,11 @@ function TrackListManager() {
     TrackListManager.prototype.deleteItem = function(index) {
         this.tracks.splice(index, 1);
         ListViewControl.prototype.deleteItem.call(this, index);
+    }
+    // -- Private functions -----------
+    // Adds a row to the control with the track data
+    TrackListManager.prototype._appendTrackRow = function(track) {
+        this.appendRow([track.title], track);
     }
 
 

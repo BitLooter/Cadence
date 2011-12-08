@@ -122,7 +122,6 @@ function ListViewControl() {
         clearElement(this.listBody);
     }
     ListViewControl.prototype.getSelected = function() {
-        //TODO: we can probably speed this up by handling click events
         var checkedList = new Array();
         for (i in this.rows) {
             var element = this.rows[i];
