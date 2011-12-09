@@ -16,7 +16,7 @@
  *************************************/
 function TrackListManager() {
     ListViewControl.call(this);
-    var headers = ["Title"];
+    var headers = ["Title", "Length"];
     this.changeHeader(headers);
     // Default message for blank lists (an empty div, not attached to the DOM)
     this.emptyMessage = document.createElement("div");
@@ -59,7 +59,7 @@ function TrackListManager() {
     // -- Private functions -----------
     // Adds a row to the control with the track data
     TrackListManager.prototype._appendTrackRow = function(track) {
-        this.appendRow([track.title], track);
+        this.appendRow([track.title, makeTimeStr(track.length)], track);
     }
 
 
@@ -300,7 +300,7 @@ function PlayerManager() {
         this.titleText.nodeValue = track.title;
         this.artistText.nodeValue = track.artist;
         this.albumText.nodeValue = track.album;
-        this.lengthText.nodeValue = this._makeTimeStr(track.length);
+        this.lengthText.nodeValue = makeTimeStr(track.length);
         this.audioElement.play();
     }
     PlayerManager.prototype.stop = function() {
@@ -337,15 +337,9 @@ function PlayerManager() {
         queue.playNext();
     }
     PlayerManager.prototype.timeUpdate = function(e) {
-        player.timeText.nodeValue = player._makeTimeStr(e.target.currentTime);
+        player.timeText.nodeValue = makeTimeStr(e.target.currentTime);
     }
     PlayerManager.prototype.muteClicked = function(e) {
         player.audioElement.muted = player.audioElement.muted == false ? true : false;
     }
     // -- Private functions ----------
-    PlayerManager.prototype._makeTimeStr = function(time) {
-        minutes = Math.floor(time/60);
-        // Round down so we don't get edge cases like 2:60
-        seconds = Math.floor(time - minutes*60);
-        return minutes + ":" + (seconds < 10 ? "0" + seconds.toString() : seconds.toString());
-    }
