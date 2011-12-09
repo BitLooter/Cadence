@@ -14,8 +14,8 @@
  specifically, playlists. May be subclassed, e.g. the queue makes use of
  a subclass of this to add queue control functionality.
  *************************************/
-function TrackListManager() {
-    ListViewControl.call(this);
+function TrackListManager(parent) {
+    ListViewControl.call(this, parent);
     var headers = ["Title", "Length"];
     this.changeHeader(headers);
     // Default message for blank lists (an empty div, not attached to the DOM)
@@ -23,7 +23,7 @@ function TrackListManager() {
     // clearTracks will reset things to a default state
     this.clearTracks();
 }
-    TrackListManager.prototype = new ListViewControl();
+    TrackListManager.prototype = Object.create(ListViewControl.prototype);
     // clearTracks() is like clear(), but also sets the playlist to an empty one
     TrackListManager.prototype.clearTracks = function() {
         this.setTracks([]);
@@ -71,21 +71,24 @@ function TrackListManager() {
  that adds methods for controlling the player and playlist management.
  *************************************/
 function QueueManager() {
-    TrackListManager.call(this);
-    this.currentlyPlaying = null;   // null == nothing playing
+    TrackListManager.call(this, document.getElementById("queueContainer"));
+    // Set the parent to the outside container
+    this.parent = document.getElementById("queuePane")
     // Set up toolbar
     this.toolbar = new ToolbarControl(document.getElementById("queueToolbar"));
     this.toolbar.addButton("Save playlist", this._savePlaylistClicked);
     this.toolbar.addButton("Remove", this._removeItemClicked);
     // Set up message for a blank queue
     this.emptyMessage = document.getElementById("queueBlankMessage");
+    
+    // Init important variables
+    this.currentlyPlaying = null;   // null == nothing playing
+    
     // Events
     player.audioElement.addEventListener("ended", this._trackFinished, false);
     this.listElement.addEventListener("rowclick", this._rowClicked, false);
-    // Stick it in the DOM
-    document.getElementById("queueContainer").appendChild(this.listElement);
 }
-    QueueManager.prototype = new TrackListManager();
+    QueueManager.prototype = Object.create(TrackListManager.prototype);
     QueueManager.prototype.setTracks = function( tracks ) {
         // We need to do some extra queue management when we set a playlist
         TrackListManager.prototype.setTracks.call(this, tracks);
@@ -161,13 +164,11 @@ function QueueManager() {
  Takes care of the library view on the page.
  *************************************/
 function LibraryManager() {
-    TrackListManager.call(this);
-    // Stick it in the DOM
-    document.getElementById("libraryContainer").appendChild(this.listElement);
+    TrackListManager.call(this, document.getElementById("libraryContainer"));
     this.toolbar = new ToolbarControl(document.getElementById("libraryToolbar"));
     this.toolbar.addButton("Queue", this._queueEvent);
 }
-    LibraryManager.prototype = new TrackListManager();
+    LibraryManager.prototype = Object.create(TrackListManager.prototype);
     LibraryManager.prototype.populate = function(query) {
         //TODO: better query system
         items = requestLibraryItems(query);
@@ -243,6 +244,8 @@ function NavigationManager() {
     }
     NavigationManager.prototype._playlistClicked = function(e) {
         queue.disable("Loading playlist");
+        //TODO: figure out why chrome refuses to show the overlay without some sort of delay here
+        alert("Make Chrome show overlay");
         try {
             var playlist = requestPlaylist(e.currentTarget.playlistID);
         } catch (error) {
