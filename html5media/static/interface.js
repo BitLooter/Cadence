@@ -275,11 +275,11 @@ function PlayerManager() {
     clearElement(this.albumElement);
     clearElement(this.timeElement);
     clearElement(this.lengthElement);
-    this.titleText = document.createTextNode();
-    this.artistText = document.createTextNode();
-    this.albumText = document.createTextNode();
-    this.timeText = document.createTextNode();
-    this.lengthText = document.createTextNode();
+    this.titleText = document.createTextNode("");
+    this.artistText = document.createTextNode("");
+    this.albumText = document.createTextNode("");
+    this.timeText = document.createTextNode("");
+    this.lengthText = document.createTextNode("");
     this.titleElement.appendChild(this.titleText);
     this.artistElement.appendChild(this.artistText);
     this.albumElement.appendChild(this.albumText);
