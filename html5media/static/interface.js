@@ -242,6 +242,7 @@ function NavigationManager() {
         library.populate("?album=" + e.target.albumID);
     }
     NavigationManager.prototype._playlistClicked = function(e) {
+        queue.disable("Loading playlist");
         try {
             var playlist = requestPlaylist(e.currentTarget.playlistID);
         } catch (error) {
@@ -249,6 +250,7 @@ function NavigationManager() {
             throw error;
         }
         queue.setTracks(playlist);
+        queue.enable();
     }
 
 

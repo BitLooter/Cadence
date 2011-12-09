@@ -67,6 +67,21 @@ function ListViewControl() {
     this.listElement.appendChild(this.listHead);
     this.listBody = document.createElement("tbody");
     this.listElement.appendChild(this.listBody);
+    // Overlay for disabled controls
+    this.overlayElement = document.createElement("div");
+    this.overlayElement.appendChild(document.createTextNode(""));
+    this.overlayElement.style.backgroundColor = "rgba(0, 0, 0, 0.75)";
+    this.overlayElement.style.color = "white";
+    this.overlayElement.style.position = "absolute";
+    this.overlayElement.style.top = "0";
+    this.overlayElement.style.left = "0"
+    this.overlayElement.style.width = "100%";
+    this.overlayElement.style.height = "100%";
+    this.overlayElement.style.textAlign = "center";
+    this.overlayElement.style.paddingTop = "2em";
+    this.overlayElement.style.display = "none"
+    this.listElement.appendChild(this.overlayElement);
+    
     // Add CSS styles
     this.listElement.className = "uilcTable";
     this.listHead.className = "uilcHead";
@@ -156,6 +171,14 @@ function ListViewControl() {
             this.rows[index].classList.add("uilcHighlight");
             this.currentHighlight = index;
         }
+    }
+    ListViewControl.prototype.disable = function(message) {
+        // Places an overlay on the control preventing input
+        this.listElement.style.position = "relative";
+        this.overlayElement.style.display = "block";
+    }
+    ListViewControl.prototype.enable = function() {
+        this.overlayElement.style.display = "none";
     }
     // -- Event handlers --------------
     ListViewControl.prototype._handleRowClick = function(e) {
