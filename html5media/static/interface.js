@@ -18,6 +18,8 @@ function TrackListManager() {
     ListViewControl.call(this);
     var headers = ["Title"];
     this.changeHeader(headers);
+    // Default message for blank lists (an empty div, not attached to the DOM)
+    this.emptyMessage = document.createElement("div");
     // clearTracks will reset things to a default state
     this.clearTracks();
 }
@@ -75,6 +77,8 @@ function QueueManager() {
     this.toolbar = new ToolbarControl(document.getElementById("queueToolbar"));
     this.toolbar.addButton("Save playlist", this._savePlaylistClicked);
     this.toolbar.addButton("Remove", this._removeItemClicked);
+    // Set up message for a blank queue
+    this.emptyMessage = document.getElementById("queueBlankMessage");
     // Events
     player.audioElement.addEventListener("ended", this._trackFinished, false);
     this.listElement.addEventListener("rowclick", this._rowClicked, false);

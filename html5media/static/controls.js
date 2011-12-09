@@ -115,11 +115,14 @@ function ListViewControl() {
         this.rows.push( element );
         // Done setting it up, stick it on the DOM
         this.listBody.appendChild(element);
+        this._updateSelectAllBox();
+        this._updateBlankMessage();
     }
     // Delete all the rows, reset it to before data was added
     ListViewControl.prototype.clear = function() {
         this.rows = [];
         clearElement(this.listBody);
+        this._updateBlankMessage();
     }
     ListViewControl.prototype.getSelected = function() {
         var checkedList = new Array();
@@ -140,6 +143,7 @@ function ListViewControl() {
         // Correct for an edge case - without this, removing all leaves the
         // 'select all' box status undefined when the the list is emptied
         this.selectAllCheck.checked = false;
+        this._updateBlankMessage();
     }
     // Highlights a specific row
     ListViewControl.prototype.highlightRow = function(index) {
@@ -204,7 +208,7 @@ function ListViewControl() {
         rowSelect.className = "uilcSelect";
         rowSelect.type = "checkbox";
         rowSelect.addEventListener("click", this._rowSelected, false);
-        // Place a reference to the controlfor the event handler
+        // Place a reference to the control for the event handler
         rowSelect.listControl = this;
         rowSelectCell = document.createElement("th");
         rowSelectCell.className = "uilcSelectBox";
@@ -212,7 +216,7 @@ function ListViewControl() {
         rowElement.appendChild(rowSelectCell);
         
         // Table data
-        element = document.createElement("td");
+        var element = document.createElement("td");
         element.className = "uilcCell";
         element.appendChild(document.createTextNode(data));
         element.values = data;
@@ -225,5 +229,12 @@ function ListViewControl() {
             this.selectAllCheck.checked = true;
         } else {
             this.selectAllCheck.checked = false;
+        }
+    }
+    ListViewControl.prototype._updateBlankMessage = function(track) {
+        if (this.rows.length == 0) {
+            this.emptyMessage.style.display = "block";
+        } else {
+            this.emptyMessage.style.display = "none";
         }
     }

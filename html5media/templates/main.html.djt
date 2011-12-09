@@ -50,6 +50,7 @@
             <h1>Queue</h1>
             <div id="queueToolbar"></div>
             <div id="queueContainer"></div>
+            <div id="queueBlankMessage"><i>No tracks queued</i></div>
         </div>
     </body>
 </html>
