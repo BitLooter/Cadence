@@ -215,13 +215,18 @@ function ListViewControl() {
         rowSelectCell.appendChild(rowSelect);
         rowElement.appendChild(rowSelectCell);
         
-        // Table data
-        var element = document.createElement("td");
-        element.className = "uilcCell";
-        element.appendChild(document.createTextNode(data));
-        element.values = data;
+        // Event handlers
         rowElement.addEventListener("click", this._handleRowClick, false);
-        rowElement.appendChild(element)
+        
+        // Table data
+        rowElement.values = data;
+        for (var i = 0; i < data.length; i++) {
+            var element = document.createElement("td");
+            element.className = "uilcCell";
+            element.appendChild(document.createTextNode(data[i]));
+            rowElement.appendChild(element)
+        }
+        
         return rowElement;
     }
     ListViewControl.prototype._updateSelectAllBox = function() {
