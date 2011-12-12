@@ -42,7 +42,7 @@ function makeRequest(url, callback, post) {
             ;
         }
     }, false);
-    method = (post == undefined ? "GET" : "POST");
-    request.open("GET", url, false);
+    var method = (post == undefined ? "GET" : "POST");
+    request.open(method, url, false);
     request.send(post);
 }
