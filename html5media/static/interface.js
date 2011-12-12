@@ -171,8 +171,8 @@ function LibraryManager() {
     LibraryManager.prototype = Object.create(TrackListManager.prototype);
     LibraryManager.prototype.populate = function(query) {
         //TODO: better query system
-        items = requestLibraryItems(query);
-        this.setTracks(items)
+        requestLibraryItems(query, function(t){library.setTracks(t)});
+        // this.setTracks(items)
     }
     // -- Event handlers ----------
     LibraryManager.prototype._queueEvent = function(e) {
@@ -200,8 +200,9 @@ function NavigationManager() {
 }
     // Updates the list of available playlists in the sidebar
     NavigationManager.prototype.updatePlaylists = function() {
+        var lists = undefined;
         try {
-            var lists = requestPlaylistList();
+            requestPlaylistList(function(l){lists = l});
         } catch (error) {
             alert(error.message);
             throw error;
@@ -226,8 +227,8 @@ function NavigationManager() {
         var albumHead = document.createElement("li");
         albumHead.appendChild(document.createTextNode("Albums"));
         this.libTree.appendChild(albumHead);
-        var albums = requestAlbumList();
-        //TODO: implement a treeview control
+        var albums = undefined;
+        requestAlbumList(function(a){albums = a});
         var albumUL = document.createElement("ul");
         for (var album in albums) {
             var albumLI = document.createElement("li");
@@ -245,14 +246,13 @@ function NavigationManager() {
     NavigationManager.prototype._playlistClicked = function(e) {
         queue.disable("Loading playlist");
         //TODO: figure out why chrome refuses to show the overlay without some sort of delay here
-        alert("Make Chrome show overlay");
+        // alert("Make Chrome show overlay");
         try {
-            var playlist = requestPlaylist(e.currentTarget.playlistID);
+            requestPlaylist(e.currentTarget.playlistID, function(p){queue.setTracks(p)});
         } catch (error) {
             alert(error.message);
             throw error;
         }
-        queue.setTracks(playlist);
         queue.enable();
     }
 

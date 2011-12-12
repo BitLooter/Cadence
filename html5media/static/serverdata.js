@@ -13,50 +13,45 @@
  
  Exceptions raised: ServerPlaylistError
  *************************************/
-function requestPlaylist(id) {
-    var request = new XMLHttpRequest();
-    //TODO: make asynchronous
-    request.open("GET", "http://localhost/html5media/data/playlist/"+id+"/", false);
-    request.send(null);
-    if (request.status != 200) {
-        throw new ServerPlaylistError(request);
-    }
-    response = JSON.parse(request.responseText);
-    playlist = response.items;
-    playlist.id = response.id;
-    playlist.name = response.name;
-    return playlist;
+function requestPlaylist(id, callback) {
+    makeRequest("data/playlist/"+id+"/", function(r){
+        if (r.status == 200) {
+            var response = JSON.parse(r.responseText);
+            var playlist = response.items;
+            playlist.id = response.id;
+            playlist.name = response.name;
+            callback(playlist);
+        } else {
+            throw new ServerPlaylistError(r);
+        }
+    });
 }
 
-function requestPlaylistList() {
-    var request = new XMLHttpRequest();
-    //TODO: make asynchronous, check for errors
-    request.open("GET", "http://localhost/html5media/data/playlistlist/", false);
-    request.send(null);
-    if (request.status != 200) {
-        throw new ServerPlaylistListError(request);
-    }
-    return JSON.parse(request.responseText);
+function requestPlaylistList(callback) {
+    makeRequest("data/playlistlist/", function(r){
+        if (r.status == 200) {
+            callback(JSON.parse(r.responseText));
+        } else {
+            throw new ServerPlaylistListError(r);
+        }
+    });
 }
 
-function requestLibraryItems(query) {
+function requestLibraryItems(query, callback) {
     if (query == undefined) {
         query = "";
     }
     //TODO: better query system
-    var request = new XMLHttpRequest();
-    //TODO: make asynchronous, check for errors
-    request.open("GET", "http://localhost/html5media/data/library/" + query, false);
-    request.send(null);
-    return JSON.parse(request.responseText);
+    makeRequest("data/library/" + query, function(r){
+        callback(JSON.parse(r.responseText));
+    });
 }
 
-function requestAlbumList() {
-    var request = new XMLHttpRequest();
-    //TODO: make asynchronous, check for errors
-    request.open("GET", "http://localhost/html5media/data/library/albums/", false);
-    request.send(null);
-    return JSON.parse(request.responseText);
+function requestAlbumList(callback) {
+    //TODO: more error handling
+    makeRequest("data/library/albums/", function(r){
+        callback(JSON.parse(r.responseText));
+    });
 }
 
 /*************************************
@@ -74,10 +69,12 @@ function savePlaylist(tracks, name) {
     }
     var text = JSON.stringify({"name": name, "tracks": idList});
     //TODO: make asynchronous
-    request.open("POST", "http://localhost/html5media/data/saveplaylist/", false);
-    request.send(text);
-    if (request.status != 201) {
-        throw new ServerPlaylistError(request);
-    }
-    nav.updatePlaylists();
+    makeRequest("data/saveplaylist/", function(r){
+        if (r.status != 201) {
+            throw new ServerPlaylistError(r);
+        }
+        nav.updatePlaylists();
+    }, text);
+    //request.open("POST", "http://localhost/html5media/data/saveplaylist/", false);
+    //request.send(text);
 }
