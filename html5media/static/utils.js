@@ -26,3 +26,23 @@ function makeTimeStr(time) {
     var seconds = Math.floor(time - minutes*60);
     return minutes + ":" + (seconds < 10 ? "0" + seconds.toString() : seconds.toString());
 }
+
+// Make an ajax request
+function makeRequest(url, callback, post) {
+    //TODO: compatibility here
+    var request = new XMLHttpRequest();
+    request.addEventListener("readystatechange", function(evt) {
+        try {
+            if (this.readyState == 4) {
+                callback(this);
+            }
+        } catch (e) {
+            // Lost connection to the server
+            //TODO: throw some sort of error here
+            ;
+        }
+    }, false);
+    method = (post == undefined ? "GET" : "POST");
+    request.open("GET", url, false);
+    request.send(post);
+}
