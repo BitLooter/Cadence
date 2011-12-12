@@ -27,6 +27,13 @@ function requestPlaylist(id, callback) {
     });
 }
 
+/*************************************
+ requestPlaylistList
+ -------------------
+ Retrieves a list of playlists from the server
+ 
+ Exceptions raised: ServerPlaylistListError
+ *************************************/
 function requestPlaylistList(callback) {
     makeRequest("data/playlistlist/", function(r){
         if (r.status == 200) {
@@ -37,6 +44,11 @@ function requestPlaylistList(callback) {
     });
 }
 
+/*************************************
+ requestLibraryItems
+ -------------------
+ Gets a list of media items in the library from the server
+ *************************************/
 function requestLibraryItems(query, callback) {
     if (query == undefined) {
         query = "";
@@ -47,6 +59,11 @@ function requestLibraryItems(query, callback) {
     });
 }
 
+/*************************************
+ requestAlbumList
+ ----------------
+ Gets a list of track's albums from the server
+ *************************************/
 function requestAlbumList(callback) {
     //TODO: more error handling
     makeRequest("data/library/albums/", function(r){
@@ -68,13 +85,10 @@ function savePlaylist(tracks, name) {
         idList.push(parseInt(tracks[i].id));
     }
     var text = JSON.stringify({"name": name, "tracks": idList});
-    //TODO: make asynchronous
     makeRequest("data/saveplaylist/", function(r){
         if (r.status != 201) {
             throw new ServerPlaylistError(r);
         }
         nav.updatePlaylists();
     }, text);
-    //request.open("POST", "http://localhost/html5media/data/saveplaylist/", false);
-    //request.send(text);
 }
