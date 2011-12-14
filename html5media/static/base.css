@@ -6,19 +6,23 @@
 #sidebarPane {
     display: inline-block;
     float: left;
-    clear: none;
     width: 15%;
+}
+
+#filterPane {
+    display: inline-block;
+    float: left;
+    width: 10%;
 }
 
 #libraryPane {
     display: inline-block;
     float: left;
-    clear: none;
-    width: 40%;
+    width: 30%;
 }
 
 #queuePane {
     display: inline-block;
     float: right;
-    width: 40%;
+    width: 30%;
 }

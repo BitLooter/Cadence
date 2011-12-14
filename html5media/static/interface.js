@@ -224,24 +224,35 @@ function NavigationManager() {
     // Updates the library catagories
     NavigationManager.prototype.updateLibTree = function() {
         clearElement(this.libTree);
-        var albumHead = document.createElement("li");
-        albumHead.appendChild(document.createTextNode("Albums"));
-        this.libTree.appendChild(albumHead);
-        var albums = undefined;
-        requestAlbumList(function(a){albums = a});
-        var albumUL = document.createElement("ul");
-        for (var album in albums) {
-            var albumLI = document.createElement("li");
-            albumLI.appendChild(document.createTextNode(albums[album].name));
-            albumLI.albumID = albums[album].id;
-            albumLI.addEventListener("click", this._libraryClicked, false);
-            albumUL.appendChild(albumLI);
-        }
-        this.libTree.appendChild(albumUL);
+        var albums = document.createElement("li");
+        albums.appendChild(document.createTextNode("By album"));
+        albums.addEventListener("click", this._albumsClicked, false);
+        this.libTree.appendChild(albums);
+        var artists = document.createElement("li");
+        artists.appendChild(document.createTextNode("By artist"));
+        this.libTree.appendChild(artists);
+        
+        
+        
+        // var albumHead = document.createElement("li");
+        // albumHead.appendChild(document.createTextNode("Albums"));
+        // this.libTree.appendChild(albumHead);
+        // var albums = undefined;
+        // requestAlbumList(function(a){albums = a});
+        // var albumUL = document.createElement("ul");
+        // for (var album in albums) {
+            // var albumLI = document.createElement("li");
+            // albumLI.appendChild(document.createTextNode(albums[album].name));
+            // albumLI.albumID = albums[album].id;
+            // albumLI.addEventListener("click", this._libraryClicked, false);
+            // albumUL.appendChild(albumLI);
+        // }
+        // this.libTree.appendChild(albumUL);
     }
     // -- Events ---------
     NavigationManager.prototype._libraryClicked = function(e) {
-        library.populate("?album=" + e.target.albumID);
+        //TODO: clean this up, maybe make an applyFilters method
+        library.populate("?album=" + e);
     }
     NavigationManager.prototype._playlistClicked = function(e) {
         queue.disable("Loading playlist");
@@ -254,6 +265,21 @@ function NavigationManager() {
             throw error;
         }
         queue.enable();
+    }
+    NavigationManager.prototype._albumsClicked = function(e) {
+        var albums = undefined;
+        requestAlbumList(function(a){albums=a});
+        var filterElement = document.getElementById("filterList");
+        for (var i = 0; i < albums.length; i++) {
+            var album = albums[i];
+            var element = document.createElement("li");
+            element.appendChild(document.createTextNode(album.name));
+            element.album = album.id;
+            element.addEventListener("click",
+                                     function(e){nav._libraryClicked(e.target.album)},
+                                     false);
+            filterElement.appendChild(element);
+        }
     }
 
 
