@@ -14,7 +14,7 @@
  Exceptions raised: ServerPlaylistError
  *************************************/
 function requestPlaylist(id, callback) {
-    makeRequest("data/playlist/"+id+"/", function(r){
+    makeRequest("data/playlists/"+id+"/", function(r){
         if (r.status == 200) {
             var response = JSON.parse(r.responseText);
             var playlist = response.items;
@@ -35,7 +35,7 @@ function requestPlaylist(id, callback) {
  Exceptions raised: ServerPlaylistListError
  *************************************/
 function requestPlaylistList(callback) {
-    makeRequest("data/playlistlist/", function(r){
+    makeRequest("data/playlists/", function(r){
         if (r.status == 200) {
             callback(JSON.parse(r.responseText));
         } else {
@@ -67,6 +67,18 @@ function requestLibraryItems(query, callback) {
 function requestAlbumList(callback) {
     //TODO: more error handling
     makeRequest("data/library/albums/", function(r){
+        callback(JSON.parse(r.responseText));
+    });
+}
+
+/*************************************
+ requestAlbum
+ ------------
+ Gets an album from the server
+ *************************************/
+function requestAlbum(id, callback) {
+    //TODO: more error handling
+    makeRequest("data/library/albums/" + id + "/", function(r){
         callback(JSON.parse(r.responseText));
     });
 }

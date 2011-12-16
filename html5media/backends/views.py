@@ -72,3 +72,9 @@ def library_albums(request):
     
     response = HttpResponse(json.dumps(models.Album.getAlbums()), mimetype="text/plain")
     return response
+
+def library_get_album(request, albumID):
+    logger.info("Album request from {}".format(request.get_host()))
+    
+    response = HttpResponse(json.dumps(models.Album.getAlbumTracks(albumID)), mimetype="text/plain")
+    return response

@@ -28,6 +28,13 @@ class Album(models.Model):
             albums.append({"id":     album.id,
                            "name":   album.name })
         return albums
+    
+    @staticmethod
+    def getAlbumTracks(id):
+        items = []
+        for item in Media.objects.filter(album=id):
+            items.append(item.make_dict())
+        return items
 
 class Media(models.Model):
     title  = models.CharField(max_length=127)
