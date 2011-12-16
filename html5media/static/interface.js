@@ -231,23 +231,6 @@ function NavigationManager() {
         var artists = document.createElement("li");
         artists.appendChild(document.createTextNode("By artist"));
         this.libTree.appendChild(artists);
-        
-        
-        
-        // var albumHead = document.createElement("li");
-        // albumHead.appendChild(document.createTextNode("Albums"));
-        // this.libTree.appendChild(albumHead);
-        // var albums = undefined;
-        // requestAlbumList(function(a){albums = a});
-        // var albumUL = document.createElement("ul");
-        // for (var album in albums) {
-            // var albumLI = document.createElement("li");
-            // albumLI.appendChild(document.createTextNode(albums[album].name));
-            // albumLI.albumID = albums[album].id;
-            // albumLI.addEventListener("click", this._libraryClicked, false);
-            // albumUL.appendChild(albumLI);
-        // }
-        // this.libTree.appendChild(albumUL);
     }
     // -- Events ---------
     NavigationManager.prototype._libraryClicked = function(e) {
