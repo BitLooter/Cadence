@@ -169,10 +169,8 @@ function LibraryManager() {
     this.toolbar.addButton("Queue", this._queueEvent);
 }
     LibraryManager.prototype = Object.create(TrackListManager.prototype);
-    LibraryManager.prototype.populate = function(query) {
-        //TODO: better query system
-        requestLibraryItems(query, function(t){library.setTracks(t)});
-        // this.setTracks(items)
+    LibraryManager.prototype.populateAlbum = function(id) {
+        requestAlbum(id, function(t){library.setTracks(t)});
     }
     // -- Event handlers ----------
     LibraryManager.prototype._queueEvent = function(e) {
@@ -233,9 +231,9 @@ function NavigationManager() {
         this.libTree.appendChild(artists);
     }
     // -- Events ---------
-    NavigationManager.prototype._libraryClicked = function(e) {
-        //TODO: clean this up, maybe make an applyFilters method
-        library.populate("?album=" + e);
+    NavigationManager.prototype._setLibraryAlbum = function(id) {
+        //TODO: clean up the whole sidbar/filters/library system
+        library.populateAlbum(id);
     }
     NavigationManager.prototype._playlistClicked = function(e) {
         queue.disable("Loading playlist");
@@ -259,7 +257,7 @@ function NavigationManager() {
             element.appendChild(document.createTextNode(album.name));
             element.album = album.id;
             element.addEventListener("click",
-                                     function(e){nav._libraryClicked(e.target.album)},
+                                     function(e){nav._setLibraryAlbum(e.target.album)},
                                      false);
             filterElement.appendChild(element);
         }
