@@ -6,15 +6,16 @@
         <script src="/html5media/static/exceptions.js" type="text/javascript"></script>
         <script src="/html5media/static/serverdata.js" type="text/javascript"></script>
         <script src="/html5media/static/controls.js" type="text/javascript"></script>
+        <script src="/html5media/static/playercontrols.js" type="text/javascript"></script>
         <script src="/html5media/static/interface.js" type="text/javascript"></script>
-        <script src="/html5media/static/player.js" type="text/javascript"></script>
+        <script src="/html5media/static/init.js" type="text/javascript"></script>
         <link rel="stylesheet" type="text/css" href="/html5media/static/base.css" />
         <link rel="stylesheet" type="text/css" href="/html5media/static/theme.css" />
     </head>
     <body>
         <div id="playerPane">
             <div id="player">
-                <audio id="playerAudio" src="" type='audio/ogg' controls></audio>
+                <audio id="playerAudio" src="" type='audio/ogg'></audio>
                 <a id="playerPlay">[Play/Pause]</a>
                 <a id="playerStop">[Stop]</a>
                 <a id="playerPrev">[Previous]</a>
@@ -25,6 +26,9 @@
                     <span id="playerTitle"></span> -
                     <span id="playerArtist"></span> /
                     <span id="playerAlbum"></span>
+                </div>
+                <div id="playerScrubber">
+                    <div id="playerScrubberProgress"></div>
                 </div>
             </div>
             <div id="logo">Home page link</div>

@@ -1,3 +1,13 @@
+#playerScrubber {
+    width: 200px; height: 1em;
+    background-color: #CCC;
+}
+
+#playerScrubberProgress {
+    width: 0; height: 100%;
+    background-color: black;
+}
+
 #logo {
     position: absolute;
     top: 0; right: 0;

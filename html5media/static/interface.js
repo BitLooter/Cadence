@@ -282,6 +282,10 @@ function PlayerManager() {
     this.lengthElement = document.getElementById("playerLength");
     this.metaElement = document.getElementById("metadata");
     
+    // Ready the controls
+    this.controls = controlsHandler;
+    this.controls.init();
+    
     // Prepare metadata elements
     clearElement(this.titleElement);
     clearElement(this.artistElement);
@@ -304,19 +308,25 @@ function PlayerManager() {
     
     // Assign events
     this.audioElement.addEventListener("timeupdate", this.timeUpdate, false);
+    //TODO: store these controls in controlsHandler
     document.getElementById("playerPlay").addEventListener("click", this.playClicked, false);
     document.getElementById("playerStop").addEventListener("click", this.stopClicked, false);
     document.getElementById("playerNext").addEventListener("click", this.nextClicked, false);
     document.getElementById("playerPrev").addEventListener("click", this.prevClicked, false);
     document.getElementById("playerMute").addEventListener("click", this.muteClicked, false);
+    this.controls.scrubber.addEventListener("tracked", this.scrubberTracked, false);
 }
-    PlayerManager.prototype.playTrack = function(track) {
+    PlayerManager.prototype.setTrack = function(track) {
+        this.track = track;
         this.audioElement.src = track.url;
         this.titleText.nodeValue = track.title;
         this.artistText.nodeValue = track.artist;
         this.albumText.nodeValue = track.album;
         this.lengthText.nodeValue = makeTimeStr(track.length);
-        this.audioElement.play();
+    }
+    PlayerManager.prototype.playTrack = function(track) {
+        this.setTrack(track);
+        this.play();
     }
     PlayerManager.prototype.stop = function() {
         this.audioElement.pause();
@@ -353,6 +363,10 @@ function PlayerManager() {
     }
     PlayerManager.prototype.timeUpdate = function(e) {
         player.timeText.nodeValue = makeTimeStr(e.target.currentTime);
+        player.controls.updateScrubber(e.target.currentTime);
+    }
+    PlayerManager.prototype.scrubberTracked = function(e) {
+        player.audioElement.currentTime = e.newTime;
     }
     PlayerManager.prototype.muteClicked = function(e) {
         player.audioElement.muted = player.audioElement.muted == false ? true : false;
