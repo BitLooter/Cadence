@@ -1,11 +1,6 @@
 from django.db import models
 
 
-# Constants
-############
-allowedFilters = ["album"]
-
-
 # Classes
 ##########
 
@@ -30,9 +25,9 @@ class Album(models.Model):
         return albums
     
     @staticmethod
-    def getAlbumTracks(id):
+    def getAlbumTracks(albumID):
         items = []
-        for item in Media.objects.filter(album=id):
+        for item in Media.objects.filter(album=albumID):
             items.append(item.make_dict())
         return items
 
@@ -56,13 +51,9 @@ class Media(models.Model):
     
     # Data source API helper methods
     @staticmethod
-    def getLibraryItems(filters):
-        request_kwargs = {}
-        for arg, param in filters.items():
-            request_kwargs[arg] = param
-        
+    def getFullLibrary():
         items = []
-        for item in Media.objects.filter(**request_kwargs):
+        for item in Media.objects.all():
             items.append(item.make_dict())
         return items
 

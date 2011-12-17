@@ -172,6 +172,9 @@ function LibraryManager() {
     LibraryManager.prototype.populateAlbum = function(id) {
         requestAlbum(id, function(t){library.setTracks(t)});
     }
+    LibraryManager.prototype.populateAll = function() {
+        requestLibraryItems(function(t){library.setTracks(t)});
+    }
     // -- Event handlers ----------
     LibraryManager.prototype._queueEvent = function(e) {
         // Find all selected tracks and stick them on the queue

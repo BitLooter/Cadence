@@ -49,12 +49,8 @@ function requestPlaylistList(callback) {
  -------------------
  Gets a list of media items in the library from the server
  *************************************/
-function requestLibraryItems(query, callback) {
-    if (query == undefined) {
-        query = "";
-    }
-    //TODO: better query system
-    makeRequest("data/library/" + query, function(r){
+function requestLibraryItems(callback) {
+    makeRequest("data/library/", function(r){
         callback(JSON.parse(r.responseText));
     });
 }

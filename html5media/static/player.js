@@ -14,7 +14,7 @@ function playerInit() {
     
     // Display the library
     //TODO: do not display library on init
-    library.populate();
+    library.populateAll();
     
     // Get default playlist
     //TODO: implement default playlist
