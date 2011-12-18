@@ -194,6 +194,7 @@ function LibraryManager() {
 function NavigationManager() {
     // Set DOM elements
     this.libTree = document.getElementById("sbLibrary");
+    this.filtersPane = document.getElementById("filterPane");
     
     // Fill data
     this.updatePlaylists();
@@ -237,6 +238,7 @@ function NavigationManager() {
     NavigationManager.prototype._setLibraryAlbum = function(id) {
         //TODO: clean up the whole sidbar/filters/library system
         library.populateAlbum(id);
+        hideFiltersPane();
     }
     NavigationManager.prototype._playlistClicked = function(e) {
         queue.disable("Loading playlist");
@@ -264,6 +266,7 @@ function NavigationManager() {
                                      false);
             filterElement.appendChild(element);
         }
+        showFiltersPane();
     }
 
 

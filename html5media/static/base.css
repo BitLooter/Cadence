@@ -1,3 +1,17 @@
+html, body {
+    height: 100%;
+    margin: 0; padding: 0;
+}
+
+div {
+    margin: 0;
+    padding: 0;
+}
+
+#playerPane {
+    height: 15%;
+}
+
 #playerScrubber {
     width: 200px; height: 1em;
     background-color: #CCC;
@@ -13,26 +27,35 @@
     top: 0; right: 0;
 }
 
+#bottom {
+    position: relative;
+    height: 85%;
+}
+
 #sidebarPane {
     position: absolute;
-    width: 20%;
+    width: 20%; height 100%;
     left: 0;
 }
 
 #filterPane {
+    margin: 5%;
     position: absolute;
-    width: 20%;
-    left: 20%;
+    width: 90%; height: 90%;
+    left: 0; top: 0;
+    background-color: white;
+    visibility: hidden;
 }
 
 #libraryPane {
     position: absolute;
-    width: 30%;
-    left: 40%;
+    overflow: hidden;
+    width: 40%; height: 100%;
+    left: 20%; top: 0;
 }
 
 #queuePane {
     position: absolute;
-    width: 30%;
-    left: 70%;
+    width: 40%; height: 100%;
+    left: 60%;
 }
