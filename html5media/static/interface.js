@@ -165,11 +165,19 @@ function QueueManager() {
  *************************************/
 function LibraryManager() {
     TrackListManager.call(this, document.getElementById("libraryContainer"));
+    
+    // DOM elements
+    var subheading = document.getElementById("librarySubheading");
+    clearElement(subheading);
+    this.subheadingNode = document.createTextNode("");
+    subheading.appendChild(this.subheadingNode);
+    
     this.toolbar = new ToolbarControl(document.getElementById("libraryToolbar"));
     this.toolbar.addButton("Queue", this._queueEvent);
 }
     LibraryManager.prototype = Object.create(TrackListManager.prototype);
-    LibraryManager.prototype.populateAlbum = function(id) {
+    LibraryManager.prototype.populateAlbum = function(id, name) {
+        this.subheadingNode.nodeValue = "Album: " + name;
         requestAlbum(id, function(t){library.setTracks(t)});
     }
     LibraryManager.prototype.populateAll = function() {
@@ -194,7 +202,14 @@ function LibraryManager() {
 function NavigationManager() {
     // Set DOM elements
     this.libTree = document.getElementById("sbLibrary");
-    this.filtersPane = document.getElementById("filterPane");
+    this.filterPane = document.getElementById("filterPane");
+    // Filter title (text node)
+    var titleElement = document.getElementById("filterTitle");
+    clearElement(titleElement);
+    this.filterTitleNode = document.createTextNode("");
+    titleElement.appendChild(this.filterTitleNode);
+    // Filter UL
+    this.filterList = document.getElementById("filterList");
     
     // Fill data
     this.updatePlaylists();
@@ -235,11 +250,6 @@ function NavigationManager() {
         this.libTree.appendChild(artists);
     }
     // -- Events ---------
-    NavigationManager.prototype._setLibraryAlbum = function(id) {
-        //TODO: clean up the whole sidbar/filters/library system
-        library.populateAlbum(id);
-        hideFiltersPane();
-    }
     NavigationManager.prototype._playlistClicked = function(e) {
         queue.disable("Loading playlist");
         //TODO: figure out why chrome refuses to show the overlay without some sort of delay here
@@ -253,20 +263,35 @@ function NavigationManager() {
         queue.enable();
     }
     NavigationManager.prototype._albumsClicked = function(e) {
+        //TODO: properly disable library when the filter pane is up
+        // library.disable();
+        nav._setFilterTitle("Select an album");
+        // Get list of albums from the server
         var albums = undefined;
         requestAlbumList(function(a){albums=a});
+        // Fill out the filter <ul> with them
         var filterElement = document.getElementById("filterList");
         for (var i = 0; i < albums.length; i++) {
             var album = albums[i];
             var element = document.createElement("li");
             element.appendChild(document.createTextNode(album.name));
             element.album = album.id;
+            element.albumName = album.name
             element.addEventListener("click",
-                                     function(e){nav._setLibraryAlbum(e.target.album)},
+                                     function(e){nav._setLibraryAlbum(e.target.album, e.target.albumName)},
                                      false);
             filterElement.appendChild(element);
         }
         showFiltersPane();
+    }
+    // -- Private functions ----------
+    NavigationManager.prototype._setFilterTitle = function(title) {
+        this.filterTitleNode.nodeValue = title;
+    }
+    NavigationManager.prototype._setLibraryAlbum = function(id, name) {
+        //TODO: clean up the whole sidbar/filters/library system
+        library.populateAlbum(id, name);
+        hideFiltersPane();
     }
 
 

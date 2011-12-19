@@ -6,9 +6,9 @@
 
 
 function showFiltersPane() {
-    nav.filtersPane.style.visibility = "visible";
+    nav.filterPane.style.visibility = "visible";
 }
 
 function hideFiltersPane() {
-    nav.filtersPane.style.visibility = "hidden";
+    nav.filterPane.style.visibility = "hidden";
 }
