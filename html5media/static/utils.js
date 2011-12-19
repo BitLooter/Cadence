@@ -31,7 +31,9 @@ function makeTimeStr(time) {
 function makeRequest(url, callback, post) {
     //TODO: compatibility here
     var request = new XMLHttpRequest();
-    request.addEventListener("readystatechange", function(evt) {
+    // Normally I prefer addEventListener to bind events, but it doesn't work
+    // on Opera for an XMLHttpRequest object.
+    request.onreadystatechange = function(evt) {
         try {
             if (this.readyState == 4) {
                 callback(this);
@@ -41,7 +43,7 @@ function makeRequest(url, callback, post) {
             //TODO: throw some sort of error here
             ;
         }
-    }, false);
+    };
     var method = (post == undefined ? "GET" : "POST");
     request.open(method, url, false);
     request.send(post);
