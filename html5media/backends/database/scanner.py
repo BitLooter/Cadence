@@ -59,19 +59,25 @@ def scan():
         artistEntries[artist] = models.Artist.objects.get_or_create(name=artist)[0]
     
     # Now process the media files
+    # Get a list of all previously processed files
+    scannedFiles = models.Media.objects.values_list("path", flat=True)
     for filename in pathnames:
-        media = models.Media()
-        if "title" in meta[filename] and meta[filename]["title"][0] != "":
-            title = meta[filename]["title"][0]
-        else:
-            title = os.path.basename(filename)
-        media.title = title
-        media.artist = artistEntries[meta[filename]["artist"][0]]
-        media.album = albumEntries[meta[filename]["album"][0]]
-        media.length = meta[filename].info.length
-        urlseg = filename.replace(AUDIO_ROOT, "").replace(os.sep, "/")
-        media.url = urllib.quote(AUDIO_URL_ROOT + urlseg)
-        media.save()
+        # Database paths are relative to AUDIO_ROOT
+        relpath = filename[len(AUDIO_ROOT):]
+        if relpath not in scannedFiles:
+            media = models.Media()
+            if "title" in meta[filename] and meta[filename]["title"][0] != "":
+                title = meta[filename]["title"][0]
+            else:
+                title = os.path.basename(filename)
+            media.title = title
+            media.artist = artistEntries[meta[filename]["artist"][0]]
+            media.album = albumEntries[meta[filename]["album"][0]]
+            media.length = meta[filename].info.length
+            urlseg = filename.replace(AUDIO_ROOT, "").replace(os.sep, "/")
+            media.url = urllib.quote(AUDIO_URL_ROOT + urlseg)
+            media.path = relpath
+            media.save()
     
     logger.info("Media scan complete")
     

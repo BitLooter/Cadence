@@ -1,5 +1,6 @@
 from django.db import models
 
+from settings import *
 
 # Classes
 ##########
@@ -38,7 +39,9 @@ class Media(models.Model):
     artist = models.ForeignKey(Artist)
     album  = models.ForeignKey(Album)
     length = models.FloatField(help_text="Track length in seconds, floating point")
-    url    = models.CharField(max_length=255)
+    url    = models.URLField()
+    #TODO: restrict field to media files
+    path   = models.FilePathField(path=AUDIO_ROOT)
     
     def __unicode__(self):
         return u"#{}: {} ({}) - {}".format(self.id, self.album.name, self.artist.name, self.title)
