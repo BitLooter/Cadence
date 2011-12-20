@@ -20,6 +20,8 @@ def scan():
     
     logger.info("Media scan initiated")
     
+    actions = None
+    
     validTypes = [".ogg"]
     pathnames = []
     for dirpath, dirnames, filenames in os.walk(AUDIO_ROOT):
@@ -45,8 +47,10 @@ def scan():
     albumEntries = {}
     for album in albums:
         # Check for album art
-        if album in artUrls:
-            cover = artUrls[album]
+        # Album name may contain bad path characters (like ':'), search against a filtered version
+        pathalbum = filterPathChars(album)
+        if pathalbum in artUrls:
+            cover = artUrls[pathalbum]
         else:
             cover = ""
         albumEntries[album] = models.Album.objects.get_or_create(name=album, coverurl=cover)[0]
@@ -70,10 +74,15 @@ def scan():
         media.save()
     
     logger.info("Media scan complete")
+    
+    return actions
 
 def filterPathChars(path):
     """Takes a string and returns it with illegal path characters removed"""
-    return path.translate(None, r'\/:*?"<>|')
+    newpath = path
+    for char in r'\/:*?"<>|':
+        newpath = newpath.replace(char, "")
+    return newpath
 
 def update(request):
     """Django view for running the scanner"""
