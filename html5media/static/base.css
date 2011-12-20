@@ -12,6 +12,16 @@ div {
     height: 15%;
 }
 
+#playerCover {
+    display: inline-block;
+    height: 100%;
+}
+
+#player {
+    display: inline-block;
+    vertical-align: top;
+}
+
 #playerScrubber {
     width: 200px; height: 1em;
     background-color: #CCC;
