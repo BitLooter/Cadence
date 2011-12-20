@@ -1,16 +1,12 @@
-from django.shortcuts import HttpResponse
+from   django.shortcuts import HttpResponse
 import os
 import urllib   #NOTE: use urllib.parse in Python 3.x
 import logging
 import mutagen
+
+from   settings import *
 import models
 
-# Constants
-############
-UNKNOWN_ALBUM = "<Unknown album>"
-UNKNOWN_ARTIST = "<Unknown artist>"
-MEDIA_ROOT = "C:/Develop/html5media/html5media/media/"
-URL_ROOT = "/html5media/media/"
 
 logger = logging.getLogger('apps')
 
@@ -26,7 +22,7 @@ def scan():
     
     validTypes = [".ogg"]
     pathnames = []
-    for dirpath, dirnames, filenames in os.walk(MEDIA_ROOT):
+    for dirpath, dirnames, filenames in os.walk(AUDIO_ROOT):
         pathnames += [os.path.join(dirpath, f) for f in filenames if os.path.splitext(f)[1] in validTypes]
     meta = {p: mutagen.File(p) for p in pathnames}
     albums = set([a.setdefault("album", [UNKNOWN_ALBUM])[0] for a in meta.values()])
@@ -38,22 +34,21 @@ def scan():
         artists.remove(""); artists.add(UNKNOWN_ARTIST)
     
     # Process available album art
-    artFilenames = os.listdir("C:/Develop/html5media/html5media/static/albumart/")
+    artFilenames = os.listdir(ALBUMART_ROOT)
     artUrls = {}
     # Tie file basenames to resulting URLS
     for image in artFilenames:
         name = os.path.splitext(image)[0]
-        artUrls[name] = urllib.quote(image)
+        artUrls[name] = urllib.quote(ALBUMART_URL_ROOT + image)
     
     # Create the album and artist database entries
     albumEntries = {}
     for album in albums:
         # Check for album art
         if album in artUrls:
-            cover = "static/albumart/" + artUrls[album]
+            cover = artUrls[album]
         else:
             cover = ""
-        
         albumEntries[album] = models.Album.objects.get_or_create(name=album, coverurl=cover)[0]
     artistEntries = {}
     for artist in artists:
@@ -70,11 +65,15 @@ def scan():
         media.artist = artistEntries[meta[filename]["artist"][0]]
         media.album = albumEntries[meta[filename]["album"][0]]
         media.length = meta[filename].info.length
-        urlseg = filename.replace(MEDIA_ROOT, "").replace(os.sep, "/")
-        media.url = urllib.quote(URL_ROOT + urlseg)
+        urlseg = filename.replace(AUDIO_ROOT, "").replace(os.sep, "/")
+        media.url = urllib.quote(AUDIO_URL_ROOT + urlseg)
         media.save()
     
     logger.info("Media scan complete")
+
+def filterPathChars(path):
+    """Takes a string and returns it with illegal path characters removed"""
+    return path.translate(None, r'\/:*?"<>|')
 
 def update(request):
     """Django view for running the scanner"""
