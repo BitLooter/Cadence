@@ -9,7 +9,6 @@ import models
 ############
 UNKNOWN_ALBUM = "<Unknown album>"
 UNKNOWN_ARTIST = "<Unknown artist>"
-NO_TITLE = "<No title>"
 MEDIA_ROOT = "C:/Develop/html5media/html5media/media/"
 URL_ROOT = "/html5media/media/"
 
@@ -38,10 +37,24 @@ def scan():
     if "" in artists:
         artists.remove(""); artists.add(UNKNOWN_ARTIST)
     
+    # Process available album art
+    artFilenames = os.listdir("C:/Develop/html5media/html5media/static/albumart/")
+    artUrls = {}
+    # Tie file basenames to resulting URLS
+    for image in artFilenames:
+        name = os.path.splitext(image)[0]
+        artUrls[name] = urllib.quote(image)
+    
     # Create the album and artist database entries
     albumEntries = {}
     for album in albums:
-        albumEntries[album] = models.Album.objects.get_or_create(name=album)[0]
+        # Check for album art
+        if album in artUrls:
+            cover = "static/albumart/" + artUrls[album]
+        else:
+            cover = ""
+        
+        albumEntries[album] = models.Album.objects.get_or_create(name=album, coverurl=cover)[0]
     artistEntries = {}
     for artist in artists:
         artistEntries[artist] = models.Artist.objects.get_or_create(name=artist)[0]
@@ -52,7 +65,7 @@ def scan():
         if "title" in meta[filename] and meta[filename]["title"][0] != "":
             title = meta[filename]["title"][0]
         else:
-            title = NO_TITLE
+            title = os.path.basename(filename)
         media.title = title
         media.artist = artistEntries[meta[filename]["artist"][0]]
         media.album = albumEntries[meta[filename]["album"][0]]

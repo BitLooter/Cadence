@@ -309,6 +309,7 @@ function PlayerManager() {
     this.timeElement = document.getElementById("playerTime");
     this.lengthElement = document.getElementById("playerLength");
     this.metaElement = document.getElementById("metadata");
+    this.coverElement = document.getElementById("playerCover");
     
     // Ready the controls
     this.controls = controlsHandler;
@@ -351,6 +352,11 @@ function PlayerManager() {
         this.artistText.nodeValue = track.artist;
         this.albumText.nodeValue = track.album;
         this.lengthText.nodeValue = makeTimeStr(track.length);
+        if (track.poster != "") {
+            this.coverElement.src = track.poster;
+        } else {
+            this.coverElement.src = "static/nocover.svg";
+        }
     }
     PlayerManager.prototype.playTrack = function(track) {
         this.setTrack(track);

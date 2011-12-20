@@ -11,7 +11,8 @@ class Artist(models.Model):
         return u"Artist #{}: {}".format(self.id, self.name)
 
 class Album(models.Model):
-    name = models.CharField(max_length=100, unique=True)
+    name =     models.CharField(max_length=100, unique=True)
+    coverurl = models.URLField()
     
     def __unicode__(self):
         return u"Album #{}: {}".format(self.id, self.name)
@@ -20,8 +21,9 @@ class Album(models.Model):
     def getAlbums():
         albums = []
         for album in Album.objects.all():
-            albums.append({"id":     album.id,
-                           "name":   album.name })
+            albums.append({"id":       album.id,
+                           "name":     album.name,
+                           "coverurl": album.coverurl })
         return albums
     
     @staticmethod
@@ -42,12 +44,13 @@ class Media(models.Model):
         return u"#{}: {} ({}) - {}".format(self.id, self.album.name, self.artist.name, self.title)
     
     def make_dict(self):
-        return {"id":     self.id,
-                "title":  self.title,
-                "artist": self.artist.name,
-                "album":  self.album.name,
-                "length": self.length,
-                "url":    self.url }
+        return {"id":       self.id,
+                "title":    self.title,
+                "artist":   self.artist.name,
+                "album":    self.album.name,
+                "length":   self.length,
+                "url":      self.url,
+                "poster":   self.album.coverurl }
     
     # Data source API helper methods
     @staticmethod
