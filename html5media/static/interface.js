@@ -265,33 +265,41 @@ function NavigationManager() {
     NavigationManager.prototype._albumsClicked = function(e) {
         //TODO: properly disable library when the filter pane is up
         // library.disable();
-        nav._setFilterTitle("Select an album");
         // Get list of albums from the server
         var albums = undefined;
         requestAlbumList(function(a){albums=a});
         // Fill out the filter <ul> with them
-        var filterElement = document.getElementById("filterList");
+        var filters = [];
+        // var filterElement = document.getElementById("filterList");
         for (var i = 0; i < albums.length; i++) {
-            var album = albums[i];
-            var element = document.createElement("li");
-            element.appendChild(document.createTextNode(album.name));
-            element.album = album.id;
-            element.albumName = album.name
-            element.addEventListener("click",
-                                     function(e){nav._setLibraryAlbum(e.target.album, e.target.albumName)},
-                                     false);
-            filterElement.appendChild(element);
+            filters.push({"text": albums[i].name, "data": albums[i]});
         }
+        nav._setFilters("Select an album", filters, nav._setLibraryAlbum);
         showFiltersPane();
     }
     // -- Private functions ----------
-    NavigationManager.prototype._setFilterTitle = function(title) {
+    /* _setFilters - fills out the filter pane with data
+     *  title: Text that goes in the filter pane's header
+     *  filters: List of objects containing text/data pairs for the list
+     *  callback: Function that takes an argument that will contain a list item's data */
+    NavigationManager.prototype._setFilters = function(title, filters, callback) {
+        clearElement(this.filterList);
         this.filterTitleNode.nodeValue = title;
+        for (var i = 0; i < filters.length; i++) {
+            var filter = filters[i];
+            var element = document.createElement("li");
+            element.appendChild(document.createTextNode(filter.text));
+            element.data = filter.data;
+            element.addEventListener("click",
+                                     function(e){callback(e.target.data);
+                                                 hideFiltersPane();},
+                                     false);
+            this.filterList.appendChild(element);
+        }
     }
-    NavigationManager.prototype._setLibraryAlbum = function(id, name) {
+    NavigationManager.prototype._setLibraryAlbum = function(album) {
         //TODO: clean up the whole sidbar/filters/library system
-        library.populateAlbum(id, name);
-        hideFiltersPane();
+        library.populateAlbum(album.id, album.name);
     }
 
 
