@@ -69,7 +69,7 @@ def scan():
             if "title" in meta[filename] and meta[filename]["title"][0] != "":
                 title = meta[filename]["title"][0]
             else:
-                title = os.path.basename(filename)
+                title = os.path.splitext(os.path.basename(filename))[0]
             media.title = title
             media.artist = artistEntries[meta[filename]["artist"][0]]
             media.album = albumEntries[meta[filename]["album"][0]]
