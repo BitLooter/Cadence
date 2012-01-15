@@ -10,6 +10,21 @@ class Artist(models.Model):
     
     def __unicode__(self):
         return u"Artist #{}: {}".format(self.id, self.name)
+    
+    @staticmethod
+    def getArtists():
+        artists = []
+        for artist in Artist.objects.all():
+            artists.append({"id":       artist.id,
+                            "name":     artist.name})
+        return artists
+    
+    @staticmethod
+    def getArtistTracks(artistID):
+        items = []
+        for item in Media.objects.filter(artist=artistID):
+            items.append(item.make_dict())
+        return items
 
 class Album(models.Model):
     name =     models.CharField(max_length=100, unique=True)

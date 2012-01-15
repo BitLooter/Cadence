@@ -6,5 +6,7 @@ urlpatterns = patterns('html5media.backends.views',
     url(r"^saveplaylist/$", "saveplaylist"),
     url(r"^library/albums/(?P<albumID>\d+)/$", "library_get_album"),
     url(r"^library/albums/$", "library_albums"),
+    url(r"^library/artists/(?P<artistID>\d+)/$", "library_get_artist"),
+    url(r"^library/artists/$", "library_artists"),
     url(r"^library/$", "library"),
 )

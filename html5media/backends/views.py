@@ -26,7 +26,6 @@ def playlist(request, playlistID):
 
 def playlistlist(request):
     logger.info("Playlist list requested from {}".format(request.get_host()))
-    
     lists = models.Playlist.getPlaylistList()
     return HttpResponse(json.dumps(lists), mimetype="text/plain")
 
@@ -58,18 +57,25 @@ def saveplaylist(request):
 
 def library(request):
     logger.info("Full library request from {}".format(request.get_host()))
-    
     response = HttpResponse(json.dumps(models.Media.getFullLibrary()), mimetype="text/plain")
     return response
 
 def library_albums(request):
     logger.info("Library albums request from {}".format(request.get_host()))
-    
     response = HttpResponse(json.dumps(models.Album.getAlbums()), mimetype="text/plain")
     return response
 
 def library_get_album(request, albumID):
     logger.info("Album request from {}".format(request.get_host()))
-    
     response = HttpResponse(json.dumps(models.Album.getAlbumTracks(albumID)), mimetype="text/plain")
+    return response
+
+def library_artists(request):
+    logger.info("Library artists request from {}".format(request.get_host()))
+    response = HttpResponse(json.dumps(models.Artist.getArtists()), mimetype="text/plain")
+    return response
+
+def library_get_artist(request, artistID):
+    logger.info("Artist request from {}".format(request.get_host()))
+    response = HttpResponse(json.dumps(models.Artist.getArtistTracks(artistID)), mimetype="text/plain")
     return response

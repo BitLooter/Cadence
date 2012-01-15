@@ -80,6 +80,30 @@ function requestAlbum(id, callback) {
 }
 
 /*************************************
+ requestArtistList
+ ----------------
+ Gets a list of artists from the server
+ *************************************/
+function requestArtistList(callback) {
+    //TODO: more error handling
+    makeRequest("data/library/artists/", function(r){
+        callback(JSON.parse(r.responseText));
+    });
+}
+
+/*************************************
+ requestArtist
+ ------------
+ Gets an artist's tracks from the server
+ *************************************/
+function requestArtist(id, callback) {
+    //TODO: more error handling
+    makeRequest("data/library/artists/" + id + "/", function(r){
+        callback(JSON.parse(r.responseText));
+    });
+}
+
+/*************************************
  savePlaylist
  ------------
  Sends a playlist to the server to save there.
