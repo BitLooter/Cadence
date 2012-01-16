@@ -176,13 +176,13 @@ function LibraryManager() {
     this.toolbar.addButton("Queue", this._queueEvent);
 }
     LibraryManager.prototype = Object.create(TrackListManager.prototype);
-    LibraryManager.prototype.populateAlbum = function(id, name) {
-        this.subheadingNode.nodeValue = "Album: " + name;
-        requestAlbum(id, function(t){library.setTracks(t)});
+    LibraryManager.prototype.populateAlbum = function(album) {
+        library.subheadingNode.nodeValue = "Album: " + album.name;
+        requestAlbum(album.id, function(t){library.setTracks(t)});
     }
-    LibraryManager.prototype.populateArtist = function(id, name) {
-        this.subheadingNode.nodeValue = "Artist: " + name;
-        requestArtist(id, function(t){library.setTracks(t)});
+    LibraryManager.prototype.populateArtist = function(artist) {
+        library.subheadingNode.nodeValue = "Artist: " + artist.name;
+        requestArtist(artist.id, function(t){library.setTracks(t)});
     }
     LibraryManager.prototype.populateAll = function() {
         requestLibraryItems(function(t){library.setTracks(t)});
@@ -247,12 +247,42 @@ function NavigationManager() {
         clearElement(this.libTree);
         var albums = document.createElement("li");
         albums.appendChild(document.createTextNode("By album"));
-        albums.addEventListener("click", this._albumsClicked, false);
+        albums.addEventListener("click",
+                                function(){nav.showFilterSelector(requestAlbumList,
+                                                                  "Select an album",
+                                                                  library.populateAlbum)},
+                                false);
         this.libTree.appendChild(albums);
         var artists = document.createElement("li");
         artists.appendChild(document.createTextNode("By artist"));
-        artists.addEventListener("click", this._artistsClicked, false);
+        artists.addEventListener("click",
+                                 function(){nav.showFilterSelector(requestArtistList,
+                                                                   "Select an artist",
+                                                                   library.populateArtist)},
+                                 false);
+        // artists.addEventListener("click", this._artistsClicked, false);
         this.libTree.appendChild(artists);
+    }
+    /* showFilterSelector
+     *  Requests data from the server and uses it to display a list of filters
+     *  Parameters:
+     *   reqFunc        Function that gets the data to use
+     *   message        Text to display in header of filter pane
+     *   callback       Function to call when a filter item is clicked */
+    NavigationManager.prototype.showFilterSelector = function(reqFunc, message, callback) {
+        //TODO: properly disable library when the filter pane is up
+        // library.disable();
+        // Get list of albums from the server
+        // items is expected to be an array of objects with name and id properties
+        var items = undefined;
+        reqFunc(function(a){items=a});
+        // Fill out the filter list with them
+        var filters = [];
+        for (var i = 0; i < items.length; i++) {
+            filters.push({"text": items[i].name, "data": items[i]});
+        }
+        nav._setFilters(message, filters, callback);
+        showFiltersPane();
     }
     // -- Events ---------
     NavigationManager.prototype._playlistClicked = function(e) {
@@ -266,34 +296,6 @@ function NavigationManager() {
             throw error;
         }
         queue.enable();
-    }
-    NavigationManager.prototype._albumsClicked = function(e) {
-        //TODO: properly disable library when the filter pane is up
-        // library.disable();
-        // Get list of albums from the server
-        var albums = undefined;
-        requestAlbumList(function(a){albums=a});
-        // Fill out the filter list with them
-        var filters = [];
-        for (var i = 0; i < albums.length; i++) {
-            filters.push({"text": albums[i].name, "data": albums[i]});
-        }
-        nav._setFilters("Select an album", filters, nav._setLibraryAlbum);
-        showFiltersPane();
-    }
-    NavigationManager.prototype._artistsClicked = function(e) {
-        //TODO: properly disable library when the filter pane is up
-        // library.disable();
-        // Get list of artists from the server
-        var artists = undefined;
-        requestArtistList(function(a){artists=a});
-        // Fill out the filter list with them
-        var filters = [];
-        for (var i = 0; i < artists.length; i++) {
-            filters.push({"text": artists[i].name, "data": artists[i]});
-        }
-        nav._setFilters("Select an artist", filters, nav._setLibraryArtist);
-        showFiltersPane();
     }
     // -- Private functions ----------
     /* _setFilters - fills out the filter pane with data
@@ -314,14 +316,6 @@ function NavigationManager() {
                                      false);
             this.filterList.appendChild(element);
         }
-    }
-    NavigationManager.prototype._setLibraryAlbum = function(album) {
-        //TODO: clean up the whole sidbar/filters/library system
-        library.populateAlbum(album.id, album.name);
-    }
-    NavigationManager.prototype._setLibraryArtist = function(artist) {
-        //TODO: clean up the whole sidbar/filters/library system
-        library.populateArtist(artist.id, artist.name);
     }
 
 
