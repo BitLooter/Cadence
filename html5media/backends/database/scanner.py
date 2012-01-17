@@ -10,6 +10,20 @@ import models
 
 logger = logging.getLogger('apps')
 
+
+#TODO: remove (object) in Py3k
+class Metadata(object):
+    def __init__(self, pathname):
+        # Use easy mode for ID3 tagged files, we don't need direct ID3 access
+        rawdata = mutagen.File(pathname, easy=True)
+        rawdata.setdefault("title", [os.path.splitext(os.path.basename(pathname))[0]])
+        rawdata.setdefault("artist", [UNKNOWN_ARTIST])
+        rawdata.setdefault("album", [UNKNOWN_ALBUM])
+        self.title = rawdata["title"][0]
+        self.artist = rawdata["artist"][0]
+        self.album = rawdata["album"][0]
+        self.length = rawdata.info.length
+
 def scan():
     """
     Scans a directory for media and updates the database.
@@ -22,13 +36,13 @@ def scan():
     
     actions = None
     
-    validTypes = [".ogg"]
+    validTypes = [".ogg", ".mp3"]
     pathnames = []
     for dirpath, dirnames, filenames in os.walk(AUDIO_ROOT):
         pathnames += [os.path.join(dirpath, f) for f in filenames if os.path.splitext(f)[1] in validTypes]
-    meta = {p: mutagen.File(p) for p in pathnames}
-    albums = set([a.setdefault("album", [UNKNOWN_ALBUM])[0] for a in meta.values()])
-    artists = set([a.setdefault("artist", [UNKNOWN_ARTIST])[0] for a in meta.values()])
+    meta = {p: Metadata(p) for p in pathnames}
+    albums = set([a.album for a in meta.values()])
+    artists = set([a.artist for a in meta.values()])
     # Correct for blank tags
     if "" in albums:
         albums.remove(""); albums.add(UNKNOWN_ALBUM)
@@ -64,16 +78,15 @@ def scan():
     for filename in pathnames:
         # Database paths are relative to AUDIO_ROOT
         relpath = filename[len(AUDIO_ROOT):]
+        metadata = meta[filename]
+        # Ignore file if previously scanned
+        #TODO: rescan if changed
         if relpath not in scannedFiles:
             media = models.Media()
-            if "title" in meta[filename] and meta[filename]["title"][0] != "":
-                title = meta[filename]["title"][0]
-            else:
-                title = os.path.splitext(os.path.basename(filename))[0]
-            media.title = title
-            media.artist = artistEntries[meta[filename]["artist"][0]]
-            media.album = albumEntries[meta[filename]["album"][0]]
-            media.length = meta[filename].info.length
+            media.title = metadata.title
+            media.artist = artistEntries[metadata.artist]
+            media.album = albumEntries[metadata.album]
+            media.length = metadata.length
             urlseg = filename.replace(AUDIO_ROOT, "").replace(os.sep, "/")
             media.url = urllib.quote(AUDIO_URL_ROOT + urlseg)
             media.path = relpath
