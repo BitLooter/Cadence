@@ -1,6 +1,7 @@
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotFound
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.decorators.http import require_POST
+from django.views.decorators.csrf import csrf_exempt # See note below on saveplaylist
 import json
 import logging
 
@@ -29,6 +30,9 @@ def playlistlist(request):
     lists = models.Playlist.getPlaylistList()
     return HttpResponse(json.dumps(lists), mimetype="text/plain")
 
+#TODO: This really, REALLY needs to be fixed - do not let this enter final
+# release without properly implementing CSRF protection.
+@csrf_exempt
 @require_POST
 def saveplaylist(request):
     logger.info("Save playlist request from {}".format(request.get_host()))
