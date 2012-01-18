@@ -49,10 +49,13 @@
             </div>
             
             <div id="libraryPane">
-                <h1 id="libraryTitle">Library</h1>
-                <h2 id="librarySubheading">Library catagory</h2>
-                <div id="libraryToolbar"></div>
+                <div id="libraryHead">
+                    <h1 id="libraryTitle">Library</h1>
+                    <h2 id="librarySubheading">Library catagory</h2>
+                    <div id="libraryToolbar"></div>
+                </div>
                 <div id="libraryContainer"></div>
+                
                 <!-- Though in libraryPane, filterPane technically belongs to the sidebar -->
                 <div id="filterPane">
                     <h1 id="filterTitle">Filters</h1>
@@ -61,9 +64,11 @@
             </div>
             
             <div id="queuePane">
-                <h1 id="queueTitle">Queue</h1>
-                <h2 id="queueSubheading">Queue contents</h2>
-                <div id="queueToolbar"></div>
+                <div id="queueHead">
+                    <h1 id="queueTitle">Queue</h1>
+                    <h2 id="queueSubheading">Queue contents</h2>
+                    <div id="queueToolbar"></div>
+                </div>
                 <div id="queueContainer"></div>
                 <div id="queueBlankMessage"><i>No tracks queued</i></div>
             </div>

@@ -57,15 +57,44 @@ div {
     visibility: hidden;
 }
 
+/* Display list control's tables and bodies as blocks to allow setting height
+   and scrolling panes */
+.uilcTable {
+    display: block;
+}
+
+.uilcBody {
+    display: block;
+    overflow-y: scroll;
+}
+
+/* Library */
 #libraryPane {
     position: absolute;
-    overflow: hidden;
     width: 40%; height: 100%;
     left: 20%; top: 0;
 }
 
+/* Remove all margins to allow height setting to work properly */
+/* These should probably be classes and merged with the queue's margin info */
+#libraryPane{margin:0px;}
+#libraryTitle{margin:0px;}
+#librarySubheading{margin:0px;}
+#libraryToolbar{margin:0px;}
+#libraryContainer{margin:0px;}
+#libraryHead{margin:0px;}
+
+
+/* Queue */
 #queuePane {
     position: absolute;
     width: 40%; height: 100%;
     left: 60%;
 }
+
+#queuePane{margin:0px;}
+#queueTitle{margin:0px;}
+#queueSubheading{margin:0px;}
+#queueToolbar{margin:0px;}
+#queueContainer{margin:0px;}
+#queueHead{margin:0px;}

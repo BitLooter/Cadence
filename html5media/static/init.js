@@ -12,6 +12,9 @@ function playerInit() {
     window.library = new LibraryManager();
     window.nav = new NavigationManager();
     
+    window.addEventListener("resize", theme.windowResized, false);
+    theme.windowResized();
+    
     // Display the library
     //TODO: do not display library on init
     library.populateAll();

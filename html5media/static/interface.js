@@ -72,12 +72,28 @@ function TrackListManager(parent) {
  *************************************/
 function QueueManager() {
     TrackListManager.call(this, document.getElementById("queueContainer"));
-    // Set the parent to the outside container
-    this.parent = document.getElementById("queuePane")
-    // Set up toolbar
+    
+    // - DOM elements
+    // Root element
+    this.element = document.getElementById("queuePane");
+    
+    // Header - contains title, subheading, and toolbar
+    this.head = document.getElementById("queueHead");
+    
+    // Subheading (text node)
+    var subheading = document.getElementById("queueSubheading");
+    clearElement(subheading);
+    this.subheadingNode = document.createTextNode("NO DATA");
+    subheading.appendChild(this.subheadingNode);
+    
+    // Toolbar
     this.toolbar = new ToolbarControl(document.getElementById("queueToolbar"));
     this.toolbar.addButton("Save playlist", this._savePlaylistClicked);
     this.toolbar.addButton("Remove", this._removeItemClicked);
+    
+    // Set the parent to the outside container
+    // this.parent = document.getElementById("queuePane")
+    
     // Set up message for a blank queue
     this.emptyMessage = document.getElementById("queueBlankMessage");
     
@@ -166,12 +182,20 @@ function QueueManager() {
 function LibraryManager() {
     TrackListManager.call(this, document.getElementById("libraryContainer"));
     
-    // DOM elements
+    // - DOM elements
+    // Root element
+    this.element = document.getElementById("libraryPane");
+    
+    // Header - contains title, subheading, and toolbar
+    this.head = document.getElementById("libraryHead");
+    
+    // Subheading (text node)
     var subheading = document.getElementById("librarySubheading");
     clearElement(subheading);
-    this.subheadingNode = document.createTextNode("");
+    this.subheadingNode = document.createTextNode("NO DATA");
     subheading.appendChild(this.subheadingNode);
     
+    // Toolbar
     this.toolbar = new ToolbarControl(document.getElementById("libraryToolbar"));
     this.toolbar.addButton("Queue", this._queueEvent);
 }
