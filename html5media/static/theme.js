@@ -20,12 +20,12 @@ var theme = new function() {
                                          queue.head.offsetHeight -
                                          queue.listHead.offsetHeight + "px";
     }
-}
-
-function showFiltersPane() {
-    nav.filterPane.style.visibility = "visible";
-}
-
-function hideFiltersPane() {
-    nav.filterPane.style.visibility = "hidden";
+    
+    this.showFiltersPane = function() {
+        nav.filterPane.style.visibility = "visible";
+    }
+    
+    this.hideFiltersPane = function() {
+        nav.filterPane.style.visibility = "hidden";
+    }
 }

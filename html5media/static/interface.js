@@ -306,7 +306,7 @@ function NavigationManager() {
             filters.push({"text": items[i].name, "data": items[i]});
         }
         nav._setFilters(message, filters, callback);
-        showFiltersPane();
+        theme.showFiltersPane();
     }
     // -- Events ---------
     NavigationManager.prototype._playlistClicked = function(e) {
@@ -336,7 +336,7 @@ function NavigationManager() {
             element.data = filter.data;
             element.addEventListener("click",
                                      function(e){callback(e.target.data);
-                                                 hideFiltersPane();},
+                                                 theme.hideFiltersPane();},
                                      false);
             this.filterList.appendChild(element);
         }
