@@ -8,6 +8,11 @@ div {
     padding: 0;
 }
 
+td {
+    overflow: hidden;
+    text-overflow; clip;
+}
+
 #playerPane {
     height: 15%;
 }
@@ -57,15 +62,11 @@ div {
     visibility: hidden;
 }
 
-/* Display list control's tables and bodies as blocks to allow setting height
+/* Display list control's table as blocks to allow setting height
    and scrolling panes */
 .uilcTable {
     display: block;
-}
-
-.uilcBody {
-    display: block;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 /* Library */
