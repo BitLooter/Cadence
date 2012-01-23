@@ -169,8 +169,7 @@ function QueueManager() {
         queue.playNext();
     }
     QueueManager.prototype._rowClicked = function(e) {
-        // Subtract one here to correct for the header row
-        e.listControl.playItem(e.row.rowIndex-1);
+        e.listControl.playItem(e.row.rowIndex);
     }
 
 
