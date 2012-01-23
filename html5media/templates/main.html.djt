@@ -50,9 +50,9 @@
             
             <div id="libraryPane">
                 <div id="libraryHead">
-                    <h1 id="libraryTitle">Library</h1>
-                    <h2 id="librarySubheading">Library catagory</h2>
-                    <div id="libraryToolbar"></div>
+                    <h1 id="libraryTitle" class="paneTitle">Library</h1>
+                    <h2 id="librarySubheading" class="paneSubheading">Library catagory</h2>
+                    <div id="libraryToolbar" class="paneToolbar"></div>
                 </div>
                 <div id="libraryContainer"></div>
                 
@@ -65,9 +65,9 @@
             
             <div id="queuePane">
                 <div id="queueHead">
-                    <h1 id="queueTitle">Queue</h1>
-                    <h2 id="queueSubheading">Queue contents</h2>
-                    <div id="queueToolbar"></div>
+                    <h1 id="queueTitle" class="paneTitle">Queue</h1>
+                    <h2 id="queueSubheading" class="paneSubheading">Queue contents</h2>
+                    <div id="queueToolbar" class="paneToolbar"></div>
                 </div>
                 <div id="queueContainer"></div>
                 <div id="queueBlankMessage"><i>No tracks queued</i></div>

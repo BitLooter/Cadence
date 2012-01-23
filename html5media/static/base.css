@@ -8,11 +8,6 @@ div {
     padding: 0;
 }
 
-td {
-    overflow: hidden;
-    text-overflow; clip;
-}
-
 #playerPane {
     height: 15%;
 }
@@ -60,6 +55,12 @@ td {
     left: 0; top: 0;
     background-color: white;
     visibility: hidden;
+}
+
+.paneSubheading {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 /* Display list control's table as blocks to allow setting height
