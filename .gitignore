@@ -1,0 +1,8 @@
+*.pyc
+*.ogg
+*.odt#
+*.db
+trac
+html5media/media
+plan.txt
+log.txt
