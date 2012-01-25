@@ -1,6 +1,6 @@
 from django.conf.urls.defaults import patterns, url
 
-urlpatterns = patterns('html5media.backends.views',
+urlpatterns = patterns('html5media.apps.backend.views',
     url(r"^playlists/(?P<playlistID>\d+)/$", "playlist"),
     url(r"^playlists/$", "playlistlist"),
     url(r"^saveplaylist/$", "saveplaylist"),

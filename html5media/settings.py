@@ -117,8 +117,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # Application apps
-    'html5media.player',
-    'html5media.backends.database',
+    'html5media.apps.player',
+    'html5media.apps.backend',
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
