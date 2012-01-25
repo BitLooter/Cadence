@@ -120,9 +120,3 @@ def filterPathChars(path):
     for char in r'\/:*?"<>|':
         newpath = newpath.replace(char, "")
     return newpath
-
-def update(request):
-    """Django view for running the scanner"""
-    
-    out = scan()
-    return HttpResponse(repr(out))

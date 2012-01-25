@@ -6,7 +6,7 @@ import json
 import logging
 
 # __init__.py handles finding the correct package to import from
-from . import models
+from . import models, scanner
 
 
 # Set up logging
@@ -83,4 +83,9 @@ def library_artists(request):
 def library_get_artist(request, artistID):
     logger.info("Artist request from {}".format(request.get_host()))
     response = HttpResponse(json.dumps(models.Artist.getArtistTracks(artistID)), mimetype="text/plain")
+    return response
+
+def update(request):
+    logger.info("Database update from {}".format(request.get_host()))
+    response = HttpResponse(json.dumps(repr(scanner.scan())), mimetype="text/plain")
     return response
