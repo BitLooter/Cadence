@@ -1,0 +1,15 @@
+# Development (debug) settings
+
+DEBUG = True
+TEMPLATE_DEBUG = DEBUG
+
+# Set this to your time zone, if it's not on Django's default Central timezone
+TIME_ZONE = 'America/Los_Angeles'
+
+# If this site is not located at the URL root, set BASE_URL to its location
+BASE_URL = '/html5media/' 
+STATIC_URL = BASE_URL + 'static/'
+ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
+
+# Set SECRET_KEY to something obscenely unique
+SECRET_KEY = 'DO NOT USE THIS DEFAULT'
