@@ -9,5 +9,4 @@ urlpatterns = patterns('html5media.apps.backend.views',
     url(r"^library/artists/(?P<artistID>\d+)/$", "library_get_artist"),
     url(r"^library/artists/$", "library_artists"),
     url(r"^library/$", "library"),
-    url(r"^update/$", "update"),
 )

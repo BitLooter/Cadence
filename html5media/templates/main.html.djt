@@ -45,7 +45,6 @@
                 <ul id="sbLibrary"></ul>
                 <h1>Other</h1>
                 <a href="admin/">Admin</a><br />
-                <a href="data/update/">Run scanner</a>
             </div>
             
             <div id="libraryPane">
