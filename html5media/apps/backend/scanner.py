@@ -3,9 +3,9 @@ import urllib   #NOTE: use urllib.parse in Python 3.x
 import logging
 import time
 from   django.shortcuts import HttpResponse
+from   django.conf      import settings
 import mutagen
 
-from   settings import *
 import models
 
 
@@ -18,14 +18,14 @@ class Mediainfo(object):
         # Use easy mode for ID3 tagged files, we don't need direct ID3 access
         rawdata = mutagen.File(pathname, easy=True)
         rawdata.setdefault("title", [os.path.splitext(os.path.basename(pathname))[0]])
-        rawdata.setdefault("artist", [UNKNOWN_ARTIST])
-        rawdata.setdefault("album", [UNKNOWN_ALBUM])
+        rawdata.setdefault("artist", [settings.UNKNOWN_ARTIST])
+        rawdata.setdefault("album", [settings.UNKNOWN_ALBUM])
         self.title = rawdata["title"][0]
         self.artist = rawdata["artist"][0]
         self.album = rawdata["album"][0]
         self.length = rawdata.info.length
         self.path = pathname
-        self.relpath = pathname[len(AUDIO_ROOT):]
+        self.relpath = pathname[len(settings.AUDIO_ROOT):]
     
     @property
     def modified(self):
@@ -51,24 +51,24 @@ def scan():
     
     validTypes = [".ogg", ".mp3"]
     pathnames = []
-    for dirpath, dirnames, filenames in os.walk(AUDIO_ROOT):
+    for dirpath, dirnames, filenames in os.walk(settings.AUDIO_ROOT):
         pathnames += [os.path.join(dirpath, f) for f in filenames if os.path.splitext(f)[1] in validTypes]
     meta = {p: Mediainfo(p) for p in pathnames}
     albums = set([a.album for a in meta.values()])
     artists = set([a.artist for a in meta.values()])
     # Correct for blank tags
     if "" in albums:
-        albums.remove(""); albums.add(UNKNOWN_ALBUM)
+        albums.remove(""); albums.add(settings.UNKNOWN_ALBUM)
     if "" in artists:
-        artists.remove(""); artists.add(UNKNOWN_ARTIST)
+        artists.remove(""); artists.add(settings.UNKNOWN_ARTIST)
     
     # Process available album art
-    artFilenames = os.listdir(ALBUMART_ROOT)
+    artFilenames = os.listdir(settings.ALBUMART_ROOT)
     artUrls = {}
     # Tie file basenames to resulting URLS
     for image in artFilenames:
         name = os.path.splitext(image)[0]
-        artUrls[name] = urllib.quote(ALBUMART_URL_ROOT + image)
+        artUrls[name] = urllib.quote(settings.ALBUMART_URL + image)
     
     # Create the album and artist database entries
     albumEntries = {}
@@ -105,8 +105,9 @@ def scan():
         media.artist = artistEntries[metadata.artist]
         media.album = albumEntries[metadata.album]
         media.length = metadata.length
-        urlseg = filename.replace(AUDIO_ROOT, "").replace(os.sep, "/")
-        media.url = urllib.quote(AUDIO_URL_ROOT + urlseg)
+        # Chop off filesystem root and replace native path separators with URL /'s
+        urlseg = filename.replace(settings.AUDIO_ROOT, "").replace(os.sep, "/")
+        media.url = urllib.quote(settings.AUDIO_URL + urlseg)
         media.path = metadata.relpath
         media.save()
     

@@ -1,6 +1,0 @@
-UNKNOWN_ALBUM = "<Unknown album>"
-UNKNOWN_ARTIST = "<Unknown artist>"
-AUDIO_ROOT = "C:/Develop/html5media/html5media/media/"
-AUDIO_URL_ROOT = "media/"
-ALBUMART_ROOT = "C:/Develop/html5media/html5media/static/albumart/"
-ALBUMART_URL_ROOT = "static/albumart/"

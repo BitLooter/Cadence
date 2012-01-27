@@ -1,6 +1,6 @@
 from django.db import models
+from django.conf import settings
 
-from settings import *
 
 # Classes
 ##########
@@ -56,7 +56,7 @@ class Media(models.Model):
     length   = models.FloatField(help_text="Track length in seconds, floating point")
     url      = models.URLField()
     #TODO: restrict field to media files
-    path     = models.FilePathField(path=AUDIO_ROOT)
+    path     = models.FilePathField(path=settings.AUDIO_ROOT)
     scanDate = models.DateTimeField(auto_now=True)
     
     def __unicode__(self):

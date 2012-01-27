@@ -94,6 +94,17 @@ LOGGING = {
     }
 }
 
+# Application settings
+#######################
+MEDIASOURCE_BACKEND = "database"
+AUDIO_ROOT = "/var/www/media/"
+AUDIO_URL = BASE_URL + "media/"
+# Scanner settings
+UNKNOWN_ALBUM = "<Unknown album>"
+UNKNOWN_ARTIST = "<Unknown artist>"
+ALBUMART_ROOT = "/var/www/static/albumart/"
+ALBUMART_URL = STATIC_URL + "albumart/"
+
 
 # Load settings local to this deployment
 # If there is no settings_local, do nothing
