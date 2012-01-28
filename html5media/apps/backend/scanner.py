@@ -7,6 +7,7 @@ from   django.conf      import settings
 import mutagen
 
 import models
+from   ...transcoder.converter import transcode
 
 
 logger = logging.getLogger('apps')
@@ -89,6 +90,8 @@ def scan():
     # Get a list of all previously processed files
     scannedFiles = models.Media.objects.values_list("path", flat=True)
     for filename in pathnames:
+        newurl = transcode(filename)
+        
         # Database paths are relative to AUDIO_ROOT
         metadata = meta[filename]
         if metadata.relpath not in scannedFiles:
@@ -107,7 +110,7 @@ def scan():
         media.length = metadata.length
         # Chop off filesystem root and replace native path separators with URL /'s
         urlseg = filename.replace(settings.AUDIO_ROOT, "").replace(os.sep, "/")
-        media.url = urllib.quote(settings.AUDIO_URL + urlseg)
+        media.url = newurl#urllib.quote(settings.AUDIO_URL + urlseg)
         media.path = metadata.relpath
         media.save()
     
