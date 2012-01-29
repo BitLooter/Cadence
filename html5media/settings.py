@@ -31,7 +31,7 @@ USE_L10N = True
 ROOT_URLCONF = 'html5media.urls'
 
 BASE_URL = '/' 
-STATIC_URL = BASE_URL + 'static/'
+STATIC_URL = 'static/'
 ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
 
 
@@ -96,14 +96,16 @@ LOGGING = {
 
 # Application settings
 #######################
-MEDIASOURCE_BACKEND = "database"
 AUDIO_ROOT = "/var/www/media/"
 AUDIO_URL = BASE_URL + "media/"
+TRANSCODE_ROOT = "/var/www/static/transcodes/"
+TRANSCODE_URL = STATIC_URL + "transcodes/"
+ALBUMART_ROOT = "/var/www/static/albumart/"
+ALBUMART_URL = STATIC_URL + "albumart/"
 # Scanner settings
 UNKNOWN_ALBUM = "<Unknown album>"
 UNKNOWN_ARTIST = "<Unknown artist>"
-ALBUMART_ROOT = "/var/www/static/albumart/"
-ALBUMART_URL = STATIC_URL + "albumart/"
+TRANSCODER = "html5media.transcoders.basic"
 
 
 # Load settings local to this deployment

@@ -4,6 +4,8 @@
 *.db
 trac
 html5media/media
+html5media/static/albumart
+html5media/static/transcodes
 plan.txt
 log.txt
 html5media/settings_local.py

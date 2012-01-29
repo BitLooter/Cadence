@@ -7,7 +7,8 @@ from   django.conf      import settings
 import mutagen
 
 import models
-from   ...transcoder.converter import transcode
+# The TranscodeManager is defined in the settings, do a dynamic import
+TranscodeManager = __import__(settings.TRANSCODER, fromlist=["TranscodeManager"]).TranscodeManager
 
 
 logger = logging.getLogger('apps')
@@ -34,7 +35,7 @@ class Mediainfo(object):
            or False if not present in database"""
         try:
             return os.path.getmtime(self.path) > \
-                   time.mktime(models.Media.objects.get(path=self.relpath).scanDate.timetuple())
+                   time.mktime(models.MediaSource.objects.get(path=self.relpath).media.scanDate.timetuple())
         except models.Media.DoesNotExist:
             return False
 
@@ -43,12 +44,10 @@ def scan():
     Scans a directory for media and updates the database.
     
     Note that because it uses Django models to interface with the database,
-    it must be run inside a Django context.
+    it must be run inside a Django context, using "manage.py scan".
     """
     
     logger.info("Media scan initiated")
-    
-    actions = None
     
     validTypes = [".ogg", ".mp3"]
     pathnames = []
@@ -88,35 +87,44 @@ def scan():
     
     # Now process the media files
     # Get a list of all previously processed files
-    scannedFiles = models.Media.objects.values_list("path", flat=True)
+    scannedFiles = models.MediaSource.objects.exclude(path__contains=".transcode").values_list("path", flat=True)
     for filename in pathnames:
-        newurl = transcode(filename)
-        
         # Database paths are relative to AUDIO_ROOT
         metadata = meta[filename]
         if metadata.relpath not in scannedFiles:
             # New file not in database, create new entry
             media = models.Media()
+            print("Found new media: " + filename.replace(settings.AUDIO_ROOT, ""))
         elif metadata.modified:
             # In the database but modified since last scan
+            print("Modified media: " + filename.replace(settings.AUDIO_ROOT, ""))
             media = models.Media.objects.get(path=metadata.relpath)
         else:
             # If already in database and not modified, skip to the next one
             continue
         
+        # Do the media transcoding, if needed
+        transcoder = TranscodeManager(filename)
+        if transcoder.transcode_needed:
+            print("Transcoding...")
+            transcoder.convert()
+        
+        # Save all the info to the database
         media.title = metadata.title
         media.artist = artistEntries[metadata.artist]
         media.album = albumEntries[metadata.album]
         media.length = metadata.length
-        # Chop off filesystem root and replace native path separators with URL /'s
-        urlseg = filename.replace(settings.AUDIO_ROOT, "").replace(os.sep, "/")
-        media.url = newurl#urllib.quote(settings.AUDIO_URL + urlseg)
-        media.path = metadata.relpath
         media.save()
+        
+        for transpath, url, mime in transcoder.files:
+            source = models.MediaSource()
+            source.media = media
+            source.path = transpath
+            source.url = url
+            source.mime = mime
+            source.save()
     
     logger.info("Media scan complete")
-    
-    return actions
 
 def filterPathChars(path):
     """Takes a string and returns it with illegal path characters removed"""
