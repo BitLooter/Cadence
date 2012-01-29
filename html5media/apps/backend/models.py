@@ -54,21 +54,22 @@ class Media(models.Model):
     artist   = models.ForeignKey(Artist)
     album    = models.ForeignKey(Album)
     length   = models.FloatField(help_text="Track length in seconds, floating point")
-    url      = models.URLField()
-    #TODO: restrict field to media files
-    path     = models.FilePathField(path=settings.AUDIO_ROOT)
     scanDate = models.DateTimeField(auto_now=True)
     
     def __unicode__(self):
         return u"#{}: {} ({}) - {}".format(self.id, self.album.name, self.artist.name, self.title)
     
     def make_dict(self):
+        # First sort the media sources, pushing transcodes to the back
+        sources = [s.make_dict() for s in self.mediasource_set.all()]
+        sources.sort(key=lambda s: ".transcode" in s["url"])
+        
         return {"id":       self.id,
                 "title":    self.title,
                 "artist":   self.artist.name,
                 "album":    self.album.name,
                 "length":   self.length,
-                "url":      self.url,
+                "sources":  sources,
                 "poster":   self.album.coverurl }
     
     # Data source API helper methods
@@ -78,6 +79,20 @@ class Media(models.Model):
         for item in Media.objects.all():
             items.append(item.make_dict())
         return items
+
+class MediaSource(models.Model):
+    media = models.ForeignKey(Media)
+    #TODO: restrict field to media files
+    url   = models.URLField()
+    path  = models.FilePathField()
+    mime  = models.CharField(max_length=100)
+    
+    def __unicode__(self):
+        return "#{}: {} - {}".format(self.id, self.url, self.mime)
+    
+    def make_dict(self):
+        return {"url":  self.url,
+                "mime": self.mime }
 
 class Playlist(models.Model):
     items = models.ManyToManyField(Media)
