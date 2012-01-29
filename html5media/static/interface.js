@@ -394,7 +394,15 @@ function PlayerManager() {
 }
     PlayerManager.prototype.setTrack = function(track) {
         this.track = track;
-        this.audioElement.src = track.url;
+        // Get the audio sources into the tag
+        clearElement(this.audioElement);
+        for (var i = 0; i < track.sources.length; i++) {
+            var sourceElement = document.createElement("source");
+            sourceElement.src = track.sources[i].url;
+            sourceElement.type = track.sources[i].mime;
+            this.audioElement.appendChild(sourceElement);
+        }
+        // Track metadata display
         this.titleText.nodeValue = track.title;
         this.artistText.nodeValue = track.artist;
         this.albumText.nodeValue = track.album;

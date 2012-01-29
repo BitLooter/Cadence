@@ -17,7 +17,7 @@
         <div id="playerPane">
             <img id="playerCover" src="static/nocover.svg" />
             <div id="player">
-                <audio id="playerAudio" src="" type='audio/ogg'></audio>
+                <audio id="playerAudio"></audio>
                 <a id="playerPlay">[Play/Pause]</a>
                 <a id="playerStop">[Stop]</a>
                 <a id="playerPrev">[Previous]</a>
