@@ -11,6 +11,9 @@ var theme = new function() {
      *  our purposes, some JS is needed to make things fit right. Should be
      *  called on load and resize events. */
     this.windowResized = function() {
+        // Set bottom pane to take whatever height the player pane doesn't
+        window.bottom.style.height = window.innerHeight - window.playerPane.offsetHeight + "px";
+        
         // Queue and library panes should have the list take up exactly how
         // much is left over from the headers and toolbars.
         library.listElement.style.height = library.element.offsetHeight -

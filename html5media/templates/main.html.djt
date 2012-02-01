@@ -15,25 +15,26 @@
     </head>
     <body>
         <div id="playerPane">
+            <audio id="playerAudio"></audio>
             <img id="playerCover" src="static/nocover.svg" />
-            <div id="player">
-                <audio id="playerAudio"></audio>
-                <a id="playerPlay">[Play/Pause]</a>
-                <a id="playerStop">[Stop]</a>
-                <a id="playerPrev">[Previous]</a>
-                <a id="playerNext">[Next]</a>
-                <a id="playerMute">[Mute]</a>
-                <div id="metadata">
-                    <span id="playerTime"></span>/<span id="playerLength"></span> - 
-                    <span id="playerTitle"></span> -
-                    <span id="playerArtist"></span> /
-                    <span id="playerAlbum"></span>
-                </div>
+            <div id="playerControls">
+                <a id="playerPlay" class="playerButton">|&gt;</a>
+                <a id="playerStop" class="playerButton">[_]</a>
+                <a id="playerPrev" class="playerButton">&lt;&lt;</a>
+                <a id="playerNext" class="playerButton">&gt;&gt;</a>
+                <a id="playerMute" class="playerButton">M</a>
+            </div>
+            <div id="playerMetadata">
+                <span id="playerTitle"></span><br />
+                <span id="playerArtist"></span> /
+                <span id="playerAlbum"></span>
+            </div>
+            <div id="playerTimeline">
                 <div id="playerScrubber">
                     <div id="playerScrubberProgress"></div>
                 </div>
+                <span id="playerTime"></span>/<span id="playerLength"></span>
             </div>
-            <div id="logo">Home page link</div>
         </div>
         
         <div id="bottom">

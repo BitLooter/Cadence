@@ -17,7 +17,7 @@ controlsHandler = {
     _scrubberClicked: function(e) {
         var event = document.createEvent("CustomEvent");
         event.initEvent("tracked", true, true);
-        event.newTime = player.track.length * (e.offsetX/200);
+        event.newTime = player.track.length * (e.offsetX/e.currentTarget.offsetWidth);
         player.controls.scrubber.dispatchEvent(event);
     } 
 }

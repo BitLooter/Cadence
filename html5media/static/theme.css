@@ -6,3 +6,47 @@ table {
     background-color: gray;
 }
 
+#playerCover {
+    display: inline-block;
+    height: 5em;
+    margin: 0.5em;
+    padding: 0;
+    float: left;
+}
+
+#playerControls {
+   display: inline-block;
+   vertical-align: top;
+}
+
+.playerButton {
+    display: inline-block;
+    border: 1px solid black;
+    width: 3em; height: 3em;
+    text-align: center;
+    line-height: 3em;
+    margin: 0.5em 0;
+    padding: 0;
+    cursor: default;
+}
+
+#playerMetadata {
+    margin: 0.5em;
+    display: inline-block;
+}
+
+#playerTimeline {
+    margin: 0.5em;
+}
+
+#playerScrubber {
+    display: inline-block;
+    width: 60%; height: 100%;
+    height: 1em;
+    background-color: #CCC;
+}
+
+#playerScrubberProgress {
+    width: 0; height: 100%;
+    background-color: black;
+}
