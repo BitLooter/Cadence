@@ -97,7 +97,7 @@ LOGGING = {
 # Application settings
 #######################
 AUDIO_ROOT = "/var/www/media/"
-AUDIO_URL = BASE_URL + "media/"
+AUDIO_URL = STATIC_URL + "media/"
 TRANSCODE_ROOT = "/var/www/static/transcodes/"
 TRANSCODE_URL = STATIC_URL + "transcodes/"
 ALBUMART_ROOT = "/var/www/static/albumart/"

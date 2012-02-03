@@ -3,8 +3,8 @@
 *.odt#
 *.db
 trac
-html5media/media
 html5media/static/albumart
+html5media/static/media
 html5media/static/transcodes
 plan.txt
 log.txt
