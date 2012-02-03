@@ -394,13 +394,17 @@ function PlayerManager() {
 }
     PlayerManager.prototype.setTrack = function(track) {
         this.track = track;
-        // Get the audio sources into the tag
         clearElement(this.audioElement);
+        // Set the audio tag's source. Scans through list and uses the first
+        // compatible type; preferred order (e.g. transcodes last) is handled
+        // server-side.
         for (var i = 0; i < track.sources.length; i++) {
-            var sourceElement = document.createElement("source");
-            sourceElement.src = track.sources[i].url;
-            sourceElement.type = track.sources[i].mime;
-            this.audioElement.appendChild(sourceElement);
+            var source = track.sources[i];
+            if (this.audioElement.canPlayType(source.mime))
+            {
+                this.audioElement.src = source.url;
+                break;
+            }
         }
         // Track metadata display
         this.titleText.nodeValue = track.title;
