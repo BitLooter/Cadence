@@ -349,7 +349,7 @@ function NavigationManager() {
  *************************************/
 function PlayerManager() {
     // Get some common elements
-    this.audioElement = document.getElementById("playerAudio");
+    this.audioElement = document.createElement("audio"); // Does not need to be on the DOM
     this.titleElement = document.getElementById("playerTitle");
     this.artistElement = document.getElementById("playerArtist");
     this.albumElement = document.getElementById("playerAlbum");

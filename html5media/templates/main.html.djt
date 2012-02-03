@@ -15,7 +15,6 @@
     </head>
     <body>
         <div id="playerPane">
-            <audio id="playerAudio"></audio>
             <img id="playerCover" src="static/nocover.svg" />
             <div id="playerControls">
                 <a id="playerPlay" class="playerButton">|&gt;</a>
