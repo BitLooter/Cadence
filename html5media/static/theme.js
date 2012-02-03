@@ -12,7 +12,8 @@ var theme = new function() {
      *  called on load and resize events. */
     this.windowResized = function() {
         // Set bottom pane to take whatever height the player pane doesn't
-        window.bottom.style.height = window.innerHeight - window.playerPane.offsetHeight + "px";
+        document.getElementById("bottom").style.height =
+            window.innerHeight - document.getElementById("playerPane").offsetHeight + "px";
         
         // Queue and library panes should have the list take up exactly how
         // much is left over from the headers and toolbars.
