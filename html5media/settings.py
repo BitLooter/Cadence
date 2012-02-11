@@ -105,7 +105,12 @@ ALBUMART_URL = STATIC_URL + "albumart/"
 # Scanner settings
 UNKNOWN_ALBUM = "<Unknown album>"
 UNKNOWN_ARTIST = "<Unknown artist>"
+# Transcoder settings
 TRANSCODER = "html5media.transcoders.basic"
+TRANSCODER_PROFILE = "default"
+TRANSCODER_PROFILES_PATH = os.path.join(os.path.dirname(os.path.normpath(__file__)),
+                                        "transcoders", "profiles")
+ENCODER = "ffmpeg"
 
 
 # Load settings local to this deployment

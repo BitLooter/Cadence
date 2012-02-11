@@ -7,9 +7,6 @@ from django.conf import settings
 class TranscodeManagerBase(object):
     """Base class for all transcoder managers"""
     
-    # nullfile is useful for passing to external commands as stdout
-    nullfile = open(os.devnull)
-    
     def __init__(self, filename):
         self.filename = filename
     

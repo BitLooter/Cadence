@@ -2,10 +2,12 @@
 # Simple transcoder module that ensures each audio file has an ogg and mp3 version
 
 import os
-import subprocess
 from django.conf import settings
 
 from common import TranscodeManagerBase
+# Encoding engine is defined in the settings, import it dynamically
+encode = __import__("transcoders.encoders." + settings.ENCODER, fromlist=["encode"]).encode
+
 
 class TranscodeManager(TranscodeManagerBase):
     """Simple manager that provides OGGs and MP3s for every audio track"""
@@ -30,16 +32,11 @@ class TranscodeManager(TranscodeManagerBase):
         
         # This basic transcoder creates MP3s out of OGGs, and vice versa.
         if self.filename.endswith(".ogg"):
-            command = 'ffmpeg -y -i "{}" -acodec libmp3lame -ab 128k "{}"'.format(self.filename,
-                                                                                  self._transcodename)
             newmime = "audio/mp3"
         elif self.filename.endswith(".mp3"):
-            command = 'ffmpeg -y -i "{}" -acodec libvorbis -ab 128k "{}"'.format(self.filename,
-                                                                                 self._transcodename)
             newmime = "audio/ogg"
         
-        #TODO: create transcode() method on base class to handle encoding
-        subprocess.call(command, stdout=self.nullfile, stderr=subprocess.STDOUT)
+        encode(self.filename, self._transcodename, newmime)
         self._transcodes.append( (self._transcodename, newmime) )
     
     @property

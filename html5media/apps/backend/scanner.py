@@ -2,8 +2,7 @@ import os
 import urllib   #NOTE: use urllib.parse in Python 3.x
 import logging
 import time
-from   django.shortcuts import HttpResponse
-from   django.conf      import settings
+from   django.conf import settings
 import mutagen
 
 import models
