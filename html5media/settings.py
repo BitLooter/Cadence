@@ -96,11 +96,13 @@ LOGGING = {
 
 # Application settings
 #######################
-AUDIO_ROOT = "/var/www/media/"
+
+# Default paths are in subdirectories of the project directory
+AUDIO_ROOT = os.path.join(PROJECT_DIR, "static", "media")
 AUDIO_URL = STATIC_URL + "media/"
-TRANSCODE_ROOT = "/var/www/static/transcodes/"
+TRANSCODE_ROOT = os.path.join(PROJECT_DIR, "static", "transcodes")
 TRANSCODE_URL = STATIC_URL + "transcodes/"
-ALBUMART_ROOT = "/var/www/static/albumart/"
+ALBUMART_ROOT = os.path.join(PROJECT_DIR, "static", "albumart")
 ALBUMART_URL = STATIC_URL + "albumart/"
 # Scanner settings
 UNKNOWN_ALBUM = "<Unknown album>"
@@ -114,7 +116,8 @@ ENCODER = "ffmpeg"
 
 
 # Load settings local to this deployment
-# If there is no settings_local, do nothing
+# If there is no settings_local, do nothing - the default configuration will
+#  function, though it's almost certainly different from what you want.
 try:
     from settings_local import *
 except ImportError:
