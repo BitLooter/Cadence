@@ -4,7 +4,7 @@ import os
 from django.conf import settings
 
 # Encoding engine is defined in the settings, import it dynamically
-encode = __import__("transcoders.encoders." + settings.ENCODER, fromlist=["encode"]).encode
+encode = __import__("html5media.transcoders.encoders." + settings.ENCODER, fromlist=["encode"]).encode
 
 
 class TranscodeManagerBase(object):

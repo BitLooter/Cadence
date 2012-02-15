@@ -5,8 +5,7 @@ from django.views.decorators.csrf import csrf_exempt # See note below on savepla
 import json
 import logging
 
-# __init__.py handles finding the correct package to import from
-from . import models
+import models
 
 
 # Set up logging
