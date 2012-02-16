@@ -9,3 +9,4 @@ html5media/static/transcodes
 plan.txt
 log.txt
 html5media/settings_local.py
+doc/_build
