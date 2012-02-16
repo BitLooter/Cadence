@@ -1,4 +1,18 @@
-# transcoders/common.py - Common code for transcoder managers
+"""Common code for all transcoders.
+
+If you area writing a new transcoder, you will generally want to extend
+:py:class:`TranscodeManagerBase`. Most of the time you will only need to set
+things up in :py:meth:`__init__`, and the standard code will take care of
+everything else. Specifically, you will need to set the class attributes
+:py:attr:`filename` to the source file, :py:attr:`pendingJobs` to a list of
+output files (:py:meth:`convert` takes care of encoding and profiles), and
+:py:attr:`transcodes` to a list of transcoded media already present in the
+filesystem.
+
+.. todo::
+    Update subclass instructions when multiple source files are implemented
+"""
+
 
 import os
 from django.conf import settings
