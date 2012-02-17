@@ -7,7 +7,11 @@ everything else. Specifically, you will need to set the class attributes
 :py:attr:`filename` to the source file, :py:attr:`pendingJobs` to a list of
 output files (:py:meth:`convert` takes care of encoding and profiles), and
 :py:attr:`transcodes` to a list of transcoded media already present in the
-filesystem.
+filesystem. Additionally, set :py:attr:`source_types` to a list of file
+extensions the transcoder can take as input.
+
+.. todo::
+    Link to transcoder docs once they are written
 
 .. todo::
     Update subclass instructions when multiple source files are implemented
@@ -24,12 +28,16 @@ encode = __import__("html5media.transcoders.encoders." + settings.ENCODER, froml
 class TranscodeManagerBase(object):
     """
     Base class for all transcoder managers
+    
+    Code common to all (most?) transcoders. As-is will perform a null
+    transcoding job, make sure your subclasses define an __init__ to set things
+    up.
     """
     
+    #. List of file extensions the transcoder can handle
+    source_types = []
+    
     def __init__(self, filename):
-        """Basic manager setup. As-is will perform a null transcoding job,
-           make sure your subclasses define an __init__ to set things up."""
-        
         #: Input filename.
         self.filename = filename
         #: List of transcoder output filenames to be processed.

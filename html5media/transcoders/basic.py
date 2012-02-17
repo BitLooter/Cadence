@@ -21,6 +21,8 @@ from common import TranscodeManagerBase
 class TranscodeManager(TranscodeManagerBase):
     """Simple manager that provides OGGs and MP3s for every audio track"""
     
+    source_types = [".ogg", ".mp3"]
+    
     def __init__(self, filename):
         TranscodeManagerBase.__init__(self, filename)
         

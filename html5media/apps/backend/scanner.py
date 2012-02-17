@@ -48,10 +48,9 @@ def scan():
     
     logger.info("Media scan initiated")
     
-    validTypes = [".ogg", ".mp3"]
     pathnames = []
     for dirpath, dirnames, filenames in os.walk(settings.AUDIO_ROOT):
-        pathnames += [os.path.join(dirpath, f) for f in filenames if os.path.splitext(f)[1] in validTypes]
+        pathnames += [os.path.join(dirpath, f) for f in filenames if os.path.splitext(f)[1] in TranscodeManager.source_types]
     meta = {p: Mediainfo(p) for p in pathnames}
     albums = set([a.album for a in meta.values()])
     artists = set([a.artist for a in meta.values()])
