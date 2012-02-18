@@ -6,6 +6,19 @@
 Welcome to Cadence's documentation!
 ===================================
 
+Installation
+------------
+
+[Not written yet]
+
+Extending
+---------
+
+.. toctree::
+   :maxdepth: 2
+   
+   extensions.rst
+
 API documentation
 -----------------
 
