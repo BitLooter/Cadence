@@ -6,14 +6,12 @@ it will need to be compiled with support for any codecs you will want to use.
 As it calles FFmpeg on the command line, you do not need the development
 libraries installed, just the command-line encoder available on the path.
 
-This encoder makes use of profiles/presets to set encoding parameters, see the
-encoder documentation for more information.
+This encoder makes use of profiles/presets to set encoding parameters, see
+:ref:`encoders` for more information.
 
 .. note::
     If PyFFmpeg ever supports encoding, this module may be updated to make use
     of it instead of the command-line version. Until then, it's CLI all the way.
-
-.. todo:: Link to encoder documentation once it is written.
 """
 
 
@@ -33,6 +31,8 @@ def encode(inputFilename, outputFilename, mime, subtype=None):
     
     #TODO: Check for existance of ffmpeg?
     #TODO: Implement subtypes
+    #TODO: Return success/fail/exceptions
+    #TODO: Finish documenting this function
     command = 'ffmpeg -y -i "{}" -fpre "{}" "{}"'.format(
                 inputFilename,
                 os.path.join(settings.TRANSCODER_PROFILES_PATH,
