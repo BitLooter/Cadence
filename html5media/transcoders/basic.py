@@ -33,8 +33,9 @@ class TranscodeManager(TranscodeManagerBase):
             transcodename = self.make_transcode_name(self.filename, ".ogg")
             transcodemime = "audio/ogg"
         else:
-            #TODO: raise an error here
-            pass
+            #TODO: raise a better error here
+            raise Exception()
+        
         # If the transcoded file already exists, add it to the list of transcodes
         if os.path.exists(transcodename):
             self.transcodes.append( (transcodename, transcodemime ) )
