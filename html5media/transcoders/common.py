@@ -4,14 +4,15 @@ If you area writing a new transcoder, you will generally want to extend
 :py:class:`TranscodeManagerBase`. Most of the time you will only need to set
 things up in :py:meth:`__init__`, and the standard code will take care of
 everything else. Specifically, you will need to set the class attributes
-:py:attr:`filename` to the source file, :py:attr:`pendingJobs` to a list of
-output files (:py:meth:`convert` takes care of encoding and profiles), and
-:py:attr:`transcodes` to a list of transcoded media already present in the
-filesystem. Additionally, set :py:attr:`source_types` to a list of file
-extensions the transcoder can take as input.
+:py:attr:`~TranscodeManagerBase.filename` to the source file,
+:py:attr:`~TranscodeManagerBase.pendingJobs` to a list of output files
+(:py:meth:`~TranscodeManagerBase.convert` takes care of encoding and profiles),
+and :py:attr:`~TranscodeManagerBase.transcodes` to a list of transcoded media
+already present in the filesystem. Additionally, set
+:py:attr:`~TranscodeManagerBase.source_types` to a list of file extensions the
+transcoder can take as input.
 
-.. todo::
-    Link to transcoder docs once they are written
+See the :ref:`transcoders` documentation for more information.
 
 .. todo::
     Update subclass instructions when multiple source files are implemented
@@ -32,9 +33,15 @@ class TranscodeManagerBase(object):
     Code common to all (most?) transcoders. As-is will perform a null
     transcoding job, make sure your subclasses define an __init__ to set things
     up.
+    
+    :param string filename: The path of the source file.
+    
+    .. py:attribute:: source_types
+    
+        Class attribute containing a list of file extensions the transcoder can
+        handle.
     """
     
-    #. List of file extensions the transcoder can handle
     source_types = []
     
     def __init__(self, filename):
@@ -46,6 +53,7 @@ class TranscodeManagerBase(object):
         #: Formatted as (path, mimetype) pairs in a list.
         self.transcodes = []
         #TODO: Add sources[], to allow for multiple inputs
+        #TODO: Split off setup code into separate method from __init__
     
     def convert(self):
         """Executes a transcoding job, if needed"""
@@ -59,20 +67,32 @@ class TranscodeManagerBase(object):
             encode(self.filename, job, newmime)
             self.transcodes.append( (job, newmime) )
     
-    def make_transcode_name(self, path, newext):
+    def make_transcode_name(self, path, newext, postfix_name=True):
         """
-        Generates a transcoded filename from a given path
+        Generates a transcoded filename from a given path.
         
         Output name is the basename prefixed with parent directory names,
         separated by periods. This keeps all transcodes in the same
         place, and also prevents name collisions. In addition to all this
-        name mangling, it also replaces AUDIO_ROOT with TRANSCODE_ROOT.
+        name mangling, it also replaces :py:const:`AUDIO_ROOT` with
+        :py:const:`TRANSCODE_ROOT`.
+        
+        :param string path: The path of the source file
+        :param string newext: New extension (file type) for the transcoded file
+        :param bool postfix_name: If True, append `.transcode` to the filename
+            (but before the extension)
+        :returns: Output path
         """
+        
+        if postfix_name:
+            postfix = ".transcode"
+        else:
+            postfix = ""
         
         # Note the slice, it strips away the initial path seperator
         outname = path.replace(settings.AUDIO_ROOT, "")[1:].replace(os.sep, ".")
         outname = os.path.join(settings.TRANSCODE_ROOT,
-                               os.path.splitext(outname)[0] + ".transcode" + newext)
+                               os.path.splitext(outname)[0] + postfix + newext)
         return outname
     
     @property
@@ -89,6 +109,8 @@ class TranscodeManagerBase(object):
         values containing the media's pathname (relative to its root defined
         in the settings), the URL used to access the media, and the MIME type.
         """
+        
+        #TODO: figure out how to seperate source files that are servered and those that are not
         
         # Start with the source file(s)
         relname = self.filename.replace(settings.AUDIO_ROOT, "")
