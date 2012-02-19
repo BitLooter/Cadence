@@ -1,4 +1,8 @@
-"""
+"""Basic encoder that accepts FLACs as input.
+
+A subclass of :py:class:`basic.TranscodeManager`, this transcode manager also
+allows for lossless FLAC files to be used as transcoder input. The FLACs are
+not made part of the output by default, only the OGGs and MP3s it produces. 
 """
 
 
@@ -30,4 +34,4 @@ class TranscodeManager(basic.TranscodeManager):
                     self.transcodes.append( (trans, "audio/" + trans[-3:] ) )
                 else:
                     # Otherwise add it to the job list
-                    self.pendingJobs.append(trans)
+                    self.pending_jobs.append(trans)

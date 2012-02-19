@@ -41,4 +41,4 @@ class TranscodeManager(TranscodeManagerBase):
             self.transcodes.append( (transcodename, transcodemime ) )
         else:
             # Otherwise add it to the job list
-            self.pendingJobs.append(transcodename)
+            self.pending_jobs.append(transcodename)

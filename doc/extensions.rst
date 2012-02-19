@@ -48,7 +48,7 @@ In short, when writing a new transcoder module here's what needs to be done:
   :py:class:`~html5media.transcoders.common.TranscodeManagerBase.source_types`
   to a list of valid input types
 * During ``__init__``:
-   * Set :py:class:`~html5media.transcoders.common.TranscodeManagerBase.pendingJobs`
+   * Set :py:class:`~html5media.transcoders.common.TranscodeManagerBase.pending_jobs`
      to a list of output files that need to be created.
      :py:class:`~html5media.transcoders.common.TranscodeManagerBase.convert` is
      smart enough to figure out the codec and profile to use from the name, if
@@ -61,7 +61,7 @@ That's it, the rest should be automatic. Specifically, the default behaviour:
 
 * :py:class:`~html5media.transcoders.common.TranscodeManagerBase.transcode_needed`
   returns ``True`` if
-  :py:class:`~html5media.transcoders.common.TranscodeManagerBase.pendingJobs`
+  :py:class:`~html5media.transcoders.common.TranscodeManagerBase.pending_jobs`
   is not an empty list.
 * :py:class:`~html5media.transcoders.common.TranscodeManagerBase.files` is the
   list of files for the scanner to add to the database, normally some

@@ -5,7 +5,7 @@ If you area writing a new transcoder, you will generally want to extend
 things up in :py:meth:`__init__`, and the standard code will take care of
 everything else. Specifically, you will need to set the class attributes
 :py:attr:`~TranscodeManagerBase.filename` to the source file,
-:py:attr:`~TranscodeManagerBase.pendingJobs` to a list of output files
+:py:attr:`~TranscodeManagerBase.pending_jobs` to a list of output files
 (:py:meth:`~TranscodeManagerBase.convert` takes care of encoding and profiles),
 and :py:attr:`~TranscodeManagerBase.transcodes` to a list of transcoded media
 already present in the filesystem. Additionally, set
@@ -48,7 +48,7 @@ class TranscodeManagerBase(object):
         #: Input filename.
         self.filename = filename
         #: List of transcoder output filenames to be processed.
-        self.pendingJobs = []
+        self.pending_jobs = []
         #: List of all found transcoded media files.
         #: Formatted as (path, mimetype) pairs in a list.
         self.transcodes = []
@@ -57,7 +57,7 @@ class TranscodeManagerBase(object):
     
     def convert(self):
         """Executes a transcoding job, if needed"""
-        for job in self.pendingJobs:
+        for job in self.pending_jobs:
             #TODO: A more extensive and flexible MIME system
             if job.endswith(".ogg"):
                 newmime = "audio/ogg"
@@ -98,7 +98,7 @@ class TranscodeManagerBase(object):
     @property
     def transcode_needed(self):
         """Returns ``True`` if transcodes need to be performed."""
-        return True if self.pendingJobs else False
+        return True if self.pending_jobs else False
     
     @property
     def files(self):
