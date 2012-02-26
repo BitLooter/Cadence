@@ -50,11 +50,12 @@ class Album(models.Model):
         return items
 
 class Media(models.Model):
-    title    = models.CharField(max_length=127)
-    artist   = models.ForeignKey(Artist)
-    album    = models.ForeignKey(Album)
-    length   = models.FloatField(help_text="Track length in seconds, floating point")
-    scanDate = models.DateTimeField(auto_now=True)
+    title           = models.CharField(max_length=127)
+    artist          = models.ForeignKey(Artist)
+    album           = models.ForeignKey(Album)
+    length          = models.FloatField(help_text="Track length in seconds, floating point")
+    original_source = models.FilePathField()
+    scan_date       = models.DateTimeField(auto_now=True)
     
     def __unicode__(self):
         return u"#{}: {} ({}) - {}".format(self.id, self.album.name, self.artist.name, self.title)
