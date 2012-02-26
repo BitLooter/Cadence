@@ -129,8 +129,7 @@ class TranscodeManagerBase(object):
         """
         
         #TODO: figure out how to seperate source files that are servered and those that are not
-        print(settings.AUDIO_ROOT)
-        print()
+        
         # Start with the source file(s)
         relname = self.filename.replace(settings.AUDIO_ROOT, "")
         output = [(relname, self._fileurl(self.filename), "audio/" + relname[-3:])]
