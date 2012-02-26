@@ -99,11 +99,11 @@ LOGGING = {
 
 # Default paths are in subdirectories of the project directory
 AUDIO_ROOT = os.path.join(PROJECT_DIR, "static", "media")
-AUDIO_URL = STATIC_URL + "media/"
+AUDIO_URL = STATIC_URL + "media"
 TRANSCODE_ROOT = os.path.join(PROJECT_DIR, "static", "transcodes")
-TRANSCODE_URL = STATIC_URL + "transcodes/"
+TRANSCODE_URL = STATIC_URL + "transcodes"
 ALBUMART_ROOT = os.path.join(PROJECT_DIR, "static", "albumart")
-ALBUMART_URL = STATIC_URL + "albumart/"
+ALBUMART_URL = STATIC_URL + "albumart"
 # Scanner settings
 UNKNOWN_ALBUM = "<Unknown album>"
 UNKNOWN_ARTIST = "<Unknown artist>"
