@@ -21,24 +21,21 @@ from common import TranscodeManagerBase
 class TranscodeManager(TranscodeManagerBase):
     """Simple manager that provides OGGs and MP3s for every audio track"""
     
-    source_types = [".ogg", ".mp3"]
+    source_types = [".flac", ".ogg", ".mp3"]
     
-    def __init__(self, filename):
-        TranscodeManagerBase.__init__(self, filename)
-        
+    def setup(self):
         if self.filename.endswith(".ogg"):
-            transcodename = self.make_transcode_name(self.filename, ".mp3")
-            transcodemime = "audio/mp3"
+            newtranscodes = (self.make_transcode_name(self.filename, ".mp3"), )
         elif self.filename.endswith(".mp3"):
-            transcodename = self.make_transcode_name(self.filename, ".ogg")
-            transcodemime = "audio/ogg"
+            newtranscodes = (self.make_transcode_name(self.filename, ".ogg"), )
+        elif self.filename.endswith(".flac"):
+            transcodeOGG = self.make_transcode_name(self.filename, ".ogg", postfix_name=False)
+            transcodeMP3 = self.make_transcode_name(self.filename, ".mp3", postfix_name=False)
+            newtranscodes = (transcodeOGG, transcodeMP3)
         else:
             #TODO: raise a better error here
             raise Exception()
         
-        # If the transcoded file already exists, add it to the list of transcodes
-        if os.path.exists(transcodename):
-            self.transcodes.append( (transcodename, transcodemime ) )
-        else:
-            # Otherwise add it to the job list
-            self.pending_jobs.append(transcodename)
+        # Check both output filenames for possible transcoding
+        for trans in newtranscodes:
+            self.queue_job(trans)

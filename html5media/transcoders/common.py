@@ -54,6 +54,24 @@ class TranscodeManagerBase(object):
         self.transcodes = []
         #TODO: Add sources[], to allow for multiple inputs
         #TODO: Split off setup code into separate method from __init__
+        
+        # Prepare the transcoder
+        self.setup()
+    
+    def queue_job(self, filename, mime=None):
+        """"""
+        
+        # If no mime type given, base it on the file extension
+        if mime == None:
+            mimetype = "audio/" + os.path.splitext(filename)[1][1:]
+        else:
+            mimetype = mime
+        
+        if os.path.exists(filename):
+            self.transcodes.append( (filename, mimetype) )
+        else:
+            # Otherwise add it to the job list
+            self.pending_jobs.append(filename)
     
     def convert(self):
         """Executes a transcoding job, if needed"""
@@ -111,7 +129,8 @@ class TranscodeManagerBase(object):
         """
         
         #TODO: figure out how to seperate source files that are servered and those that are not
-        
+        print(settings.AUDIO_ROOT)
+        print()
         # Start with the source file(s)
         relname = self.filename.replace(settings.AUDIO_ROOT, "")
         output = [(relname, self._fileurl(self.filename), "audio/" + relname[-3:])]
