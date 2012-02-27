@@ -12,6 +12,8 @@ as the source files and :py:mod:`basicflac` as the transcoder.
 
 import os
 
+from django.conf import settings
+
 from common import TranscodeManagerBase
 
 
@@ -35,6 +37,9 @@ class TranscodeManager(TranscodeManagerBase):
             transcodeOGG = self.make_transcode_name(filename, ".ogg", postfix_name=False)
             transcodeMP3 = self.make_transcode_name(filename, ".mp3", postfix_name=False)
             newtranscodes = (transcodeOGG, transcodeMP3)
+            # If the server is configured to serve lossless audio, make it a source
+            if settings.SERVE_LOSSLESS:
+                self.sources.append( (filename, "audio/flac") )
         else:
             #TODO: raise a better error here
             raise Exception()
