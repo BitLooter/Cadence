@@ -34,8 +34,10 @@ class Mediainfo(object):
         try:
             return os.path.getmtime(self.path) > \
                    time.mktime(models.MediaSource.objects.get(path=self.relpath).media.scan_date.timetuple())
-        except models.Media.DoesNotExist:
+        except models.MediaSource.DoesNotExist:
             return False
+        except Exception as e:
+            print(e)
 
 
 class Scanner(object):
@@ -120,12 +122,12 @@ class Scanner(object):
             update_needed = True
         elif metadata.modified:
             # In the database but modified since last scan
-            media = models.MediaSource.objects.get(path=metadata.relpath).media
+            media = models.Media.objects.get(original_source=metadata.relpath)
             print("Modified media: " + metadata.path.replace(settings.AUDIO_ROOT, ""))
             update_needed = True
         else:
             # Else nothing to do here, but do get the object to return later
-            media = models.MediaSource.objects.get(path=metadata.relpath).media
+            media = models.Media.objects.get(original_source=metadata.relpath)
             print("Skipping already known media: " + metadata.path.replace(settings.AUDIO_ROOT, ""))
             update_needed = False
         
@@ -142,7 +144,7 @@ class Scanner(object):
         return media
     
     def make_transcodes(self, filename, media):
-        transcoder = TranscodeManager(filename)
+        transcoder = TranscodeManager( [filename] )
         
         # By default transcode only if needed, but can be forced by command line
         if transcoder.transcode_needed or self.options["force_transcode"]:

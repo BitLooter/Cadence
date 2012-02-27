@@ -16,6 +16,9 @@ See the :ref:`transcoders` documentation for more information.
 
 .. todo::
     Update subclass instructions when multiple source files are implemented
+
+.. todo::
+    Update instructions - transcodes and pending_jobs are now set by queue_job()
 """
 
 
@@ -36,6 +39,10 @@ class TranscodeManagerBase(object):
     
     :param string filename: The path of the source file.
     
+    
+    .. todo::
+        Now raises exception rather than a null job, update docs
+    
     .. py:attribute:: source_types
     
         Class attribute containing a list of file extensions the transcoder can
@@ -44,16 +51,18 @@ class TranscodeManagerBase(object):
     
     source_types = []
     
-    def __init__(self, filename):
+    def __init__(self, filenames):
         #: Input filename.
-        self.filename = filename
+        self.filenames = filenames
         #: List of transcoder output filenames to be processed.
         self.pending_jobs = []
         #: List of all found transcoded media files.
         #: Formatted as (path, mimetype) pairs in a list.
         self.transcodes = []
+        #TODO: update these docs to reflect new role of transcodes/media
         #TODO: Add sources[], to allow for multiple inputs
         #TODO: Split off setup code into separate method from __init__
+        self.sources = []
         
         # Prepare the transcoder
         self.setup()
@@ -74,14 +83,15 @@ class TranscodeManagerBase(object):
             self.pending_jobs.append(filename)
     
     def convert(self):
-        """Executes a transcoding job, if needed"""
+        """Executes a transcoding job"""
+        
         for job in self.pending_jobs:
             #TODO: A more extensive and flexible MIME system
             if job.endswith(".ogg"):
                 newmime = "audio/ogg"
             elif job.endswith(".mp3"):
                 newmime = "audio/mp3"
-        
+            
             encode(self.filename, job, newmime)
             self.transcodes.append( (job, newmime) )
     
@@ -128,11 +138,12 @@ class TranscodeManagerBase(object):
         in the settings), the URL used to access the media, and the MIME type.
         """
         
-        #TODO: figure out how to seperate source files that are servered and those that are not
+        output = []
         
         # Start with the source file(s)
-        relname = self.filename.replace(settings.AUDIO_ROOT, "")
-        output = [(relname, self._fileurl(self.filename), "audio/" + relname[-3:])]
+        for source in self.sources:
+            relname = source[0].replace(settings.AUDIO_ROOT, "")
+            output.append( (relname, self._fileurl(source[0]), source[1]) )
         
         # Then add the transcode(s)
         for transcode in self.transcodes:
