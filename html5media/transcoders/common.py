@@ -2,7 +2,7 @@
 
 If you area writing a new transcoder, you will generally want to extend
 :py:class:`TranscodeManagerBase`. Most of the time you will only need to set
-things up in :py:meth:`__init__`, and the standard code will take care of
+things up in :py:meth:`setup`, and the standard code will take care of
 everything else. Specifically, you will need to set the class attributes
 :py:attr:`~TranscodeManagerBase.filename` to the source file,
 :py:attr:`~TranscodeManagerBase.pending_jobs` to a list of output files
@@ -66,6 +66,18 @@ class TranscodeManagerBase(object):
         
         # Prepare the transcoder
         self.setup()
+    
+    def add_source(self, filename, mime=None):
+        """"""
+        
+        #TODO: Move this to a dedicated function along with the code in queue_job
+        # If no mime type given, base it on the file extension
+        if mime == None:
+            mimetype = "audio/" + os.path.splitext(filename)[1][1:]
+        else:
+            mimetype = mime
+        
+        self.sources.append( (filename, mimetype) )
     
     def queue_job(self, filename, mime=None):
         """"""

@@ -29,17 +29,17 @@ class TranscodeManager(TranscodeManagerBase):
         
         if filename.endswith(".ogg"):
             newtranscodes = (self.make_transcode_name(filename, ".mp3"), )
-            self.sources.append( (filename, "audio/ogg") )
+            self.add_source(filename)
         elif filename.endswith(".mp3"):
             newtranscodes = (self.make_transcode_name(filename, ".ogg"), )
-            self.sources.append( (filename, "audio/mp3") )
+            self.add_source(filename)
         elif filename.endswith(".flac"):
             transcodeOGG = self.make_transcode_name(filename, ".ogg", postfix_name=False)
             transcodeMP3 = self.make_transcode_name(filename, ".mp3", postfix_name=False)
             newtranscodes = (transcodeOGG, transcodeMP3)
             # If the server is configured to serve lossless audio, make it a source
             if settings.SERVE_LOSSLESS:
-                self.sources.append( (filename, "audio/flac") )
+                self.add_source(filename)
         else:
             #TODO: raise a better error here
             raise Exception()
