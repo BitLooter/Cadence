@@ -27,6 +27,11 @@ def encode(inputFilename, outputFilename, mime, subtype=None):
     Encodes inputFilename to outputFilename, in the codec given in mime.
     If subtype does not equal None (e.g. you may have varients for iPhones,
     consoles, set-top boxes, etc.) use it as part of the profile name.
+    
+    :param string inputFilename: File to encode
+    :param string outputFilename: File to output
+    :param string mime: Output type. Used to select profile.
+    :param string subtype: Used to refine profile selection, if varients exist.
     """
     
     #TODO: Check for existance of ffmpeg?
