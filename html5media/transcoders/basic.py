@@ -1,9 +1,8 @@
 """Simple transcoder that provides OGGs and MP3s for every audio track.
 
-For every input OGG or MP3 file, creates (if necessary) a file of the other
-type. This is a lossy conversion of course, but better than nothing if you do
-not have a lossless source. If you do have that, you should consider using them
-as the source files and :py:mod:`basicflac` as the transcoder.
+For every input file of the supported types, creates (if necessary) an MP3 or
+OGG. This may be a lossy conversion if no FLAC source is available, but better
+than nothing if you do not have a lossless source.
 
 .. note::
     MP3s and OGGs are enough to enable audio playback on every major browser.

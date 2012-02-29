@@ -3,22 +3,17 @@
 If you area writing a new transcoder, you will generally want to extend
 :py:class:`TranscodeManagerBase`. Most of the time you will only need to set
 things up in :py:meth:`setup`, and the standard code will take care of
-everything else. Specifically, you will need to set the class attributes
-:py:attr:`~TranscodeManagerBase.filename` to the source file,
-:py:attr:`~TranscodeManagerBase.pending_jobs` to a list of output files
-(:py:meth:`~TranscodeManagerBase.convert` takes care of encoding and profiles),
-and :py:attr:`~TranscodeManagerBase.transcodes` to a list of transcoded media
-already present in the filesystem. Additionally, set
+everything else. Specifically, you will need to call
+:py:meth:`~TranscodeManagerBase.add_source()` for every input file you would
+like to make available as a streaming source, and
+:py:meth:`~TranscodeManagerBase.queue_job()` for each output transcode you
+want to create. :py:meth:`~TranscodeManagerBase.convert()` takes care of
+encoding and profiles, assuming you set the output filenames properly.
+You will also need to set the class attribute
 :py:attr:`~TranscodeManagerBase.source_types` to a list of file extensions the
 transcoder can take as input.
 
 See the :ref:`transcoders` documentation for more information.
-
-.. todo::
-    Update subclass instructions when multiple source files are implemented
-
-.. todo::
-    Update instructions - transcodes and pending_jobs are now set by queue_job()
 """
 
 
@@ -31,24 +26,16 @@ encode = __import__("html5media.transcoders.encoders." + settings.ENCODER, froml
 
 class TranscodeManagerBase(object):
     """
-    Base class for all transcoder managers
+    Base class for all transcoder managers.
     
-    Code common to all (most?) transcoders. As-is will perform a null
-    transcoding job, make sure your subclasses define an __init__ to set things
-    up.
+    Code common to all (most?) transcoders. Not usable as-is, your subclasses
+    define a ``setup()`` method to prepare the transcoder.
     
-    :param string filename: The path of the source file.
-    
-    
-    .. todo::
-        Now raises exception rather than a null job, update docs
-    
-    .. py:attribute:: source_types
-    
-        Class attribute containing a list of file extensions the transcoder can
-        handle.
+    :param list filenames: List of source filenames.
     """
     
+    #: Class attribute containing a list of file extensions the transcoder can
+    #: handle.
     source_types = []
     
     def __init__(self, filenames):
@@ -60,15 +47,25 @@ class TranscodeManagerBase(object):
         #: Formatted as (path, mimetype) pairs in a list.
         self.transcodes = []
         #TODO: update these docs to reflect new role of transcodes/media
-        #TODO: Add sources[], to allow for multiple inputs
-        #TODO: Split off setup code into separate method from __init__
+        #: List of all given media source files.
+        #: Like :py:attr:`transcodes`, formatted as (path, mimetype) pairs.
         self.sources = []
         
         # Prepare the transcoder
         self.setup()
     
     def add_source(self, filename, mime=None):
-        """"""
+        """
+        Adds a file to the list of media sources.
+        
+        Any files you add will be added to :py:attr:`sources` and used
+        unmodified in the final output file list. If no MIME type is specified,
+        it will be autodetected based on the file extension.
+        
+        :param string filename: Path of the file
+        :param string mime: MIME type of the file. Optional, will be autodetected
+            if nothing is given.
+        """
         
         #TODO: Move this to a dedicated function along with the code in queue_job
         # If no mime type given, base it on the file extension
@@ -80,7 +77,18 @@ class TranscodeManagerBase(object):
         self.sources.append( (filename, mimetype) )
     
     def queue_job(self, filename, mime=None):
-        """"""
+        """
+        Prepares a file for transcoding.
+        
+        If the file already exists, it is directly added to
+        :py:attr:`transcodes`; if it does not, it's added to the
+        :py:attr:`job queue <pending_jobs>`. If no MIME type is given, it is
+        autodetected from the file extension.
+        
+        :param string filename: Path of the file to be made
+        :param string mime: MIME type of the file. Optional, will be autodetected
+            if nothing is given.
+        """
         
         # If no mime type given, base it on the file extension
         if mime == None:
@@ -95,7 +103,13 @@ class TranscodeManagerBase(object):
             self.pending_jobs.append(filename)
     
     def convert(self):
-        """Executes a transcoding job"""
+        """
+        Executes a transcoding job.
+        
+        Runs through each item in :py:attr:`pending_jobs`, calling the encoder
+        for each one. It's up to the encoder to determine codec parameters
+        based on the information passed to it.
+        """
         
         for job in self.pending_jobs:
             #TODO: A more extensive and flexible MIME system
@@ -148,6 +162,8 @@ class TranscodeManagerBase(object):
         Data is in the form of a list of tuples, each tuple a triplet of three
         values containing the media's pathname (relative to its root defined
         in the settings), the URL used to access the media, and the MIME type.
+        
+        :returns: List of all output files
         """
         
         output = []
@@ -165,7 +181,7 @@ class TranscodeManagerBase(object):
         return output
     
     def _fileurl(self, path):
-        """Returns the URL used to access a given path (for original files)"""
+        """Returns the URL used to access a given path (for source files)"""
         return settings.AUDIO_URL + path.replace(settings.AUDIO_ROOT, "").replace(os.sep, "/")
     
     def _transcodeurl(self, path):
