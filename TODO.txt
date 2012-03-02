@@ -1,0 +1,25 @@
+Build the website
+    Based on Django-CMS and DjangoBB
+        Blog
+        Docs
+        Live demo
+        Forums
+        Bug tracker
+        Screenshots
+        About/contact/credits for code, test media, etc.
+    Secure domain name and hosting
+Video support
+Interface cleanup
+Tuneup middleware
+Develop deployment code
+Possibly start using jQuery (for maintainability, compatibility, and sanity)
+User accounts
+Testing framework
+Dynamic transcoder
+Remote storage
+Photo support
+Cleandb command
+Implement new name
+Reorganize /static
+Scan reports
+Use fabric and south for deployment
