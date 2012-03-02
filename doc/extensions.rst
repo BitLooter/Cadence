@@ -1,5 +1,5 @@
-Writing <NAME> Extensions
-=========================
+Writing Cadence Extensions
+==========================
 
 <Intro text>
 
@@ -24,15 +24,17 @@ to a list of valid input formats. Encoding and other tasks can normally be
 handled by the base class; you can always redefine individual methods if they
 are not sufficient for whatever you're doing.
 
-Transcoding process
-^^^^^^^^^^^^^^^^^^^
+A Bird's-eye View of the Transcoding Process
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-To write a new transcoder, it helps to understand the transcoding process.
+By "Bird's-eye view" I mean a general overview of the system, stop bobbing your
+head back and forth in front of the monitor like some sort of nerdy pigeon.
 
 First, the scanner walks over the directory tree, and makes a list of every
-file the transcoder can handle. After doing some internal processing, it then
-loops over every file, creating a new transcoder manager (using the transcoder
-defined in the settings) for each one.
+file the transcoder can handle. After doing some internal processing (Making
+artist/album entries, looking for album art, etc.), it then loops over every
+file, creating a new transcoder manager (using the transcoder defined in the
+settings) for each one.
 
 The scanner then checks if a transcode is needed, and if so does that. Once the
 encoding process completes, it uses the output information from the transcoder
@@ -45,17 +47,32 @@ In short, when writing a new transcoder module here's what needs to be done:
 
 * Set the :py:class:`~html5media.transcoders.common.TranscodeManagerBase`
   class attribute
-  :py:class:`~html5media.transcoders.common.TranscodeManagerBase.source_types`
+  :py:attr:`~html5media.transcoders.common.TranscodeManagerBase.source_types`
   to a list of valid input types
-* During ``__init__``:
-   * Set :py:class:`~html5media.transcoders.common.TranscodeManagerBase.pending_jobs`
-     to a list of output files that need to be created.
-     :py:class:`~html5media.transcoders.common.TranscodeManagerBase.convert` is
+* Define a :py:meth:`~html5media.transcoders.common.TranscodeManagerBase.setup`
+  method on the class that prepares the encoder.
+   * The input files are in a list in 
+     :py:attr:`~html5media.transcoders.common.TranscodeManagerBase.filenames`.
+     Usually there will be only a single file, but there may be more (e.g.
+     there are OGGs and MP3s of the same track already encoded).
+   * Call :py:meth:`~html5media.transcoders.common.TranscodeManagerBase.add_source`
+     for every input file you wish to serve as a media source.
+   * Call :py:meth:`~html5media.transcoders.common.TranscodeManagerBase.queue_job`
+     for every new output (transcoded) file you want to create. Don't worry
+     about reencoding existing files, :py:meth:`queue_job` is smart enough to
+     check for existing files first. Unless you use the --force-transcode
+     command line options, which will reencode every single file, so think
+     twice about using it on your 10,000 MP3s you're trying to serve up.
+     
+     .. todo::
+         Mark the command line switch here.
+     
+     :py:meth:`~html5media.transcoders.common.TranscodeManagerBase.convert` is
      smart enough to figure out the codec and profile to use from the name, if
      it follows the standard format.
-   * Initialize :py:class:`~html5media.transcoders.common.TranscodeManagerBase.transcodes`
-     to a list of transcoded files that already exist. Used when updating a
-     previously scanned set so it doesn't need to reencode everything.
+     
+     .. todo::
+         document standard format
 
 That's it, the rest should be automatic. Specifically, the default behaviour:
 
@@ -72,6 +89,14 @@ That's it, the rest should be automatic. Specifically, the default behaviour:
 .. todo:: document output filename format
 .. todo:: fix docs when multiple source files are implemented
 .. todo:: add note about the encoder when overriding convert()
+
+Helper Functions
+^^^^^^^^^^^^^^^^
+
+The transcoder base class is equipped with helper methods for your convenience,
+to simplify some common tasks.
+
+.. todo:: document these functions
 
 
 .. _encoders:

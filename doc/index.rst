@@ -9,7 +9,14 @@ Welcome to Cadence's documentation!
 Installation
 ------------
 
+[Write requirements here]
+
 [Not written yet]
+
+Usage
+-----
+
+[Scanner usage]
 
 Extending
 ---------
@@ -21,6 +28,8 @@ Extending
 
 API documentation
 -----------------
+
+[REST interface docs]
 
 .. toctree::
    :maxdepth: 5
