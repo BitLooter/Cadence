@@ -4,7 +4,7 @@
 :mod:`models` Module
 --------------------
 
-.. automodule:: html5media.apps.player.models
+.. automodule:: cadence.apps.player.models
     :members:
     :undoc-members:
     :show-inheritance:
@@ -12,7 +12,7 @@
 :mod:`views` Module
 -------------------
 
-.. automodule:: html5media.apps.player.views
+.. automodule:: cadence.apps.player.views
     :members:
     :undoc-members:
     :show-inheritance:

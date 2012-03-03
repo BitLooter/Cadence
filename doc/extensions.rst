@@ -17,9 +17,9 @@ included that provide basic browser compatibility, but if they do not provide
 the functionality you require it's very easy to write your own.
 
 Most of the time, you will only need to subclass
-:py:class:`~html5media.transcoders.common.TranscodeManagerBase`, set up
+:py:class:`~cadence.transcoders.common.TranscodeManagerBase`, set up
 details in ``__init__``, and set
-:py:class:`~html5media.transcoders.common.TranscodeManagerBase.source_types`
+:py:class:`~cadence.transcoders.common.TranscodeManagerBase.source_types`
 to a list of valid input formats. Encoding and other tasks can normally be
 handled by the base class; you can always redefine individual methods if they
 are not sufficient for whatever you're doing.
@@ -45,19 +45,19 @@ Writing a new transcoder
 
 In short, when writing a new transcoder module here's what needs to be done:
 
-* Set the :py:class:`~html5media.transcoders.common.TranscodeManagerBase`
+* Set the :py:class:`~cadence.transcoders.common.TranscodeManagerBase`
   class attribute
-  :py:attr:`~html5media.transcoders.common.TranscodeManagerBase.source_types`
+  :py:attr:`~cadence.transcoders.common.TranscodeManagerBase.source_types`
   to a list of valid input types
-* Define a :py:meth:`~html5media.transcoders.common.TranscodeManagerBase.setup`
+* Define a :py:meth:`~cadence.transcoders.common.TranscodeManagerBase.setup`
   method on the class that prepares the encoder.
    * The input files are in a list in 
-     :py:attr:`~html5media.transcoders.common.TranscodeManagerBase.filenames`.
+     :py:attr:`~cadence.transcoders.common.TranscodeManagerBase.filenames`.
      Usually there will be only a single file, but there may be more (e.g.
      there are OGGs and MP3s of the same track already encoded).
-   * Call :py:meth:`~html5media.transcoders.common.TranscodeManagerBase.add_source`
+   * Call :py:meth:`~cadence.transcoders.common.TranscodeManagerBase.add_source`
      for every input file you wish to serve as a media source.
-   * Call :py:meth:`~html5media.transcoders.common.TranscodeManagerBase.queue_job`
+   * Call :py:meth:`~cadence.transcoders.common.TranscodeManagerBase.queue_job`
      for every new output (transcoded) file you want to create. Don't worry
      about reencoding existing files, :py:meth:`queue_job` is smart enough to
      check for existing files first. Unless you use the --force-transcode
@@ -67,7 +67,7 @@ In short, when writing a new transcoder module here's what needs to be done:
      .. todo::
          Mark the command line switch here.
      
-     :py:meth:`~html5media.transcoders.common.TranscodeManagerBase.convert` is
+     :py:meth:`~cadence.transcoders.common.TranscodeManagerBase.convert` is
      smart enough to figure out the codec and profile to use from the name, if
      it follows the standard format.
      
@@ -76,11 +76,11 @@ In short, when writing a new transcoder module here's what needs to be done:
 
 That's it, the rest should be automatic. Specifically, the default behaviour:
 
-* :py:class:`~html5media.transcoders.common.TranscodeManagerBase.transcode_needed`
+* :py:class:`~cadence.transcoders.common.TranscodeManagerBase.transcode_needed`
   returns ``True`` if
-  :py:class:`~html5media.transcoders.common.TranscodeManagerBase.pending_jobs`
+  :py:class:`~cadence.transcoders.common.TranscodeManagerBase.pending_jobs`
   is not an empty list.
-* :py:class:`~html5media.transcoders.common.TranscodeManagerBase.files` is the
+* :py:class:`~cadence.transcoders.common.TranscodeManagerBase.files` is the
   list of files for the scanner to add to the database, normally some
   combination of the source files and the transcodes.
 

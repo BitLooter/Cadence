@@ -54,7 +54,7 @@ def saveplaylist(request):
         else:
             newID = models.Playlist.savePlaylist(info["tracks"], info["name"])
             response = HttpResponse("Playlist created successfully", status=201, mimetype="text/plain")
-            response["Location"] = "/html5media/data/playlist/{}/".format(newID)
+            response["Location"] = "/cadence/data/playlist/{}/".format(newID)
             logger.info("Playlist from {} successfully saved as #{}".format(request.get_host(), newID))
     
     return response

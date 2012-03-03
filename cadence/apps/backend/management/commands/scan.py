@@ -1,7 +1,7 @@
 from optparse import make_option
 
 from django.core.management.base import NoArgsCommand, CommandError
-from html5media.apps.backend.scanner import Scanner
+from cadence.apps.backend.scanner import Scanner
 
 
 class Command(NoArgsCommand):

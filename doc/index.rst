@@ -34,9 +34,9 @@ API documentation
 .. toctree::
    :maxdepth: 5
    
-   api/html5media.apps
-   api/html5media.transcoders
-   api/html5media.transcoders.encoders
+   api/cadence.apps
+   api/cadence.transcoders
+   api/cadence.transcoders.encoders
 
 Documentation tasks/todo's
 ==========================

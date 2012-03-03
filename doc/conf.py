@@ -16,7 +16,7 @@ import sys, os
 #print(os.path.abspath( os.path.join(os.path.dirname(__file__), "..") ))
 sys.path.append(os.path.abspath( os.path.join(os.path.dirname(__file__), "..") ))
 
-from html5media import settings
+from cadence import settings
 from django.core.management import setup_environ
 setup_environ(settings)
 

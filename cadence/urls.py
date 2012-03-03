@@ -5,8 +5,8 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r"^$", "html5media.apps.player.views.index"),
-    url(r"^data/", include("html5media.apps.backend.urls")),
+    url(r"^$", "cadence.apps.player.views.index"),
+    url(r"^data/", include("cadence.apps.backend.urls")),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),

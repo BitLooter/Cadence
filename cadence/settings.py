@@ -28,7 +28,7 @@ SECRET_KEY = 'do_not_use_this_key'
 USE_I18N = True
 USE_L10N = True
 
-ROOT_URLCONF = 'html5media.urls'
+ROOT_URLCONF = 'cadence.urls'
 
 BASE_URL = '/' 
 STATIC_URL = 'static/'
@@ -49,8 +49,8 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.admindocs',
     # Application apps
-    'html5media.apps.player',
-    'html5media.apps.backend',
+    'cadence.apps.player',
+    'cadence.apps.backend',
 )
 
 LOGGING = {
@@ -108,7 +108,7 @@ ALBUMART_URL = STATIC_URL + "albumart"
 UNKNOWN_ALBUM = "<Unknown album>"
 UNKNOWN_ARTIST = "<Unknown artist>"
 # Transcoder settings
-TRANSCODER = "html5media.transcoders.basic"
+TRANSCODER = "cadence.transcoders.basic"
 TRANSCODER_PROFILE = "default"
 TRANSCODER_PROFILES_PATH = os.path.join(PROJECT_DIR, "transcoders", "profiles")
 ENCODER = "ffmpeg"

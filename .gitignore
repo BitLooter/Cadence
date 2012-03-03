@@ -3,10 +3,10 @@
 *.odt#
 *.db
 trac
-html5media/static/albumart
-html5media/static/media
-html5media/static/transcodes
+cadence/static/albumart
+cadence/static/media
+cadence/static/transcodes
 plan.txt
 log.txt
-html5media/settings_local.py
+cadence/settings_local.py
 doc/_build

@@ -7,7 +7,7 @@ TEMPLATE_DEBUG = DEBUG
 #TIME_ZONE = 'America/Los_Angeles'
 
 # If this site is not located at the URL root, set BASE_URL to its location
-#BASE_URL = '/html5media/' 
+#BASE_URL = '/cadence/' 
 #STATIC_URL = BASE_URL + 'static/'
 #ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
 
