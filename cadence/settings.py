@@ -30,9 +30,13 @@ USE_L10N = True
 
 ROOT_URLCONF = 'cadence.urls'
 
+STATIC_ROOT = "/var/www/static/"
 BASE_URL = '/' 
 STATIC_URL = 'static/'
-ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
+ADMIN_MEDIA_PREFIX = BASE_URL + STATIC_URL + 'admin/'
+
+MEDIA_ROOT = "/var/www/media/"
+MEDIA_URL = "media/"
 
 
 TEMPLATE_DIRS = (
@@ -98,12 +102,13 @@ LOGGING = {
 #######################
 
 # Default paths are in subdirectories of the project directory
-AUDIO_ROOT = os.path.join(PROJECT_DIR, "static", "media")
-AUDIO_URL = STATIC_URL + "media"
-TRANSCODE_ROOT = os.path.join(PROJECT_DIR, "static", "transcodes")
-TRANSCODE_URL = STATIC_URL + "transcodes"
-ALBUMART_ROOT = os.path.join(PROJECT_DIR, "static", "albumart")
-ALBUMART_URL = STATIC_URL + "albumart"
+AUDIO_ROOT = os.path.join(MEDIA_ROOT, "music/")
+AUDIO_URL = MEDIA_URL + "music/"
+TRANSCODE_ROOT = os.path.join(MEDIA_ROOT, "transcodes/")
+TRANSCODE_URL = MEDIA_URL + "transcodes/"
+ALBUMART_ROOT = os.path.join(MEDIA_ROOT, "albumart/")
+ALBUMART_URL = MEDIA_URL + "albumart/"
+
 # Scanner settings
 UNKNOWN_ALBUM = "<Unknown album>"
 UNKNOWN_ARTIST = "<Unknown artist>"

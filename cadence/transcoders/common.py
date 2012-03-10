@@ -143,8 +143,7 @@ class TranscodeManagerBase(object):
         else:
             postfix = ""
         
-        # Note the slice, it strips away the initial path seperator
-        outname = path.replace(settings.AUDIO_ROOT, "")[1:].replace(os.sep, ".")
+        outname = path.replace(settings.AUDIO_ROOT, "").replace(os.sep, ".")
         outname = os.path.join(settings.TRANSCODE_ROOT,
                                os.path.splitext(outname)[0] + postfix + newext)
         return outname

@@ -2,20 +2,20 @@
 <html>
     <head>
         <title>HTML5 Media Player</title>
-        <script src="static/utils.js" type="text/javascript"></script>
-        <script src="static/exceptions.js" type="text/javascript"></script>
-        <script src="static/serverdata.js" type="text/javascript"></script>
-        <script src="static/controls.js" type="text/javascript"></script>
-        <script src="static/playercontrols.js" type="text/javascript"></script>
-        <script src="static/theme.js" type="text/javascript"></script>
-        <script src="static/interface.js" type="text/javascript"></script>
-        <script src="static/init.js" type="text/javascript"></script>
-        <link rel="stylesheet" type="text/css" href="static/base.css" />
-        <link rel="stylesheet" type="text/css" href="static/theme.css" />
+        <script src="{{ STATIC_URL }}player/utils.js" type="text/javascript"></script>
+        <script src="{{ STATIC_URL }}player/exceptions.js" type="text/javascript"></script>
+        <script src="{{ STATIC_URL }}player/serverdata.js" type="text/javascript"></script>
+        <script src="{{ STATIC_URL }}player/controls.js" type="text/javascript"></script>
+        <script src="{{ STATIC_URL }}player/playercontrols.js" type="text/javascript"></script>
+        <script src="{{ STATIC_URL }}player/theme.js" type="text/javascript"></script>
+        <script src="{{ STATIC_URL }}player/interface.js" type="text/javascript"></script>
+        <script src="{{ STATIC_URL }}player/init.js" type="text/javascript"></script>
+        <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}player/base.css" />
+        <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}player/theme.css" />
     </head>
     <body>
         <div id="playerPane">
-            <img id="playerCover" src="static/nocover.svg" />
+            <img id="playerCover" src="{{ STATIC_URL }}player/nocover.svg" />
             <div id="playerControls">
                 <a id="playerPlay" class="playerButton">|&gt;</a>
                 <a id="playerStop" class="playerButton">[_]</a>

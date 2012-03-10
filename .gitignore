@@ -3,9 +3,7 @@
 *.odt#
 *.db
 trac
-cadence/static/albumart
-cadence/static/media
-cadence/static/transcodes
+cadence/media
 plan.txt
 log.txt
 cadence/settings_local.py
