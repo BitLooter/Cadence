@@ -118,7 +118,10 @@ class TranscodeManagerBase(object):
             elif job.endswith(".mp3"):
                 newmime = "audio/mp3"
             
-            encode(self.filename, job, newmime)
+            # By default uses the first given filename as the transcoding source.
+            # If you wish to change this, rearrange the list order in setup() or
+            # override convert() with your own code.
+            encode(self.filenames[0], job, newmime)
             self.transcodes.append( (job, newmime) )
     
     def make_transcode_name(self, path, newext, postfix_name=True):
