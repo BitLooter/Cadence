@@ -1,8 +1,11 @@
+"""Default settings for the debug configuration
+
+Intended for use with the runserver command."""
+
 import os
 
 from settings_default import *
 
-# Development (debug) settings
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
