@@ -1,25 +1,33 @@
+1.0 (Inital release goals)
+==========================
+
 Build the website
     Based on Django-CMS and DjangoBB
         Blog
         Docs
         Live demo
         Forums
-        Bug tracker
+        Bug tracker [use GitHub]
         Screenshots
         About/contact/credits for code, test media, etc.
     Secure domain name and hosting
-Video support
 Interface cleanup
-Tuneup middleware
 Develop deployment code
+Cleandb command
+Reorganize /static
+Scan reports
+Use fabric and south for deployment
+
+
+Future (post-1.0) goals
+=======================
+
+Video support
+Tuneup middleware
 Possibly start using jQuery (for maintainability, compatibility, and sanity)
+Bootstrap-based interface?
 User accounts
 Testing framework
 Dynamic transcoder
 Remote storage
 Photo support
-Cleandb command
-Implement new name
-Reorganize /static
-Scan reports
-Use fabric and south for deployment
