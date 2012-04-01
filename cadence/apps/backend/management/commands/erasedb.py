@@ -2,7 +2,7 @@ from optparse import make_option
 
 from django.core.management.base import NoArgsCommand, CommandError
 
-from apps.backend import models
+from cadence.apps.backend import models
 
 
 class Command(NoArgsCommand):

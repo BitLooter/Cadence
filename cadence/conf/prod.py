@@ -1,14 +1,15 @@
 import os
 
-from defaultdebug import *
+from defaultprod import *
 
-# Development (debug) settings
+# Production settings, local
 
 TIME_ZONE = 'America/Los_Angeles'
 
 SECRET_KEY = 'w+u!vatz60^t@+pocdm8%g!ps_)heb@aj$4g_ptiqnol^c4bdh'
 
 STATIC_ROOT = "C:\\Develop\\htdocs\\cadence\\static"
+STATIC_URL = "/cadence/static/"
 MEDIA_ROOT = "C:\\Develop\\htdocs\\cadence\\media"
 
 # Reset Cadence paths to the new MEDIA_ROOT

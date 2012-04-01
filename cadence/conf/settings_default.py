@@ -28,17 +28,13 @@ DATABASES = {
     }
 }
 
-SECRET_KEY = 'do_not_use_this_key'
-
 USE_I18N = True
 USE_L10N = True
 
 ROOT_URLCONF = 'cadence.urls'
 
 STATIC_ROOT = "/var/www/static/"
-BASE_URL = '/' 
-STATIC_URL = 'static/'
-ADMIN_MEDIA_PREFIX = BASE_URL + STATIC_URL + 'admin/'
+STATIC_URL = '/static/'
 
 MEDIA_ROOT = "/var/www/media/"
 MEDIA_URL = "media/"
@@ -48,8 +44,6 @@ TEMPLATE_DIRS = (
     os.path.join(PROJECT_DIR, "templates"),
 )
 
-INTERNAL_IPS = ('127.0.0.1',)
-MIDDLEWARE_CLASSES += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
