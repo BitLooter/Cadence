@@ -74,6 +74,8 @@ INSTALLED_APPS = (
     'cadence.apps.backend',
 )
 
+MIDDLEWARE_CLASSES += ('django.middleware.clickjacking.XFrameOptionsMiddleware',)
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
