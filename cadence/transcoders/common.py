@@ -173,12 +173,12 @@ class TranscodeManagerBase(object):
         # Start with the source file(s)
         for source in self.sources:
             relname = source[0].replace(settings.AUDIO_ROOT, "")
-            output.append( (relname, self._fileurl(source[0]), source[1]) )
+            output.append( (relname, self._fileurl(source[0]), source[1], False), )
         
         # Then add the transcode(s)
         for transcode in self.transcodes:
             relname = transcode[0].replace(settings.TRANSCODE_ROOT, "")
-            output.append( (relname, self._transcodeurl(transcode[0]), transcode[1]) )
+            output.append( (relname, self._transcodeurl(transcode[0]), transcode[1], True), )
         
         return output
     

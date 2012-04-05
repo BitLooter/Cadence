@@ -82,18 +82,20 @@ class Media(models.Model):
         return items
 
 class MediaSource(models.Model):
-    media = models.ForeignKey(Media)
+    media     = models.ForeignKey(Media)
     #TODO: restrict field to media files
-    url   = models.URLField()
-    path  = models.FilePathField()
-    mime  = models.CharField(max_length=100)
+    url       = models.URLField()
+    path      = models.FilePathField()
+    mime      = models.CharField(max_length=100)
+    transcode = models.BooleanField()
     
     def __unicode__(self):
         return "#{}: {} - {}".format(self.id, self.url, self.mime)
     
     def make_dict(self):
-        return {"url":  self.url,
-                "mime": self.mime }
+        return {"url":       self.url,
+                "mime":      self.mime,
+                "transcode": self.transcode}
 
 class Playlist(models.Model):
     items = models.ManyToManyField(Media)

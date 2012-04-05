@@ -78,7 +78,6 @@ class Scanner(object):
         
         # Now process the scanned files
         # Make a list of all previously processed files
-        #TODO: add a flag for transcodes to the database
         self.scannedFiles = models.Media.objects.values_list("original_source", flat=True)
         #TODO: iteritems() becomes items() in Py3k
         for metadata in meta:
@@ -151,12 +150,13 @@ class Scanner(object):
             print("Transcoding...")
             transcoder.convert()
         
-        for transpath, url, mime in transcoder.files:
+        for transpath, url, mime, is_transcode in transcoder.files:
             # Create DB entries, if they do not exist already
-            create_params = {"media": media,
-                             "path":  transpath,
-                             "url":   url,
-                             "mime":  mime}
+            create_params = {"media":     media,
+                             "path":      transpath,
+                             "url":       url,
+                             "mime":      mime,
+                             "transcode": is_transcode}
             models.MediaSource.objects.get_or_create(**create_params)
     
     def filter_path_chars(self, path):
