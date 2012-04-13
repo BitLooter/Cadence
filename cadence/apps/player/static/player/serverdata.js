@@ -117,7 +117,7 @@ function savePlaylist(tracks, name) {
         idList.push(parseInt(tracks[i].id));
     }
     var text = JSON.stringify({"name": name, "tracks": idList});
-    makeRequest("data/saveplaylist/", function(r){
+    makeRequest("data/playlists/", function(r){
         if (r.status != 201) {
             throw new ServerPlaylistError(r);
         }

@@ -13,28 +13,49 @@ logger = logging.getLogger("apps")
 
 #TODO: document API parameters
 #TODO: check for external errors like database access problems
-def playlist(request, playlistID):
-    logger.info("Playlist #{} requested from {}".format(playlistID, request.get_host()))
+#TODO: This really, REALLY needs to be fixed - do not let this enter final
+# release without properly implementing CSRF protection.
+@csrf_exempt
+def playlists(request):
+    """
+    Virtual view method for data/playlists/
     
-    try:
-        playlist = models.Playlist.getPlaylist(playlistID)
-        response = HttpResponse(json.dumps(playlist), mimetype="text/plain")
-    except ObjectDoesNotExist:
-        response = HttpResponseNotFound("Error: Playlist not found", mimetype="text/plain")
-        logger.error("Playlist #{} does not exist".format(playlistID))
+    Saves a playlist or returns a list of them, depending on request type. A GET
+    request will return a list of available playlists in JSON format; a POST request
+    saves a new playlist to the server, using the POST data (also in JSON format).
     
-    return response
+    Does not actually do anything itself, but rather calls the correct function for
+    the task.
+    """
+    
+    # If POST, we're saving a playlist
+    if request.method == "POST":
+        return saveplaylist(request)
+    # Otherwise, default behavior is to return a list of playlists
+    else:
+        return playlistlist(request)
 
 def playlistlist(request):
+    """View method for data/playlists/ (GET). Returns list of playlists in JSON."""
+    
     logger.info("Playlist list requested from {}".format(request.get_host()))
     lists = models.Playlist.getPlaylistList()
     return HttpResponse(json.dumps(lists), mimetype="text/plain")
 
-#TODO: This really, REALLY needs to be fixed - do not let this enter final
-# release without properly implementing CSRF protection.
-@csrf_exempt
-@require_POST
 def saveplaylist(request):
+    """
+    View method for data/playlists/ (POST)
+    
+    Saves a new playlist to the database. Data is in JSON format, and is expected
+    to take the form of a dict with 'name' and 'tracks' fields, name being a
+    string and tracks being a list of track IDs. Example:
+    
+        {
+            "name": "Top ten Tuvian throat singing rap singles"
+            "tracks": [553, 1490, 6643, 1186, 6689, 91, 642, 11, 853, 321]
+        }
+    """
+    
     logger.info("Save playlist request from {}".format(request.get_host()))
 
     try:
@@ -59,27 +80,54 @@ def saveplaylist(request):
     
     return response
 
+def getplaylist(request, playlistID):
+    """View method for data/playlists/<ID>/. Returns playlist matching ID."""
+    
+    logger.info("Playlist #{} requested from {}".format(playlistID, request.get_host()))
+    
+    try:
+        playlist = models.Playlist.getPlaylist(playlistID)
+        response = HttpResponse(json.dumps(playlist), mimetype="text/plain")
+    except ObjectDoesNotExist:
+        response = HttpResponseNotFound("Error: Playlist not found", mimetype="text/plain")
+        logger.error("Playlist #{} does not exist".format(playlistID))
+    
+    return response
+
 def library(request):
+    """
+    View method for data/library/. Returns information on every track in the library.
+    
+    Note that for very large libraries, this could produce a great amount of data
+    and load slowly on the client (not to mention "Holy crap Frank, how'd we go over
+    our data limit again this month?"). Therefore, this view may be disabled depending
+    on the current site settings.
+    """
+     
     logger.info("Full library request from {}".format(request.get_host()))
     response = HttpResponse(json.dumps(models.Media.getFullLibrary()), mimetype="text/plain")
     return response
 
 def library_albums(request):
+    """View method for data/library/albums/. Returns list of albums in the library."""
     logger.info("Library albums request from {}".format(request.get_host()))
     response = HttpResponse(json.dumps(models.Album.getAlbums()), mimetype="text/plain")
     return response
 
 def library_get_album(request, albumID):
+    """View method for data/library/albums/<ID>. Returns info on album matching ID."""
     logger.info("Album request from {}".format(request.get_host()))
     response = HttpResponse(json.dumps(models.Album.getAlbumTracks(albumID)), mimetype="text/plain")
     return response
 
 def library_artists(request):
+    """View method for data/library/artists/. Returns list of artists in the library."""
     logger.info("Library artists request from {}".format(request.get_host()))
     response = HttpResponse(json.dumps(models.Artist.getArtists()), mimetype="text/plain")
     return response
 
 def library_get_artist(request, artistID):
+    """View method for data/library/artists/<ID>. Returns info on artist matching ID."""
     logger.info("Artist request from {}".format(request.get_host()))
     response = HttpResponse(json.dumps(models.Artist.getArtistTracks(artistID)), mimetype="text/plain")
     return response
