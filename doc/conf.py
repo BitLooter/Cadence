@@ -16,7 +16,7 @@ import sys, os
 #print(os.path.abspath( os.path.join(os.path.dirname(__file__), "..") ))
 sys.path.append(os.path.abspath( os.path.join(os.path.dirname(__file__), "..") ))
 
-from cadence import settings
+from cadence.conf import debug as settings
 from django.core.management import setup_environ
 setup_environ(settings)
 
@@ -32,7 +32,8 @@ setup_environ(settings)
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = ['sphinx.ext.autodoc', 'sphinx.ext.todo', 'sphinx.ext.coverage', 'sphinx.ext.viewcode']
+extensions = ['sphinx.ext.autodoc', 'sphinx.ext.todo', 'sphinx.ext.coverage',
+              'sphinx.ext.viewcode', 'sphinxcontrib.httpdomain']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
