@@ -79,7 +79,7 @@ class Scanner(object):
         # Now process the scanned files
         # Make a list of all previously processed files
         self.scannedFiles = models.Media.objects.values_list("original_source", flat=True)
-        #TODO: iteritems() becomes items() in Py3k
+        #PY3K: iteritems() becomes items() in Py3k
         for metadata in meta:
             media = self.update_db(metadata)
             # Do the media transcoding, if needed
