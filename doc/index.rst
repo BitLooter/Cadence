@@ -29,7 +29,17 @@ Extending
 API documentation
 -----------------
 
-[REST interface docs]
+Client/server interface
+~~~~~~~~~~~~~~~~~~~~~~~
+
+.. toctree::
+   :maxdepth: 5
+   
+   api/restinterface
+
+
+Internal APIs
+~~~~~~~~~~~~~
 
 .. toctree::
    :maxdepth: 5
