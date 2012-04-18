@@ -40,7 +40,7 @@ def playlistlist(request):
     
     logger.info("Playlist list requested from {}".format(request.get_host()))
     lists = models.Playlist.getPlaylistList()
-    return HttpResponse(json.dumps(lists), mimetype="text/plain")
+    return json_response(lists)
 
 def saveplaylist(request):
     """
@@ -87,7 +87,7 @@ def getplaylist(request, playlistID):
     
     try:
         playlist = models.Playlist.getPlaylist(playlistID)
-        response = HttpResponse(json.dumps(playlist), mimetype="text/plain")
+        response = json_response(playlist)
     except ObjectDoesNotExist:
         response = HttpResponseNotFound("Error: Playlist not found", mimetype="text/plain")
         logger.error("Playlist #{} does not exist".format(playlistID))
@@ -105,29 +105,37 @@ def library(request):
     """
      
     logger.info("Full library request from {}".format(request.get_host()))
-    response = HttpResponse(json.dumps(models.Media.getFullLibrary()), mimetype="text/plain")
+    response = json_response(models.Media.getFullLibrary())
     return response
 
 def library_albums(request):
     """View method for data/library/albums/. Returns list of albums in the library."""
     logger.info("Library albums request from {}".format(request.get_host()))
-    response = HttpResponse(json.dumps(models.Album.getAlbums()), mimetype="text/plain")
+    response = json_response(models.Album.getAlbums())
     return response
 
 def library_get_album(request, albumID):
     """View method for data/library/albums/<ID>. Returns info on album matching ID."""
     logger.info("Album request from {}".format(request.get_host()))
-    response = HttpResponse(json.dumps(models.Album.getAlbumTracks(albumID)), mimetype="text/plain")
+    response = json_response(models.Album.getAlbumTracks(albumID))
     return response
 
 def library_artists(request):
     """View method for data/library/artists/. Returns list of artists in the library."""
     logger.info("Library artists request from {}".format(request.get_host()))
-    response = HttpResponse(json.dumps(models.Artist.getArtists()), mimetype="text/plain")
+    response = json_response(models.Artist.getArtists())
     return response
 
 def library_get_artist(request, artistID):
     """View method for data/library/artists/<ID>. Returns info on artist matching ID."""
     logger.info("Artist request from {}".format(request.get_host()))
-    response = HttpResponse(json.dumps(models.Artist.getArtistTracks(artistID)), mimetype="text/plain")
+    response = json_response(models.Artist.getArtistTracks(artistID))
     return response
+
+
+# Utility methods
+#################
+
+def json_response(output):
+    """Returns an HTTP Response with the data in output as the content in JSON format"""
+    return HttpResponse(json.dumps(output), mimetype="application/json")
