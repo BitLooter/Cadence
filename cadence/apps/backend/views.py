@@ -89,8 +89,9 @@ def getplaylist(request, playlistID):
         playlist = models.Playlist.getPlaylist(playlistID)
         response = json_response(playlist)
     except ObjectDoesNotExist:
-        response = HttpResponseNotFound("Error: Playlist not found", mimetype="text/plain")
-        logger.error("Playlist #{} does not exist".format(playlistID))
+        error = "Playlist #{} does not exist".format(playlistID)
+        response = HttpResponseNotFound(error, mimetype="text/plain")
+        logger.error(error)
     
     return response
 
@@ -117,7 +118,15 @@ def library_albums(request):
 def library_get_album(request, albumID):
     """View method for data/library/albums/<ID>. Returns info on album matching ID."""
     logger.info("Album request from {}".format(request.get_host()))
-    response = json_response(models.Album.getAlbumTracks(albumID))
+    
+    try:
+        tracks = models.Album.getAlbumTracks(albumID)
+        response = json_response(tracks)
+    except ObjectDoesNotExist as e:
+        error = "Error: {}".format(e.message)
+        logger.error(error)
+        response = HttpResponseNotFound(error, mimetype="text/plain")
+    
     return response
 
 def library_artists(request):
@@ -129,7 +138,15 @@ def library_artists(request):
 def library_get_artist(request, artistID):
     """View method for data/library/artists/<ID>. Returns info on artist matching ID."""
     logger.info("Artist request from {}".format(request.get_host()))
-    response = json_response(models.Artist.getArtistTracks(artistID))
+    
+    try:
+        tracks = models.Artist.getArtistTracks(artistID)
+        response = json_response(tracks)
+    except ObjectDoesNotExist as e:
+        error = "Error: {}".format(e.message)
+        logger.error(error)
+        response = HttpResponseNotFound(error, mimetype="text/plain")
+    
     return response
 
 

@@ -21,10 +21,14 @@ class Artist(models.Model):
     
     @staticmethod
     def getArtistTracks(artistID):
-        items = []
-        for item in Media.objects.filter(artist=artistID):
-            items.append(item.make_dict())
-        return items
+        # Check that the given artist exists - if it doesn't, raise an exception
+        if Artist.objects.filter(id=artistID).exists():
+            items = []
+            for item in Media.objects.filter(artist=artistID):
+                items.append(item.make_dict())
+            return items
+        else:
+            raise Artist.DoesNotExist("Artist #{} not found".format(artistID))
 
 class Album(models.Model):
     name =     models.CharField(max_length=100, unique=True)
@@ -44,10 +48,14 @@ class Album(models.Model):
     
     @staticmethod
     def getAlbumTracks(albumID):
-        items = []
-        for item in Media.objects.filter(album=albumID):
-            items.append(item.make_dict())
-        return items
+        # Check that the given album exists - if it doesn't, raise an exception
+        if Album.objects.filter(id=albumID).exists():
+            items = []
+            for item in Media.objects.filter(album=albumID):
+                items.append(item.make_dict())
+            return items
+        else:
+            raise Album.DoesNotExist("Album #{} not found".format(albumID))
 
 class Media(models.Model):
     title           = models.CharField(max_length=127)
