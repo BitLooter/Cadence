@@ -67,12 +67,8 @@ class TranscodeManagerBase(object):
             if nothing is given.
         """
         
-        #TODO: Move this to a dedicated function along with the code in queue_job
         # If no mime type given, base it on the file extension
-        if mime == None:
-            mimetype = "audio/" + os.path.splitext(filename)[1][1:]
-        else:
-            mimetype = mime
+        mimetype = self._mime_from_filename(filename)
         
         self.sources.append( (filename, mimetype) )
     
@@ -91,10 +87,7 @@ class TranscodeManagerBase(object):
         """
         
         # If no mime type given, base it on the file extension
-        if mime == None:
-            mimetype = "audio/" + os.path.splitext(filename)[1][1:]
-        else:
-            mimetype = mime
+        mimetype = self._mime_from_filename(filename)
         
         if os.path.exists(filename):
             self.transcodes.append( (filename, mimetype) )
@@ -189,3 +182,15 @@ class TranscodeManagerBase(object):
     def _transcodeurl(self, path):
         """Returns the URL used to access a given path (for transcoded files)"""
         return settings.TRANSCODE_URL + path.replace(settings.TRANSCODE_ROOT, "").replace(os.sep, "/")
+    
+    def _mime_from_filename(self, filename):
+        """Detects MIME type from filename"""
+        extension = os.path.splitext(filename)[1][1:]
+        if extension == "mp3":
+            mime = "audio/mp3"
+        elif extension == "ogg":
+            mime = "audio/ogg"
+        else:
+            mime = None
+        
+        return mime
