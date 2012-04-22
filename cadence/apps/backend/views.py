@@ -48,7 +48,7 @@ def saveplaylist(request):
     
     Saves a new playlist to the database. Data is in JSON format, and is expected
     to take the form of a dict with 'name' and 'tracks' fields, name being a
-    string and tracks being a list of track IDs. Example:
+    string and tracks being a list of track IDs. Example::
     
         {
             "name": "Top ten Tuvian throat singing rap singles"

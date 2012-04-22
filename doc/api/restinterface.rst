@@ -153,6 +153,7 @@ All urls are relative to the data URL root, by default `/data`.
          <Continues on for the rest of the tracks by the artist>
       ]
    
+   :param artist_id: Unique ID for the artist
    :statuscode 200: No error
    :statuscode 404: Artist ID does not exist in database
 
@@ -255,6 +256,7 @@ All urls are relative to the data URL root, by default `/data`.
          <Continues on for the rest of the tracks in the album>
       ]
    
+   :param album_id: Unique ID for the album
    :statuscode 200: No error
    :statuscode 404: Album ID does not exist in database
 
@@ -342,6 +344,7 @@ All urls are relative to the data URL root, by default `/data`.
          <Continues on for the rest of the tracks in the playlist>
       ]
    
+   :param playlist_id: Unique ID for the playlist
    :statuscode 200: No error
    :statuscode 404: No playlist matching `playlist_id`.
    
