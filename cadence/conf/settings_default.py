@@ -1,25 +1,35 @@
-"""Global defaults for the project
+"""
+Global defaults for the project
+===============================
 
 Don't edit this file directly; instead, write a new module with your settings
 and import this or one of the child defaults. For example, your debug.py may
-look like this:
+look like this::
 
     from defaultdebug import *
     <Your local settings go here>
 
 Then configure your server to use debug.py as your Django settings file.
 
-This setup has the advantage of allowing you to write code like this:
+This setup has the advantage of allowing you to write code like this::
 
     INSTALLED_APPS += ('debug_toolbar',)
 
 All the defaults are available to you, you can simply add on or modify existing
 settings without completely overriding them like the traditional
 'from settings_local import *' approach does.
+
+What to configure
+-----------------
+
+Besides the usual Django settings like STATIC_ROOT and SECRET_KEY, there are a
+few Cadence-specific settings you will need to configure.
+
+See the documentation or the cadencedefaults module for details on the settings
+used by Cadence.
 """
 
 #TODO: Document defaults here
-#TODO: do we need contenttypes, messages, sessions?
 
 import sys
 import os
@@ -33,6 +43,7 @@ PROJECT_DIR = os.path.normpath(os.path.join(
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
+# If no database is specified, default is an SQLite database in the project dir
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -51,17 +62,19 @@ USE_TZ=True
 
 ROOT_URLCONF = 'cadence.urls'
 
+# Set up some sane directory defaults, based on a Debian/Ubuntu-style Linux system
 STATIC_ROOT = "/var/www/static/"
 STATIC_URL = '/static/'
 
 MEDIA_ROOT = "/var/www/media/"
 MEDIA_URL = "media/"
 
-
+# Add the templates in the project directory
 TEMPLATE_DIRS = (
     os.path.join(PROJECT_DIR, "templates"),
 )
 
+# The default apps needed by Cadence
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -76,6 +89,7 @@ INSTALLED_APPS = (
 
 MIDDLEWARE_CLASSES += ('django.middleware.clickjacking.XFrameOptionsMiddleware',)
 
+# Configure the logging system to write to a 'log.txt' file in the project dir
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -120,14 +134,5 @@ LOGGING = {
 # Cadence settings
 ###################
 
-INSTALLED_APPS += (
-    'cadence.apps.player',
-    'cadence.apps.backend',
-)
+# Defaults are stored in a separate module to ease use with existing sites
 from cadencedefaults import *
-AUDIO_ROOT = os.path.join(MEDIA_ROOT, "media/music/")
-AUDIO_URL = MEDIA_URL + "music/"
-TRANSCODE_ROOT = os.path.join(MEDIA_ROOT, "media/transcodes/")
-TRANSCODE_URL = MEDIA_URL + "transcodes/"
-ALBUMART_ROOT = os.path.join(MEDIA_ROOT, "media/albumart/")
-ALBUMART_URL = MEDIA_URL + "albumart/"
