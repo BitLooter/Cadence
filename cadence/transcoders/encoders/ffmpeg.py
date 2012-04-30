@@ -40,8 +40,8 @@ def encode(inputFilename, outputFilename, mime, subtype=None):
     #TODO: Finish documenting this function
     command = 'ffmpeg -y -i "{}" -fpre "{}" "{}"'.format(
                 inputFilename,
-                os.path.join(settings.TRANSCODER_PROFILES_PATH,
-                             settings.TRANSCODER_PROFILE,
+                os.path.join(settings.ENCODER_PROFILES_PATH,
+                             settings.ENCODER_PROFILE,
                              mime.replace("/", "_") + ".ffpreset"),
                 outputFilename)
     

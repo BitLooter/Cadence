@@ -46,16 +46,16 @@ Transcoder settings
 TRANSCODER
     Transcoder module the scanner should use. Should be a string with the fully
     qualified module name.
-TRANSCODER_PROFILE
-    Profile set for the transcoder. Note that different transcoders may not
-    share profiles, so for example profiles built for ffmpeg will not work with
-    a SOX transcoder.
-TRANSCODER_PROFILES_PATH
-    Filesystem path where profiles are stored. By default ../transcoders/profiles,
-    relative to this file.
 ENCODER
     Which encoder the transcoder should use. Should be a string with the fully
     qualified module name.
+ENCODER_PROFILE
+    Profile set for the transcoder. Note that different transcoders may not
+    share profiles, so for example profiles built for ffmpeg will not work with
+    a SOX transcoder.
+ENCODER_PROFILES_PATH
+    Filesystem path where profiles are stored. By default ../transcoders/profiles,
+    relative to this file.
 SERVE_LOSSLESS
     Boolean indicating if lossless files should be served to users. By default,
     they are only used as original masters and are not sucking up all your
@@ -79,12 +79,12 @@ UNKNOWN_ALBUM = "<Unknown album>"
 UNKNOWN_ARTIST = "<Unknown artist>"
 
 # Transcoder settings
-ENCODER = "cadence.transcoders.encoders.ffmpeg"
 SERVE_LOSSLESS = False
 TRANSCODER = "cadence.transcoders.basic"
-TRANSCODER_PROFILE = "default"
+ENCODER = "cadence.transcoders.encoders.ffmpeg"
+ENCODER_PROFILE = "default"
 # Default directory structure leaves the profiles in ../transcoders/profiles from here.
 # If you have rearranged things, naturally you will need to change this in the local settings.
 thisdir = os.path.dirname(os.path.abspath(__file__))
-TRANSCODER_PROFILES_PATH = os.path.normpath(
+ENCODER_PROFILES_PATH = os.path.normpath(
                                 os.path.join(thisdir, "..", "transcoders", "profiles"))
