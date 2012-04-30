@@ -44,8 +44,8 @@ Transcoder settings
 ~~~~~~~~~~~~~~~~~~~
 
 TRANSCODER
-    Transcoder module the scanner should use. Should be a string with the name
-    of the module, do not include the package path.
+    Transcoder module the scanner should use. Should be a string with the fully
+    qualified module name.
 TRANSCODER_PROFILE
     Profile set for the transcoder. Note that different transcoders may not
     share profiles, so for example profiles built for ffmpeg will not work with
@@ -54,8 +54,8 @@ TRANSCODER_PROFILES_PATH
     Filesystem path where profiles are stored. By default ../transcoders/profiles,
     relative to this file.
 ENCODER
-    Which encoder the transcoder should use. Should be a string with the name
-    of the module, do not include the package path.
+    Which encoder the transcoder should use. Should be a string with the fully
+    qualified module name.
 SERVE_LOSSLESS
     Boolean indicating if lossless files should be served to users. By default,
     they are only used as original masters and are not sucking up all your
@@ -79,7 +79,7 @@ UNKNOWN_ALBUM = "<Unknown album>"
 UNKNOWN_ARTIST = "<Unknown artist>"
 
 # Transcoder settings
-ENCODER = "ffmpeg"
+ENCODER = "cadence.transcoders.encoders.ffmpeg"
 SERVE_LOSSLESS = False
 TRANSCODER = "cadence.transcoders.basic"
 TRANSCODER_PROFILE = "default"
