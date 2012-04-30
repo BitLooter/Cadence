@@ -2,9 +2,9 @@
 Default settings for Cadence
 ============================
 
-Simply "from cadencedefaults import *" in your settings environment to get the
-default settings ready. You will also need to add `cadence.apps.player` and
-`cadence.apps.backend` to your `INSTALLED_APPS`.
+Simply use "from cadencedefaults import *" in your settings environment to get
+the default settings ready. You will also need to add `cadence.apps.player`
+and `cadence.apps.backend` to your `INSTALLED_APPS`.
 
 Settings you may need to manually configure
 -------------------------------------------
