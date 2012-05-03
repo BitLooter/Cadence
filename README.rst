@@ -22,8 +22,8 @@ box these should get you started quickly.
 Credits and thanks
 ------------------
 
-`Mutagen <http://code.google.com/p/mutagen/>` is used for tag handling in the
-scanner.
-The `Django <https://www.djangoproject.com/>` and `Python <http://python.org/>`
-teams, without whose efforts this would have been written in PHP (gasp!).
-Source code and bug tracker hosting provided by `GitHub <https://github.com/>`.
+* `Mutagen <http://code.google.com/p/mutagen/>`_ is used for tag handling in the
+  scanner.
+* The `Django <https://www.djangoproject.com/>`_ and `Python <http://python.org/>`_
+  teams, without whose efforts I would be forced to use PHP.
+* Source code and bug tracker hosting provided by `GitHub <https://github.com/>`_.
