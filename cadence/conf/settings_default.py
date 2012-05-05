@@ -128,6 +128,11 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': True,
         },
+        'cadence': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
     }
 }
 

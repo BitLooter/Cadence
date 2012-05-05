@@ -18,6 +18,9 @@ This encoder makes use of profiles/presets to set encoding parameters, see
 import os
 import subprocess
 from django.conf import settings
+import logging
+
+logger = logging.getLogger("cadence.encoder")
 
 # nullfile is useful for passing to external commands as stdout
 nullfile = open(os.devnull)
@@ -34,15 +37,21 @@ def encode(inputFilename, outputFilename, mime, subtype=None):
     :param string subtype: Used to refine profile selection, if varients exist.
     """
     
-    #TODO: Check for existance of ffmpeg?
     #TODO: Implement subtypes
     #TODO: Return success/fail/exceptions
     #TODO: Finish documenting this function
-    command = 'ffmpeg -y -i "{}" -fpre "{}" "{}"'.format(
+    command = 'ffmpegg -y -i "{}" -fpre "{}" "{}"'.format(
                 inputFilename,
                 os.path.join(settings.ENCODER_PROFILES_PATH,
                              settings.ENCODER_PROFILE,
                              mime.replace("/", "_") + ".ffpreset"),
                 outputFilename)
     
-    subprocess.call(command, stdout=nullfile, stderr=subprocess.STDOUT)
+    try:
+        subprocess.call(command, stdout=nullfile, stderr=subprocess.STDOUT)
+    except OSError as e:
+        # If the command isn't found, ffmpeg isn't available on this machine
+        if e.errno == 2:
+            logger.error("ffmpeg not found")
+            #TODO: raise a better error here
+            raise
