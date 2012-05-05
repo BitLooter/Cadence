@@ -40,7 +40,7 @@ def encode(inputFilename, outputFilename, mime, subtype=None):
     #TODO: Implement subtypes
     #TODO: Return success/fail/exceptions
     #TODO: Finish documenting this function
-    command = 'ffmpegg -y -i "{}" -fpre "{}" "{}"'.format(
+    command = 'ffmpeg -y -i "{}" -fpre "{}" "{}"'.format(
                 inputFilename,
                 os.path.join(settings.ENCODER_PROFILES_PATH,
                              settings.ENCODER_PROFILE,
