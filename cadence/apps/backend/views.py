@@ -11,7 +11,6 @@ import models
 # Set up logging
 logger = logging.getLogger("apps")
 
-#TODO: document API parameters
 #TODO: check for external errors like database access problems
 #TODO: This really, REALLY needs to be fixed - do not let this enter final
 # release without properly implementing CSRF protection.
