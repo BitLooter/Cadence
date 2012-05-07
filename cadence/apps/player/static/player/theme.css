@@ -50,3 +50,9 @@ table {
     width: 0; height: 100%;
     background-color: black;
 }
+
+/* Sidebar */
+
+.sbPlaylistItem {
+	color: blue;
+}

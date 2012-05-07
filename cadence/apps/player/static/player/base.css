@@ -22,6 +22,10 @@ div {
     left: 0;
 }
 
+.sbPlaylistItem {
+	cursor: pointer;
+}
+
 #filterPane {
     margin: 5%;
     position: absolute;

@@ -255,13 +255,12 @@ function NavigationManager() {
         clearElement(plElement);
         for (var i in lists) {
             var listItem = document.createElement("li");
+            listItem.classList.add("sbPlaylistItem");
             var linkItem = document.createElement("a");
             linkItem.appendChild(document.createTextNode(lists[i].name));
             listItem.appendChild(linkItem);
             listItem.playlistID = lists[i].id;
             listItem.addEventListener("click", this._playlistClicked, false);
-            //TODO: remove this line once we start styling things
-            listItem.style.color = "blue";
             plElement.appendChild(listItem);
         }
     }
