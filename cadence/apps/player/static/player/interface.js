@@ -349,6 +349,7 @@ function NavigationManager() {
 function PlayerManager() {
     // Get some common elements
     this.audioElement = document.createElement("audio"); // Does not need to be on the DOM
+    aa = this.audioElement;
     this.titleElement = document.getElementById("playerTitle");
     this.artistElement = document.getElementById("playerArtist");
     this.albumElement = document.getElementById("playerAlbum");
@@ -359,7 +360,7 @@ function PlayerManager() {
     
     // Ready the controls
     this.controls = controlsHandler;
-    this.controls.init();
+    this.controls.init(this);
     
     // Prepare metadata elements
     clearElement(this.titleElement);
@@ -383,13 +384,6 @@ function PlayerManager() {
     
     // Assign events
     this.audioElement.addEventListener("timeupdate", this.timeUpdate, false);
-    //TODO: store these controls in controlsHandler
-    document.getElementById("playerPlay").addEventListener("click", this.playClicked, false);
-    document.getElementById("playerStop").addEventListener("click", this.stopClicked, false);
-    document.getElementById("playerNext").addEventListener("click", this.nextClicked, false);
-    document.getElementById("playerPrev").addEventListener("click", this.prevClicked, false);
-    document.getElementById("playerMute").addEventListener("click", this.muteClicked, false);
-    this.controls.scrubber.addEventListener("tracked", this.scrubberTracked, false);
 }
     PlayerManager.prototype.setTrack = function(track) {
         this.track = track;
@@ -422,11 +416,22 @@ function PlayerManager() {
     }
     PlayerManager.prototype.stop = function() {
         this.audioElement.pause();
+        // Note that this doesn't work under Chrome if you're using the Django dev server
         this.audioElement.currentTime = 0;
     }
     PlayerManager.prototype.play = function() {
         //TODO: take a parameter indicating start position
         this.audioElement.play();
+    }
+    PlayerManager.prototype.togglePlay = function() {
+        if (player.audioElement.paused) {
+            player.audioElement.play();
+        } else {
+            player.audioElement.pause();
+        }
+    }
+    PlayerManager.prototype.toggleMute = function() {
+        player.audioElement.muted = player.audioElement.muted == false ? true : false;
     }
     // Resets to player to a default state with no track loaded
     PlayerManager.prototype.clearMeta = function() {
@@ -437,30 +442,7 @@ function PlayerManager() {
         this.lengthText.nodeValue = "-:--";
     }
     // -- Event handlers -----------
-    PlayerManager.prototype.playClicked = function(e) {
-        if (player.audioElement.paused) {
-            player.audioElement.play();
-        } else {
-            player.audioElement.pause();
-        }
-    }
-    PlayerManager.prototype.stopClicked = function(e) {
-        player.stop();
-    }
-    PlayerManager.prototype.prevClicked = function(e) {
-        queue.playPrev();
-    }
-    PlayerManager.prototype.nextClicked = function(e) {
-        queue.playNext();
-    }
     PlayerManager.prototype.timeUpdate = function(e) {
         player.timeText.nodeValue = makeTimeStr(e.target.currentTime);
         player.controls.updateScrubber(e.target.currentTime);
     }
-    PlayerManager.prototype.scrubberTracked = function(e) {
-        player.audioElement.currentTime = e.newTime;
-    }
-    PlayerManager.prototype.muteClicked = function(e) {
-        player.audioElement.muted = player.audioElement.muted == false ? true : false;
-    }
-    // -- Private functions ----------
