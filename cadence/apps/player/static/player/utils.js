@@ -29,7 +29,6 @@ function makeTimeStr(time) {
 
 // Make an ajax request
 function makeRequest(url, callback, post) {
-    //TODO: compatibility here
     var request = new XMLHttpRequest();
     // Normally I prefer addEventListener to bind events, but it doesn't work
     // on Opera for an XMLHttpRequest object.
