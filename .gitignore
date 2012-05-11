@@ -12,3 +12,4 @@ cadence.wsgi
 debug_toolbar
 cadence/conf/debug.py
 cadence/conf/prod.py
+*.bat
