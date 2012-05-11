@@ -9,6 +9,10 @@ and `cadence.apps.backend` to your `INSTALLED_APPS`.
 Settings you may need to manually configure
 -------------------------------------------
 
+PLAYER_NAME
+    Name of the web site, or at least the Cadence player part if you're
+    incorporating it into an existing site.
+
 Path settings
 ~~~~~~~~~~~~~
 
@@ -66,6 +70,8 @@ SERVE_LOSSLESS
 
 import os
 
+
+PLAYER_NAME = "Cadence Media Player"
 
 AUDIO_ROOT = "/var/www/media/music/"
 AUDIO_URL = "media/music/"

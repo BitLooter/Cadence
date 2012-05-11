@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>HTML5 Media Player</title>
+        <title>{{ title }}</title>
         <script src="{{ STATIC_URL }}player/utils.js" type="text/javascript"></script>
         <script src="{{ STATIC_URL }}player/exceptions.js" type="text/javascript"></script>
         <script src="{{ STATIC_URL }}player/serverdata.js" type="text/javascript"></script>
