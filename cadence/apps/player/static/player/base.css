@@ -69,11 +69,11 @@ div {
 
 /* Remove all margins to allow height setting to work properly */
 /* These should probably be classes and merged with the queue's margin info */
+.paneListView
 #libraryPane{margin:0px;}
 #libraryTitle{margin:0px;}
 #librarySubheading{margin:0px;}
 #libraryToolbar{margin:0px;}
-#libraryContainer{margin:0px;}
 #libraryHead{margin:0px;}
 
 
@@ -88,5 +88,4 @@ div {
 #queueTitle{margin:0px;}
 #queueSubheading{margin:0px;}
 #queueToolbar{margin:0px;}
-#queueContainer{margin:0px;}
 #queueHead{margin:0px;}

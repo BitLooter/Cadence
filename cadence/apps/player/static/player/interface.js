@@ -13,9 +13,16 @@
  Specialized version of a ListViewControl made to display media items - 
  specifically, playlists. May be subclassed, e.g. the queue makes use of
  a subclass of this to add queue control functionality.
+ 
+ Parameters
+ ~~~~~~~~~~
+ 	container
+ 		DOM element that will be the parent for the ListViewControl.
  *************************************/
-function TrackListManager(parent) {
-    ListViewControl.call(this, parent);
+function TrackListManager(container) {
+    // Get the parent element for the list view
+    var listViewParent = container.getElementsByClassName("paneListView")[0];
+    ListViewControl.call(this, listViewParent);
     var headers = ["Title", "Length"];
     this.changeHeader(headers);
     // Default message for blank lists (an empty div, not attached to the DOM)
@@ -71,11 +78,12 @@ function TrackListManager(parent) {
  that adds methods for controlling the player and playlist management.
  *************************************/
 function QueueManager() {
-    TrackListManager.call(this, document.getElementById("queueContainer"));
-    
-    // - DOM elements
-    // Root element
+	// Find the root element for the control
     this.element = document.getElementById("queuePane");
+    // Init the track listing control
+    TrackListManager.call(this, this.element);
+    
+    // Move the overlay for disabled controls up to the new root element
     this.element.appendChild(this.disabledOverlay);
     
     // Header - contains title, subheading, and toolbar
@@ -180,11 +188,12 @@ function QueueManager() {
  Takes care of the library view on the page.
  *************************************/
 function LibraryManager() {
-    TrackListManager.call(this, document.getElementById("libraryContainer"));
-    
-    // - DOM elements
-    // Root element
+	// Find the root element for the control
     this.element = document.getElementById("libraryPane");
+    // Init the track listing control
+    TrackListManager.call(this, this.element);
+    
+    // Move the overlay for disabled controls up to the new root element
     this.element.appendChild(this.disabledOverlay);
     
     // Header - contains title, subheading, and toolbar

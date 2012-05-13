@@ -53,7 +53,7 @@
                     <h2 id="librarySubheading" class="paneSubheading">Library catagory</h2>
                     <div id="libraryToolbar" class="paneToolbar"></div>
                 </div>
-                <div id="libraryContainer"></div>
+                <div id="libraryListView" class="paneListView"></div>
                 
                 <!-- Though in libraryPane, filterPane technically belongs to the sidebar -->
                 <div id="filterPane">
@@ -68,7 +68,7 @@
                     <h2 id="queueSubheading" class="paneSubheading">Queue contents</h2>
                     <div id="queueToolbar" class="paneToolbar"></div>
                 </div>
-                <div id="queueContainer"></div>
+                <div id="queueListView" class="paneListView"></div>
                 <div id="queueBlankMessage"><i>No tracks queued</i></div>
             </div>
             
