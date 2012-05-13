@@ -186,10 +186,10 @@ function ListViewControl(parent) {
     ListViewControl.prototype.disable = function(message) {
         // Places an overlay on the control preventing input
         this.listElement.style.position = "relative";
-        this.overlayElement.style.display = "block";
+        this.disabledOverlay.style.display = "block";
     }
     ListViewControl.prototype.enable = function() {
-        this.overlayElement.style.display = "none";
+        this.disabledOverlay.style.display = "none";
     }
     // Resets column widths after a resize
     ListViewControl.prototype.fixWidths = function() {
@@ -262,30 +262,24 @@ function ListViewControl(parent) {
         this.listHeadElement.appendChild(this.listColgroup);
         this.listHead = document.createElement("thead");
         this.listHeadElement.appendChild(this.listHead);
+        
         // Body
         this.listElement = document.createElement("table");
         this.listBody = document.createElement("tbody");
         this.listElement.appendChild(this.listBody);
+        
         // Overlay for disabled controls
-        //TODO: move some of this stuff to the stylesheet
-        this.overlayElement = document.createElement("div");
-        this.overlayElement.appendChild(document.createTextNode(""));
-        this.overlayElement.style.backgroundColor = "rgba(0, 0, 0, 0.75)";
-        this.overlayElement.style.color = "white";
-        this.overlayElement.style.position = "absolute";
-        this.overlayElement.style.top = "0";
-        this.overlayElement.style.left = "0"
-        this.overlayElement.style.width = "100%";
-        this.overlayElement.style.height = "100%";
-        this.overlayElement.style.textAlign = "center";
-        this.overlayElement.style.paddingTop = "2em";
-        this.overlayElement.style.display = "none"
-        this.listElement.appendChild(this.overlayElement);
+        this.disabledOverlay = document.createElement("div");
+        // Note: If you encapsulate this control in another div, you may need to
+        // move this element to the appropriate location in the DOM.
+        this.listElement.appendChild(this.disabledOverlay);
+        
         // Add CSS styles
         this.listHeadElement.className = "uilcHeadTable";
         this.listHead.className = "uilcHead";
         this.listElement.className = "uilcTable";
         this.listBody.className = "uilcBody";
+        this.disabledOverlay.className = "disabledOverlay"
         // Put it all on the DOM
         this.parent.appendChild(this.listHeadElement);
         this.parent.appendChild(this.listElement);

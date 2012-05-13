@@ -29,9 +29,11 @@ var theme = new function() {
     
     this.showFiltersPane = function() {
         nav.filterPane.style.visibility = "visible";
+        library.disable();
     }
     
     this.hideFiltersPane = function() {
         nav.filterPane.style.visibility = "hidden";
+        library.enable();
     }
 }

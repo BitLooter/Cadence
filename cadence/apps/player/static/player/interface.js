@@ -76,6 +76,7 @@ function QueueManager() {
     // - DOM elements
     // Root element
     this.element = document.getElementById("queuePane");
+    this.element.appendChild(this.disabledOverlay);
     
     // Header - contains title, subheading, and toolbar
     this.head = document.getElementById("queueHead");
@@ -184,6 +185,7 @@ function LibraryManager() {
     // - DOM elements
     // Root element
     this.element = document.getElementById("libraryPane");
+    this.element.appendChild(this.disabledOverlay);
     
     // Header - contains title, subheading, and toolbar
     this.head = document.getElementById("libraryHead");
@@ -292,8 +294,6 @@ function NavigationManager() {
      *   message        Text to display in header of filter pane
      *   callback       Function to call when a filter item is clicked */
     NavigationManager.prototype.showFilterSelector = function(reqFunc, message, callback) {
-        //TODO: properly disable library when the filter pane is up
-        // library.disable();
         // Get list of albums from the server
         // items is expected to be an array of objects with name and id properties
         var items = undefined;
