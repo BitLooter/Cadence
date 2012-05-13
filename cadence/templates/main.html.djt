@@ -14,7 +14,7 @@
         <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}player/theme.css" />
     </head>
     <body>
-        <div id="playerPane">
+        <div id="playerPane" class="pane">
             <img id="playerCover" src="{{ STATIC_URL }}player/nocover.svg" />
             <div id="playerControls">
                 <a id="playerPlay" class="playerButton">|&gt;</a>
@@ -38,7 +38,7 @@
         
         <div id="bottom">
         
-            <div id="sidebarPane">
+            <div id="sidebarPane" class="pane">
                 <h1>Playlists</h1>
                 <ul id="sbPlaylists"></ul>
                 <h1>Library</h1>
@@ -47,8 +47,8 @@
                 <a href="admin/">Admin</a><br />
             </div>
             
-            <div id="libraryPane">
-                <div id="libraryHead">
+            <div id="libraryPane" class="pane">
+                <div id="libraryHead" class="paneHead">
                     <h1 id="libraryTitle" class="paneTitle">Library</h1>
                     <h2 id="librarySubheading" class="paneSubheading">Library catagory</h2>
                     <div id="libraryToolbar" class="paneToolbar"></div>
@@ -62,8 +62,8 @@
                 </div>
             </div>
             
-            <div id="queuePane">
-                <div id="queueHead">
+            <div id="queuePane" class="pane">
+                <div id="queueHead" class="paneHead">
                     <h1 id="queueTitle" class="paneTitle">Queue</h1>
                     <h2 id="queueSubheading" class="paneSubheading">Queue contents</h2>
                     <div id="queueToolbar" class="paneToolbar"></div>

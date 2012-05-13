@@ -60,21 +60,21 @@ div {
 	display: none;
 }
 
+/* Remove all margins to allow height setting to work properly */
+.pane{margin: 0px;}
+.paneHead{margin: 0px;}
+.paneTitle{margin: 0px;}
+.paneSubheading{margin: 0px;}
+.paneToolbar{margin: 0px;}
+.paneListView{margin: 0px;}
+
+
 /* Library */
 #libraryPane {
     position: absolute;
     width: 40%; height: 100%;
     left: 20%; top: 0;
 }
-
-/* Remove all margins to allow height setting to work properly */
-/* These should probably be classes and merged with the queue's margin info */
-.paneListView
-#libraryPane{margin:0px;}
-#libraryTitle{margin:0px;}
-#librarySubheading{margin:0px;}
-#libraryToolbar{margin:0px;}
-#libraryHead{margin:0px;}
 
 
 /* Queue */
@@ -83,9 +83,3 @@ div {
     width: 40%; height: 100%;
     left: 60%;
 }
-
-#queuePane{margin:0px;}
-#queueTitle{margin:0px;}
-#queueSubheading{margin:0px;}
-#queueToolbar{margin:0px;}
-#queueHead{margin:0px;}
