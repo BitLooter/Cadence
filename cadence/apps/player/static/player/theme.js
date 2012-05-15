@@ -28,12 +28,12 @@ var theme = new function() {
     }
     
     this.showFiltersPane = function() {
-        nav.filterPane.style.visibility = "visible";
+        nav.filterPane.style.display = "block";
         library.disable();
     }
     
     this.hideFiltersPane = function() {
-        nav.filterPane.style.visibility = "hidden";
+        nav.filterPane.style.display = "none";
         library.enable();
     }
 }

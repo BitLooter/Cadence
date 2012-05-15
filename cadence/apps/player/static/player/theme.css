@@ -58,5 +58,11 @@ table {
 }
 
 #filterPane {
+    /* Filters pane is initially hidden, only made visible (over the library) when required. */
+    display: none;
+    position: absolute;
+    width: 90%; height: 90%;
+    left: 0; top: 0;
+    background-color: white;
 	z-index: 1;
 }

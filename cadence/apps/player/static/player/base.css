@@ -28,11 +28,7 @@ div {
 
 #filterPane {
     margin: 5%;
-    position: absolute;
-    width: 90%; height: 90%;
-    left: 0; top: 0;
     background-color: white;
-    visibility: hidden;
 }
 
 .paneSubheading {
