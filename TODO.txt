@@ -13,7 +13,6 @@ Build the website
     Secure domain name and hosting
 Interface cleanup
 Develop deployment code
-Cleandb command
 Reorganize /static
 Scan reports
 Use fabric and south for deployment
@@ -24,8 +23,12 @@ Future (post-1.0) goals
 
 Video support
 Tuneup middleware
-Possibly start using jQuery (for maintainability, compatibility, and sanity)
-Bootstrap-based interface?
+Third-party libraries to investigate:
+    jQuery
+    Underscore
+    Backbone
+    Bootstrap
+    require.js
 User accounts
 Testing framework
 Dynamic transcoder
