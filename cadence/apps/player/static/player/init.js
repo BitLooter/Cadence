@@ -16,11 +16,10 @@ function playerInit() {
     theme.windowResized();
     
     // Display the library
-    //TODO: do not display library on init
     library.populateAll();
     
-    // Get default playlist
-    //TODO: implement default playlist
+    // Get default playlist (last viewed playlist)
+    queue.loadPlaylist(localStorage.getItem("default_playlist"));
 }
 
 window.addEventListener("load", playerInit, false);

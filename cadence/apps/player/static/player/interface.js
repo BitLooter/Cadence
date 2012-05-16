@@ -156,6 +156,9 @@ function QueueManager() {
             queue.playItem(0);
         }
     }
+    QueueManager.prototype.loadPlaylist = function( playlistID ) {
+        requestPlaylist(playlistID, function(p){queue.setTracks(p)});
+    }
     // -- Event handlers -----------
     QueueManager.prototype._savePlaylistClicked = function(e) {
         var name = prompt("Enter a name for the playlist:", "<Unnamed>");
@@ -321,11 +324,13 @@ function NavigationManager() {
         //TODO: figure out why chrome refuses to show the overlay without some sort of delay here
         // alert("Make Chrome show overlay");
         try {
-            requestPlaylist(e.currentTarget.playlistID, function(p){queue.setTracks(p)});
+            queue.loadPlaylist(e.currentTarget.playlistID);
         } catch (error) {
             alert(error.message);
             throw error;
         }
+        //TODO: check for errors here
+        localStorage.setItem("default_playlist", e.currentTarget.playlistID)
         queue.enable();
     }
     // -- Private functions ----------
