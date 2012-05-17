@@ -135,7 +135,6 @@ function ListViewControl(parent) {
         element = this._createRow(rowValues);
         // Add additional row data
         element.listIndex = this.rows.length;
-        //TODO: make values an array
         element.values = rowValues;
         element.extra = rowExtra;
         this.rows.push( element );
