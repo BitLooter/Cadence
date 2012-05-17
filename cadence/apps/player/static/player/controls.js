@@ -192,15 +192,10 @@ function ListViewControl(parent) {
     }
     // Resets column widths after a resize
     ListViewControl.prototype.fixWidths = function() {
-        //TODO: handle automatically?
         // usable width is the table width minus the checkbox and scroll bar
         var usableWidth = this.parent.offsetWidth -
                           this.listHeadElement.getElementsByClassName("uilcHeadSelectBox")[0].offsetWidth -
                           this.listHeadElement.getElementsByClassName("uilcHeadScrollBuffer")[0].offsetWidth;
-        /*var a = this.parent.offsetWidth;
-        var b = this.listHeadElement.getElementsByClassName("uilcHeadSelectBox")[0].offsetWidth;
-        var bb = this.listHeadElement.getElementsByClassName("uilcHeadScrollBuffer")[0].offsetWidth;
-        var c = a - b - bb;*/
         //TODO: Sizes should NOT be hardcoded here
         this.cols[0].style.width = Math.round(usableWidth * 0.9) + "px";
         this.cols[1].style.width = Math.round(usableWidth * 0.1) + "px";
