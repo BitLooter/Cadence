@@ -7,14 +7,27 @@
  ************/
 
 /*************************************
+ serverRequest
+ -------------
+ Wrapper for makeRequest that ignores exceptions and errors - the various request
+ functions will supply their own error handlers.
+ *************************************/
+function serverRequest(url, handler, postdata) {
+    try {
+        makeRequest(url, handler, postdata);
+    } catch (e) {
+        // Do nothing, error handling here is done in the handler
+    }
+}
+
+
+/*************************************
  requestPlaylist
  ---------------
  Tries to recieve the playlist with the given id from the server.
- 
- Exceptions raised: ServerPlaylistError
  *************************************/
-function requestPlaylist(id, callback) {
-    makeRequest("data/playlists/"+id+"/", function(r){
+function requestPlaylist(id, callback, errorCallback) {
+    serverRequest("data/playlists/"+id+"/", function(r){
         if (r.status == 200) {
             var response = JSON.parse(r.responseText);
             var playlist = response.items;
@@ -22,7 +35,10 @@ function requestPlaylist(id, callback) {
             playlist.name = response.name;
             callback(playlist);
         } else {
-            throw new ServerPlaylistError(r);
+            // Call the error callback if anything went wrong, if one was given
+            if (errorCallback != undefined) {
+                errorCallback(r);
+            }
         }
     });
 }
@@ -31,15 +47,16 @@ function requestPlaylist(id, callback) {
  requestPlaylistList
  -------------------
  Retrieves a list of playlists from the server
- 
- Exceptions raised: ServerPlaylistListError
  *************************************/
-function requestPlaylistList(callback) {
-    makeRequest("data/playlists/", function(r){
+function requestPlaylistList(callback, errorCallback) {
+    serverRequest("data/playlists/", function(r){
         if (r.status == 200) {
             callback(JSON.parse(r.responseText));
         } else {
-            throw new ServerPlaylistListError(r);
+            // Call the error callback if anything went wrong, if one was given
+            if (errorCallback != undefined) {
+                errorCallback(r);
+            }
         }
     });
 }
@@ -49,9 +66,16 @@ function requestPlaylistList(callback) {
  -------------------
  Gets a list of media items in the library from the server
  *************************************/
-function requestLibraryItems(callback) {
-    makeRequest("data/library/", function(r){
-        callback(JSON.parse(r.responseText));
+function requestLibraryItems(callback, errorCallback) {
+    serverRequest("data/library/", function(r){
+        if (r.status == 200) {
+            callback(JSON.parse(r.responseText));
+        } else {
+            // Call the error callback if anything went wrong, if one was given
+            if (errorCallback != undefined) {
+                errorCallback(r);
+            }
+        }
     });
 }
 
@@ -60,10 +84,16 @@ function requestLibraryItems(callback) {
  ----------------
  Gets a list of track's albums from the server
  *************************************/
-function requestAlbumList(callback) {
-    //TODO: more error handling
-    makeRequest("data/library/albums/", function(r){
-        callback(JSON.parse(r.responseText));
+function requestAlbumList(callback, errorCallback) {
+    serverRequest("data/library/albums/", function(r){
+        if (r.status == 200) {
+            callback(JSON.parse(r.responseText));
+        } else {
+            // Call the error callback if anything went wrong, if one was given
+            if (errorCallback != undefined) {
+                errorCallback(r);
+            }
+        }
     });
 }
 
@@ -72,10 +102,16 @@ function requestAlbumList(callback) {
  ------------
  Gets an album from the server
  *************************************/
-function requestAlbum(id, callback) {
-    //TODO: more error handling
-    makeRequest("data/library/albums/" + id + "/", function(r){
-        callback(JSON.parse(r.responseText));
+function requestAlbum(id, callback, errorCallback) {
+    serverRequest("data/library/albums/" + id + "/", function(r){
+        if (r.status == 200) {
+            callback(JSON.parse(r.responseText));
+        } else {
+            // Call the error callback if anything went wrong, if one was given
+            if (errorCallback != undefined) {
+                errorCallback(r);
+            }
+        }
     });
 }
 
@@ -84,10 +120,16 @@ function requestAlbum(id, callback) {
  ----------------
  Gets a list of artists from the server
  *************************************/
-function requestArtistList(callback) {
-    //TODO: more error handling
-    makeRequest("data/library/artists/", function(r){
-        callback(JSON.parse(r.responseText));
+function requestArtistList(callback, errorCallback) {
+    serverRequest("data/library/artists/", function(r){
+        if (r.status == 200) {
+            callback(JSON.parse(r.responseText));
+        } else {
+            // Call the error callback if anything went wrong, if one was given
+            if (errorCallback != undefined) {
+                errorCallback(r);
+            }
+        }
     });
 }
 
@@ -96,10 +138,16 @@ function requestArtistList(callback) {
  ------------
  Gets an artist's tracks from the server
  *************************************/
-function requestArtist(id, callback) {
-    //TODO: more error handling
-    makeRequest("data/library/artists/" + id + "/", function(r){
-        callback(JSON.parse(r.responseText));
+function requestArtist(id, callback, errorCallback) {
+    serverRequest("data/library/artists/" + id + "/", function(r){
+        if (r.status == 200) {
+            callback(JSON.parse(r.responseText));
+        } else {
+            // Call the error callback if anything went wrong, if one was given
+            if (errorCallback != undefined) {
+                errorCallback(r);
+            }
+        }
     });
 }
 
@@ -107,20 +155,20 @@ function requestArtist(id, callback) {
  savePlaylist
  ------------
  Sends a playlist to the server to save there.
- 
- Exceptions raised: ServerPlaylistError
  *************************************/
-function savePlaylist(tracks, name) {
-    var request = new XMLHttpRequest();
+function savePlaylist(tracks, name, errorCallback) {
+    // First prepare the data to a JSON-ready server format
     var idList = [];
     for (var i = 0; i < tracks.length; i++) {
         idList.push(parseInt(tracks[i].id));
     }
     var text = JSON.stringify({"name": name, "tracks": idList});
-    makeRequest("data/playlists/", function(r){
+    // Now send it to the server
+    serverRequest("data/playlists/", function(r){
         if (r.status != 201) {
-            throw new ServerPlaylistError(r);
+            errorCallback(r);
+        } else {
+            nav.updatePlaylists();
         }
-        nav.updatePlaylists();
     }, text);
 }

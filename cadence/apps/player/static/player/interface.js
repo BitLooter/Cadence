@@ -157,17 +157,25 @@ function QueueManager() {
         }
     }
     QueueManager.prototype.loadPlaylist = function( playlistID ) {
-        requestPlaylist(playlistID, function(p){queue.setTracks(p)});
+        //TODO: figure out why chrome refuses to show the overlay without some sort of delay here
+        // alert("Make Chrome show overlay");
+        queue.disable("Loading playlist");
+        requestPlaylist(playlistID,
+            function(p){ queue.setTracks(p); },
+            function(r){ alert("Error loading playlist from server"); }
+        );
+        queue.enable();
+        // Set the playlist just loaded as the new default
+        //TODO: check for localStorage errors
+        localStorage.setItem("default_playlist", playlistID)
     }
     // -- Event handlers -----------
     QueueManager.prototype._savePlaylistClicked = function(e) {
         var name = prompt("Enter a name for the playlist:", "<Unnamed>");
         if (name != null) {
-            try {
-                savePlaylist(queue.tracks, name);
-            } catch(error) {
-                alert(error.message);
-            }
+            savePlaylist(queue.tracks, name,
+                function(){ alert("Unable to save playlist") }
+            );
         }
     }
     QueueManager.prototype._removeItemClicked = function(e) {
@@ -214,15 +222,28 @@ function LibraryManager() {
 }
     LibraryManager.prototype = Object.create(TrackListManager.prototype);
     LibraryManager.prototype.populateAlbum = function(album) {
-        library.subheadingNode.nodeValue = "Album: " + album.name;
-        requestAlbum(album.id, function(t){library.setTracks(t)});
+        requestAlbum(album.id,
+            function(t){
+                library.setTracks(t);
+                library.subheadingNode.nodeValue = "Album: " + album.name;
+            },
+            function(r){ alert("Error getting album's tracks from server") }
+        );
     }
     LibraryManager.prototype.populateArtist = function(artist) {
-        library.subheadingNode.nodeValue = "Artist: " + artist.name;
-        requestArtist(artist.id, function(t){library.setTracks(t)});
+        requestArtist(artist.id,
+            function(t){
+                library.setTracks(t);
+                library.subheadingNode.nodeValue = "Artist: " + artist.name;
+            },
+            function(r){ alert("Error getting artist's tracks from server") }
+        );
     }
     LibraryManager.prototype.populateAll = function() {
-        requestLibraryItems(function(t){library.setTracks(t)});
+        requestLibraryItems(
+            function(t){ library.setTracks(t) },
+            function(r){ alert("Error getting library from server") }
+        );
     }
     // -- Event handlers ----------
     LibraryManager.prototype._queueEvent = function(e) {
@@ -259,12 +280,11 @@ function NavigationManager() {
     // Updates the list of available playlists in the sidebar
     NavigationManager.prototype.updatePlaylists = function() {
         var lists = undefined;
-        try {
-            requestPlaylistList(function(l){lists = l});
-        } catch (error) {
-            alert(error.message);
-            throw error;
-        }
+        requestPlaylistList(
+            function(l){ lists = l },
+            //TODO: Display message under playlists when they failed to load
+            function(r){ alert("Error getting list of playlists from the server") }
+        );
         var plElement = document.getElementById("sbPlaylists");
         clearElement(plElement);
         for (var i in lists) {
@@ -274,7 +294,12 @@ function NavigationManager() {
             linkItem.appendChild(document.createTextNode(lists[i].name));
             listItem.appendChild(linkItem);
             listItem.playlistID = lists[i].id;
-            listItem.addEventListener("click", this._playlistClicked, false);
+            listItem.addEventListener(
+                "click",
+                function(id){
+                    return function(){queue.loadPlaylist(id);}
+                }(listItem.playlistID), 
+                false);
             plElement.appendChild(listItem);
         }
     }
@@ -284,32 +309,37 @@ function NavigationManager() {
         var albums = document.createElement("li");
         albums.appendChild(document.createTextNode("By album"));
         albums.addEventListener("click",
-                                function(){nav.showFilterSelector(requestAlbumList,
-                                                                  "Select an album",
-                                                                  library.populateAlbum)},
-                                false);
+            function(){
+                requestAlbumList(
+                    function(f){nav.showFilterSelector(f,
+                                                      "Select an album",
+                                                      library.populateAlbum)},
+                    function(r){ alert("Error getting albums from server") }
+                )
+            },
+            false);
         this.libTree.appendChild(albums);
         var artists = document.createElement("li");
         artists.appendChild(document.createTextNode("By artist"));
         artists.addEventListener("click",
-                                 function(){nav.showFilterSelector(requestArtistList,
-                                                                   "Select an artist",
-                                                                   library.populateArtist)},
-                                 false);
-        // artists.addEventListener("click", this._artistsClicked, false);
+            function(){
+                requestArtistList(
+                    function(f){nav.showFilterSelector(f,
+                                                      "Select an artist",
+                                                      library.populateArtist)},
+                    function(r){ alert("Error getting artists from server") }
+                )
+            },
+            false);
         this.libTree.appendChild(artists);
     }
     /* showFilterSelector
      *  Requests data from the server and uses it to display a list of filters
      *  Parameters:
-     *   reqFunc        Function that gets the data to use
+     *   items          Array of objects with name and id properties
      *   message        Text to display in header of filter pane
      *   callback       Function to call when a filter item is clicked */
-    NavigationManager.prototype.showFilterSelector = function(reqFunc, message, callback) {
-        // Get list of albums from the server
-        // items is expected to be an array of objects with name and id properties
-        var items = undefined;
-        reqFunc(function(a){items=a});
+    NavigationManager.prototype.showFilterSelector = function(items, message, callback) {
         // Fill out the filter list with them
         var filters = [];
         for (var i = 0; i < items.length; i++) {
@@ -317,21 +347,6 @@ function NavigationManager() {
         }
         nav._setFilters(message, filters, callback);
         theme.showFiltersPane();
-    }
-    // -- Events ---------
-    NavigationManager.prototype._playlistClicked = function(e) {
-        queue.disable("Loading playlist");
-        //TODO: figure out why chrome refuses to show the overlay without some sort of delay here
-        // alert("Make Chrome show overlay");
-        try {
-            queue.loadPlaylist(e.currentTarget.playlistID);
-        } catch (error) {
-            alert(error.message);
-            throw error;
-        }
-        //TODO: check for errors here
-        localStorage.setItem("default_playlist", e.currentTarget.playlistID)
-        queue.enable();
     }
     // -- Private functions ----------
     /* _setFilters - fills out the filter pane with data

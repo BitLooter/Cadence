@@ -33,14 +33,8 @@ function makeRequest(url, callback, post) {
     // Normally I prefer addEventListener to bind events, but it doesn't work
     // on Opera for an XMLHttpRequest object.
     request.onreadystatechange = function(evt) {
-        try {
-            if (this.readyState == 4) {
-                callback(this);
-            }
-        } catch (e) {
-            // Lost connection to the server
-            //TODO: throw some sort of error here
-            ;
+        if (this.readyState == 4) {
+            callback(this);
         }
     };
     var method = (post == undefined ? "GET" : "POST");
