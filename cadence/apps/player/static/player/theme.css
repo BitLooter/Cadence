@@ -67,3 +67,9 @@ table {
 	z-index: 1;
 	overflow-y: scroll;
 }
+
+#filterClose {
+    text-align: right;
+    cursor: pointer;
+    color: blue;
+}

@@ -280,6 +280,15 @@ function NavigationManager() {
     // Filter UL
     this.filterList = document.getElementById("filterList");
     
+    // Set events
+    document.getElementById("filterClose").addEventListener(
+        "click",
+        function(e){
+            theme.hideFiltersPane();
+        },
+        false
+    )
+    
     // Fill data
     this.updatePlaylists();
     this.updateLibTree();

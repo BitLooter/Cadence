@@ -56,6 +56,7 @@
                 
                 <!-- Though in libraryPane, filterPane technically belongs to the sidebar -->
                 <div id="filterPane" class="pane">
+                    <div id="filterClose">close</div>
                     <h1 id="filterTitle">Filters</h1>
                     <ul id="filterList"></ul>
                 </div>
