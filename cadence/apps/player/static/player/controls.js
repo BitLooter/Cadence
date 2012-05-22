@@ -102,8 +102,9 @@ function ListViewControl(parent) {
         // Add the headers
         for (var i in headers) {
             var thisHead = document.createElement("th");
-            thisHead.appendChild(document.createTextNode(headers[i]));
+            thisHead.appendChild(document.createTextNode(headers[i].text));
             thisHead.className = "uilcHeadItem";
+            thisHead.header = headers[i];
             headRow.appendChild(thisHead);
         }
         // Add one more for a scroll bar buffer
@@ -122,6 +123,7 @@ function ListViewControl(parent) {
         this.cols = [];
         for (var i = 0; i < headers.length; i++) {
             var col = document.createElement("col");
+            col.header = headers[i];
             this.listColgroup.appendChild(col);
             this.cols.push(col);
         }
@@ -204,9 +206,10 @@ function ListViewControl(parent) {
         var usableWidth = this.parent.offsetWidth -
                           this.listHeadElement.getElementsByClassName("uilcHeadSelectBox")[0].offsetWidth -
                           this.listHeadElement.getElementsByClassName("uilcHeadScrollBuffer")[0].offsetWidth;
-        //TODO: Sizes should NOT be hardcoded here
-        this.cols[0].style.width = Math.round(usableWidth * 0.9) + "px";
-        this.cols[1].style.width = Math.round(usableWidth * 0.1) + "px";
+        for (i in library.cols) {
+            col = library.cols[i];
+            col.style.width = Math.round(usableWidth * col.header.size) + "px";
+        }
         // Now copy column data to the table body
         // First remove the old data, if any
         var oldCols = this.listElement.getElementsByTagName("colgroup")[0];

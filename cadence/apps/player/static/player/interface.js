@@ -23,7 +23,12 @@ function TrackListManager(container) {
     // Get the parent element for the list view
     var listViewParent = container.getElementsByClassName("paneListView")[0];
     ListViewControl.call(this, listViewParent);
-    var headers = ["Title", "Length"];
+    var headers = [
+        {text: "Title",
+         size: 0.9},
+        {text: "Length",
+         size: 0.1}
+    ];
     this.changeHeader(headers);
     // Default message for blank lists (an empty div, not attached to the DOM)
     this.emptyMessage = document.createElement("div");
