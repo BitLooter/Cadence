@@ -252,6 +252,8 @@ function LibraryManager() {
         for (var i in tracks) {
             queue.appendTrack(tracks[i]);
         }
+        
+        library.clearSelected();
     }
 
 
