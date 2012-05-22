@@ -161,6 +161,14 @@ function ListViewControl(parent) {
         }
         return checkedList;
     }
+    ListViewControl.prototype.clearSelected = function() {
+        selected = this.getSelected();
+        for (i in selected) {
+            var row = this.rows[selected[i]];
+            var checkbox = row.getElementsByTagName("input")[0];
+            checkbox.checked = false;
+        }
+    }
     ListViewControl.prototype.deleteItem = function(index) {
         removed = this.rows[index];
         this.listBody.removeChild(removed);
