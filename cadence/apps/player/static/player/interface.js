@@ -68,6 +68,9 @@ function TrackListManager(container) {
         this.tracks.splice(index, 1);
         ListViewControl.prototype.deleteItem.call(this, index);
     }
+    TrackListManager.prototype.setSubheading = function(text) {
+        this.subheadingNode.nodeValue = text;
+    }
     // -- Private functions -----------
     // Adds a row to the control with the track data
     TrackListManager.prototype._appendTrackRow = function(track) {
@@ -113,6 +116,7 @@ function QueueManager() {
     
     // Init important variables
     this.currentlyPlaying = null;   // null == nothing playing
+    this.currentPlaylist = null;
     
     // Events
     player.audioElement.addEventListener("ended", this._trackFinished, false);
@@ -166,13 +170,23 @@ function QueueManager() {
         // alert("Make Chrome show overlay");
         queue.disable("Loading playlist");
         requestPlaylist(playlistID,
-            function(p){ queue.setTracks(p); },
+            function(p){
+                queue.setTracks(p);
+                queue.currentPlaylist = p;
+                queue.setSubheading("Playlist: " + p.name);
+            },
             function(r){ alert("Error loading playlist from server"); }
         );
         queue.enable();
         // Set the playlist just loaded as the new default
         //TODO: check for localStorage errors
         localStorage.setItem("default_playlist", playlistID)
+    }
+    QueueManager.prototype.playlistModified = function() {
+        // No need to update modifed display if no playlist is loaded
+        if (this.currentPlaylist != null) {
+            this.setSubheading("Playlist: " + this.currentPlaylist.name + " [Modified]");
+        }
     }
     // -- Event handlers -----------
     QueueManager.prototype._savePlaylistClicked = function(e) {
@@ -230,7 +244,7 @@ function LibraryManager() {
         requestAlbum(album.id,
             function(t){
                 library.setTracks(t);
-                library.subheadingNode.nodeValue = "Album: " + album.name;
+                library.setSubheading("Album: " + album.name);
             },
             function(r){ alert("Error getting album's tracks from server") }
         );
@@ -239,14 +253,17 @@ function LibraryManager() {
         requestArtist(artist.id,
             function(t){
                 library.setTracks(t);
-                library.subheadingNode.nodeValue = "Artist: " + artist.name;
+                library.setSubheading("Artist: " + artist.name);
             },
             function(r){ alert("Error getting artist's tracks from server") }
         );
     }
     LibraryManager.prototype.populateAll = function() {
         requestLibraryItems(
-            function(t){ library.setTracks(t) },
+            function(t){
+                library.setTracks(t);
+                library.setSubheading("Full library");
+            },
             function(r){ alert("Error getting library from server") }
         );
     }
@@ -257,7 +274,7 @@ function LibraryManager() {
         for (var i in tracks) {
             queue.appendTrack(tracks[i]);
         }
-        
+        queue.playlistModified();
         library.clearSelected();
     }
 
