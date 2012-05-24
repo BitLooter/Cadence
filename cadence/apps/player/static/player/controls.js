@@ -206,8 +206,8 @@ function ListViewControl(parent) {
         var usableWidth = this.parent.offsetWidth -
                           this.listHeadElement.getElementsByClassName("uilcHeadSelectBox")[0].offsetWidth -
                           this.listHeadElement.getElementsByClassName("uilcHeadScrollBuffer")[0].offsetWidth;
-        for (i in library.cols) {
-            col = library.cols[i];
+        for (var i in this.cols) {
+            var col = this.cols[i];
             col.style.width = Math.round(usableWidth * col.header.size) + "px";
         }
         // Now copy column data to the table body
