@@ -190,12 +190,14 @@ function QueueManager() {
     }
     // -- Event handlers -----------
     QueueManager.prototype._savePlaylistClicked = function(e) {
-        var name = prompt("Enter a name for the playlist:", "<Unnamed>");
+        var defaultName = queue.currentPlaylist == null ? "<Unnamed>" : queue.currentPlaylist.name;
+        var name = prompt("Enter a name for the playlist:", defaultName);
         if (name != null) {
             savePlaylist(queue.tracks, name,
                 function(){ alert("Unable to save playlist") }
             );
         }
+        //TODO: set the new playlist default to the one just saved
     }
     QueueManager.prototype._removeItemClicked = function(e) {
         // Process the list in reverse, because indexes change when we remove items
