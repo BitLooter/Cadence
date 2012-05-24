@@ -19,6 +19,18 @@ box these should get you started quickly.
 <INSTALLATION INSTRUCTIONS WILL GO HERE WHEN I FIGURE THEM OUT>
 
 
+Note about the Django dev server
+--------------------------------
+
+Be warned that a few things don't work quite right on Django's dev server,
+particularly when it comes to multimedia files. Known issues are outlined below:
+
+ * Chrome doesn't let you set arbritary seek locations on the dev server. This
+   means seeking on the scrubber and the stop button are a no-go.
+ * Firefox won't even play from the dev server, as it requires MIME types on
+   media files that the dev server doesn't supply.
+
+
 Credits and thanks
 ------------------
 
