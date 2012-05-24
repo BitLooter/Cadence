@@ -197,7 +197,6 @@ function QueueManager() {
                 function(){ alert("Unable to save playlist") }
             );
         }
-        //TODO: set the new playlist default to the one just saved
     }
     QueueManager.prototype._removeItemClicked = function(e) {
         // Process the list in reverse, because indexes change when we remove items
