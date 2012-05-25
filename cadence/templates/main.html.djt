@@ -38,11 +38,11 @@
         <div id="bottom">
         
             <div id="sidebarPane" class="pane">
-                <h1>Playlists</h1>
-                <ul id="sbPlaylists"></ul>
-                <h1>Library</h1>
-                <ul id="sbLibrary"></ul>
-                <h1>Other</h1>
+                <h1 class="paneTitle">Playlists</h1>
+                <ul id="sbPlaylists" class="sbList"></ul>
+                <h1 class="paneTitle">Library</h1>
+                <ul id="sbLibrary" class="sbList"></ul>
+                <h1 class="paneTitle">Other</h1>
                 <a href="admin/">Admin</a><br />
             </div>
             
@@ -57,8 +57,8 @@
                 <!-- Though in libraryPane, filterPane technically belongs to the sidebar -->
                 <div id="filterPane" class="pane">
                     <div id="filterClose">close</div>
-                    <h1 id="filterTitle">Filters</h1>
-                    <ul id="filterList"></ul>
+                    <h1 id="filterTitle" class="paneTitle">Filters</h1>
+                    <ul id="filterList" class="sbList"></ul>
                 </div>
             </div>
             

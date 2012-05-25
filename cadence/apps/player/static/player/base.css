@@ -22,7 +22,7 @@ div {
     left: 0;
 }
 
-.sbPlaylistItem {
+.sbList li {
 	cursor: pointer;
 }
 
