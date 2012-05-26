@@ -283,12 +283,12 @@ function LibraryManager() {
 /*************************************
  NavigationManager
  -----------------
- Handles sidebar tasks, such as the available playlists, library access, links,
+ Handles navigation tasks, such as the available playlists, library access, links,
  and other navigation elements.
  *************************************/
 function NavigationManager() {
     // Set DOM elements
-    this.libTree = document.getElementById("sbLibrary");
+    this.libTree = document.getElementById("navLibrary");
     this.filterPane = document.getElementById("filterPane");
     // Filter title (text node)
     var titleElement = document.getElementById("filterTitle");
@@ -311,7 +311,7 @@ function NavigationManager() {
     this.updatePlaylists();
     this.updateLibTree();
 }
-    // Updates the list of available playlists in the sidebar
+    // Updates the list of available playlists in the navigation bar
     NavigationManager.prototype.updatePlaylists = function() {
         var lists = undefined;
         requestPlaylistList(
@@ -319,11 +319,11 @@ function NavigationManager() {
             //TODO: Display message under playlists when they failed to load
             function(r){ alert("Error getting list of playlists from the server") }
         );
-        var plElement = document.getElementById("sbPlaylists");
+        var plElement = document.getElementById("navPlaylists");
         clearElement(plElement);
         for (var i in lists) {
             var listItem = document.createElement("li");
-            listItem.classList.add("sbPlaylistItem");
+            listItem.classList.add("navPlaylistItem");
             var linkItem = document.createElement("a");
             linkItem.appendChild(document.createTextNode(lists[i].name));
             listItem.appendChild(linkItem);

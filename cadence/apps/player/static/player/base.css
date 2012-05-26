@@ -16,13 +16,13 @@ div {
     position: relative;
 }
 
-#sidebarPane {
+#navPane {
     position: absolute;
     width: 20%; height: 100%;
     left: 0;
 }
 
-.sbList li {
+.navList li {
 	cursor: pointer;
 }
 
