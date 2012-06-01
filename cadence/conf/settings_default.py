@@ -29,7 +29,6 @@ See the documentation or the cadencedefaults module for details on the settings
 used by Cadence.
 """
 
-#TODO: Document defaults here
 
 import sys
 import os
