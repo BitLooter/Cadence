@@ -11,6 +11,10 @@ var theme = new function() {
      *  our purposes, some JS is needed to make things fit right. Should be
      *  called on load and resize events. */
     this.windowResized = function() {
+        // Give the player scrubber as much room as the other elements don't take
+        player.controls.scrubber.style.width =
+            window.innerWidth - player.coverElement.offsetWidth*2 + "px";
+        
         // Set bottom pane to take whatever height the player pane doesn't
         document.getElementById("bottom").style.height =
             window.innerHeight - document.getElementById("playerPane").offsetHeight + "px";
