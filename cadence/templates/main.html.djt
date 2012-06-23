@@ -52,8 +52,6 @@
                 <ul id="navPlaylists" class="navList"></ul>
                 <h1 class="paneTitle">Library</h1>
                 <ul id="navLibrary" class="navList"></ul>
-                <h1 class="paneTitle">Other</h1>
-                <a href="admin/">Admin</a><br />
             </div>
             
             <div id="libraryPane" class="pane">
