@@ -19,7 +19,12 @@ function playerInit() {
     library.populateAll();
     
     // Get default playlist (last viewed playlist)
-    queue.loadPlaylist(localStorage.getItem("default_playlist"));
+    var playlistID = localStorage.getItem("default_playlist");
+    // Only load a default playlist from the server if one defined
+    if (playlistID !== null)
+    {
+        queue.loadPlaylist(playlistID);
+    } //TODO: load a default default playist if one is configured
 }
 
 window.addEventListener("load", playerInit, false);
