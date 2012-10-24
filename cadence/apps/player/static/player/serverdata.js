@@ -9,17 +9,24 @@
 /*************************************
  serverRequest
  -------------
- Wrapper for makeRequest that ignores exceptions and errors - the various request
- functions will supply their own error handlers.
+ Wrapper for makeRequest that handles errors and exceptions with an error callback
  *************************************/
-function serverRequest(url, handler, postdata) {
+function serverRequest(url, callback, errorCallback, postdata) {
     try {
-        makeRequest(url, handler, postdata);
+        makeRequest(url, function(r){
+            if (r.status == 200) {
+                callback(JSON.parse(r.responseText));
+            } else {
+                // Call the error callback if anything went wrong, if one was given
+                if (errorCallback != undefined) {
+                    errorCallback(r);
+                }
+            }
+        }, postdata);
     } catch (e) {
-        // Do nothing, error handling here is done in the handler
+        // Do nothing, error handling here is done above
     }
 }
-
 
 /*************************************
  requestPlaylist
@@ -27,20 +34,7 @@ function serverRequest(url, handler, postdata) {
  Tries to recieve the playlist with the given id from the server.
  *************************************/
 function requestPlaylist(id, callback, errorCallback) {
-    serverRequest("data/playlists/"+id+"/", function(r){
-        if (r.status == 200) {
-            var response = JSON.parse(r.responseText);
-            var playlist = response.items;
-            playlist.id = response.id;
-            playlist.name = response.name;
-            callback(playlist);
-        } else {
-            // Call the error callback if anything went wrong, if one was given
-            if (errorCallback != undefined) {
-                errorCallback(r);
-            }
-        }
-    });
+    serverRequest("data/playlists/"+id+"/", callback, errorCallback);
 }
 
 /*************************************
@@ -49,16 +43,7 @@ function requestPlaylist(id, callback, errorCallback) {
  Retrieves a list of playlists from the server
  *************************************/
 function requestPlaylistList(callback, errorCallback) {
-    serverRequest("data/playlists/", function(r){
-        if (r.status == 200) {
-            callback(JSON.parse(r.responseText));
-        } else {
-            // Call the error callback if anything went wrong, if one was given
-            if (errorCallback != undefined) {
-                errorCallback(r);
-            }
-        }
-    });
+    serverRequest("data/playlists/", callback, errorCallback);
 }
 
 /*************************************
@@ -67,16 +52,7 @@ function requestPlaylistList(callback, errorCallback) {
  Gets a list of media items in the library from the server
  *************************************/
 function requestLibraryItems(callback, errorCallback) {
-    serverRequest("data/library/", function(r){
-        if (r.status == 200) {
-            callback(JSON.parse(r.responseText));
-        } else {
-            // Call the error callback if anything went wrong, if one was given
-            if (errorCallback != undefined) {
-                errorCallback(r);
-            }
-        }
-    });
+    serverRequest("data/library/", callback, errorCallback);
 }
 
 /*************************************
@@ -85,16 +61,7 @@ function requestLibraryItems(callback, errorCallback) {
  Gets a list of track's albums from the server
  *************************************/
 function requestAlbumList(callback, errorCallback) {
-    serverRequest("data/library/albums/", function(r){
-        if (r.status == 200) {
-            callback(JSON.parse(r.responseText));
-        } else {
-            // Call the error callback if anything went wrong, if one was given
-            if (errorCallback != undefined) {
-                errorCallback(r);
-            }
-        }
-    });
+    serverRequest("data/library/albums/", callback, errorCallback);
 }
 
 /*************************************
@@ -103,16 +70,7 @@ function requestAlbumList(callback, errorCallback) {
  Gets an album from the server
  *************************************/
 function requestAlbum(id, callback, errorCallback) {
-    serverRequest("data/library/albums/" + id + "/", function(r){
-        if (r.status == 200) {
-            callback(JSON.parse(r.responseText));
-        } else {
-            // Call the error callback if anything went wrong, if one was given
-            if (errorCallback != undefined) {
-                errorCallback(r);
-            }
-        }
-    });
+    serverRequest("data/library/albums/" + id + "/", callback, errorCallback);
 }
 
 /*************************************
@@ -121,16 +79,7 @@ function requestAlbum(id, callback, errorCallback) {
  Gets a list of artists from the server
  *************************************/
 function requestArtistList(callback, errorCallback) {
-    serverRequest("data/library/artists/", function(r){
-        if (r.status == 200) {
-            callback(JSON.parse(r.responseText));
-        } else {
-            // Call the error callback if anything went wrong, if one was given
-            if (errorCallback != undefined) {
-                errorCallback(r);
-            }
-        }
-    });
+    serverRequest("data/library/artists/", callback, errorCallback);
 }
 
 /*************************************
@@ -139,16 +88,7 @@ function requestArtistList(callback, errorCallback) {
  Gets an artist's tracks from the server
  *************************************/
 function requestArtist(id, callback, errorCallback) {
-    serverRequest("data/library/artists/" + id + "/", function(r){
-        if (r.status == 200) {
-            callback(JSON.parse(r.responseText));
-        } else {
-            // Call the error callback if anything went wrong, if one was given
-            if (errorCallback != undefined) {
-                errorCallback(r);
-            }
-        }
-    });
+    serverRequest("data/library/artists/" + id + "/", callback, errorCallback);
 }
 
 /*************************************
@@ -156,18 +96,8 @@ function requestArtist(id, callback, errorCallback) {
  -------------------
  Gets detailed information about a specific media item
  *************************************/
-function requestMediaDetails(id, callback, errorCallback)
-{
-    serverRequest("data/library/" + id + "/", function(r){
-        if (r.status == 200) {
-            callback(JSON.parse(r.responseText));
-        } else {
-            // Call the error callback if anything went wrong, if one was given
-            if (errorCallback != undefined) {
-                errorCallback(r);
-            }
-        }
-    });
+function requestMediaDetails(id, callback, errorCallback) {
+    serverRequest("data/library/" + id + "/", callback, errorCallback);
 }
 
 /*************************************
@@ -183,11 +113,5 @@ function savePlaylist(tracks, name, errorCallback) {
     }
     var text = JSON.stringify({"name": name, "tracks": idList});
     // Now send it to the server
-    serverRequest("data/playlists/", function(r){
-        if (r.status != 201) {
-            errorCallback(r);
-        } else {
-            nav.updatePlaylists();
-        }
-    }, text);
+    serverRequest("data/playlists/", callback, errorCallback, text);
 }

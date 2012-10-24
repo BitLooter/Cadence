@@ -171,7 +171,7 @@ function QueueManager() {
         queue.disable("Loading playlist");
         requestPlaylist(playlistID,
             function(p){
-                queue.setTracks(p);
+                queue.setTracks(p.items);
                 queue.currentPlaylist = p;
                 queue.setSubheading("Playlist: " + p.name);
             },
