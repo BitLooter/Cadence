@@ -56,6 +56,10 @@ table {
     float: right;
 }
 
+#playerDetails {
+    float: right;
+}
+
 #playerMetadata {
     margin: 0.5em;
     display: inline-block;

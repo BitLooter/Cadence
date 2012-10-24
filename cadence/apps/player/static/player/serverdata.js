@@ -152,6 +152,25 @@ function requestArtist(id, callback, errorCallback) {
 }
 
 /*************************************
+ requestMediaDetails
+ -------------------
+ Gets detailed information about a specific media item
+ *************************************/
+function requestMediaDetails(id, callback, errorCallback)
+{
+    serverRequest("data/library/" + id + "/", function(r){
+        if (r.status == 200) {
+            callback(JSON.parse(r.responseText));
+        } else {
+            // Call the error callback if anything went wrong, if one was given
+            if (errorCallback != undefined) {
+                errorCallback(r);
+            }
+        }
+    });
+}
+
+/*************************************
  savePlaylist
  ------------
  Sends a playlist to the server to save there.

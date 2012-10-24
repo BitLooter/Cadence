@@ -496,6 +496,13 @@ function PlayerManager() {
     PlayerManager.prototype.toggleMute = function() {
         player.audioElement.muted = player.audioElement.muted == false ? true : false;
     }
+    PlayerManager.prototype.showDetails = function() {
+        //TODO: Error handling
+        requestMediaDetails(player.track.id, function(details){
+            
+            alert(Object.keys(details).map(function(x){return x + ": " + details[x];}).join(', '));
+        });
+    }
     // Resets to player to a default state with no track loaded
     PlayerManager.prototype.clearMeta = function() {
         this.titleText.nodeValue = "Nothing playing";

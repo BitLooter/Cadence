@@ -148,6 +148,11 @@ def library_get_artist(request, artistID):
     
     return response
 
+def details(request, mediaID=1):
+    """View method for details on a specific media item"""
+    logger.info("Media details request from {}".format(request.get_host()))
+    response = json_response(models.Media.getDetails(mediaID))
+    return response
 
 # Utility methods
 #################

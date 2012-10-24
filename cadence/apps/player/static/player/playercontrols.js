@@ -16,6 +16,8 @@ controlsHandler = {
 	    	function(){ queue.playPrev() }, false);
 	    document.getElementById("playerMute").addEventListener("click",
 	    	function(){ player.toggleMute() }, false);
+        document.getElementById("playerDetails").addEventListener("click",
+            function(){ player.showDetails() }, false);
 	    
         this.scrubber = document.getElementById("playerScrubber");
         this._scrubberProgress = document.getElementById("playerScrubberProgress");

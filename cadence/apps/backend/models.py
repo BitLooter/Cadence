@@ -69,6 +69,8 @@ class Media(models.Model):
         return u"#{}: {} ({}) - {}".format(self.id, self.album.name, self.artist.name, self.title)
     
     def make_dict(self):
+        """Create a dict with commonly used data, suitable for in (e.g.) playlists"""
+
         # First sort the media sources, pushing transcodes to the back
         sources = [s.make_dict() for s in self.mediasource_set.all()]
         sources.sort(key=lambda s: ".transcode" in s["url"])
@@ -88,6 +90,14 @@ class Media(models.Model):
         for item in Media.objects.all():
             items.append(item.make_dict())
         return items
+    
+    @staticmethod
+    def getDetails(mediaID):
+        # Get the common data and add all the rest of the data stored
+        media = Media.objects.get(pk=mediaID)
+        details = media.make_dict()
+        details.update({"scan_date": media.scan_date.isoformat()})
+        return details
 
 class MediaSource(models.Model):
     media     = models.ForeignKey(Media)

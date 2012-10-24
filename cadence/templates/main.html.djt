@@ -34,6 +34,9 @@
                 <span id="playerArtist"></span> <b>/</b>
                 <span id="playerAlbum"></span>
             </div>
+            <a id="playerDetails" class="playerButton">
+                D
+            </a>
             <a id="playerMute" class="playerButton">
                 <img src="{{ STATIC_URL }}player/mute.svg">
             </a>
