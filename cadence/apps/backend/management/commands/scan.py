@@ -1,6 +1,6 @@
 from optparse import make_option
 
-from django.core.management.base import NoArgsCommand, CommandError
+from django.core.management.base import NoArgsCommand
 from cadence.apps.backend.scanner import Scanner
 
 

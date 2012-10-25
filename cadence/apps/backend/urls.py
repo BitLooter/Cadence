@@ -50,7 +50,7 @@ playlists/<Playlist ID>/
 
 """
 
-from django.conf.urls.defaults import patterns, url
+from django.conf.urls import patterns, url
 
 #TODO: xxID should be xx_id
 urlpatterns = patterns('cadence.apps.backend.views',

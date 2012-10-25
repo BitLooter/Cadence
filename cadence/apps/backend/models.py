@@ -1,5 +1,4 @@
 from django.db import models
-from django.conf import settings
 
 
 # Classes
@@ -30,6 +29,7 @@ class Artist(models.Model):
         else:
             raise Artist.DoesNotExist("Artist #{} not found".format(artistID))
 
+
 class Album(models.Model):
     name =     models.CharField(max_length=100, unique=True)
     coverurl = models.URLField()
@@ -43,7 +43,7 @@ class Album(models.Model):
         for album in Album.objects.all():
             albums.append({"id":       album.id,
                            "name":     album.name,
-                           "coverurl": album.coverurl })
+                           "coverurl": album.coverurl})
         return albums
     
     @staticmethod
@@ -56,6 +56,7 @@ class Album(models.Model):
             return items
         else:
             raise Album.DoesNotExist("Album #{} not found".format(albumID))
+
 
 class Media(models.Model):
     title           = models.CharField(max_length=127)
@@ -81,7 +82,7 @@ class Media(models.Model):
                 "album":    self.album.name,
                 "length":   self.length,
                 "sources":  sources,
-                "poster":   self.album.coverurl }
+                "poster":   self.album.coverurl}
     
     # Data source API helper methods
     @staticmethod
@@ -99,6 +100,7 @@ class Media(models.Model):
         details.update({"scan_date": media.scan_date.isoformat()})
         return details
 
+
 class MediaSource(models.Model):
     media     = models.ForeignKey(Media)
     #TODO: restrict field to media files
@@ -114,6 +116,7 @@ class MediaSource(models.Model):
         return {"url":       self.url,
                 "mime":      self.mime,
                 "transcode": self.transcode}
+
 
 class Playlist(models.Model):
     items = models.ManyToManyField(Media)

@@ -30,14 +30,13 @@ used by Cadence.
 """
 
 
-import sys
 import os
 
 from django.conf.global_settings import *
 
 # By default, project dir is the parent of this one
 PROJECT_DIR = os.path.normpath(os.path.join(
-                    os.path.dirname(os.path.abspath(__file__)), "..") )
+                    os.path.dirname(os.path.abspath(__file__)), ".."))
 
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
@@ -57,7 +56,7 @@ DATABASES = {
 USE_I18N = True
 USE_L10N = True
 
-USE_TZ=True
+USE_TZ = True
 
 ROOT_URLCONF = 'cadence.urls'
 

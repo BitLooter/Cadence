@@ -2,8 +2,6 @@
 
 Defaults for a web-facing server should go here."""
 
-import os
-
 from settings_default import *
 
 # Production settings

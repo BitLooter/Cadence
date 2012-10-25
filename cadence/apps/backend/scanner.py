@@ -1,5 +1,5 @@
 import os
-import urllib   #NOTE: use urllib.parse in Python 3.x
+import urllib   # NOTE: use urllib.parse in Python 3.x
 import logging
 import time
 from   django.conf import settings
@@ -69,9 +69,11 @@ class Scanner(object):
         artists = set([a.artist for a in meta])
         # Correct for blank tags
         if "" in albums:
-            albums.remove(""); albums.add(settings.UNKNOWN_ALBUM)
+            albums.remove("")
+            albums.add(settings.UNKNOWN_ALBUM)
         if "" in artists:
-            artists.remove(""); artists.add(settings.UNKNOWN_ARTIST)
+            artists.remove("")
+            artists.add(settings.UNKNOWN_ARTIST)
         # Create the entires in the database
         self.make_albums(albums)
         self.make_artists(artists)
@@ -143,7 +145,7 @@ class Scanner(object):
         return media
     
     def make_transcodes(self, filename, media):
-        transcoder = TranscodeManager( [filename] )
+        transcoder = TranscodeManager([filename])
         
         # By default transcode only if needed, but can be forced by command line
         if transcoder.transcode_needed or self.options["force_transcode"]:

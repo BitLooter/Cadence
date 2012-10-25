@@ -1,7 +1,6 @@
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotFound
 from django.core.exceptions import ObjectDoesNotExist
-from django.views.decorators.http import require_POST
-from django.views.decorators.csrf import csrf_exempt # See note below on saveplaylist
+from django.views.decorators.csrf import csrf_exempt  # See note below on saveplaylist
 import json
 import logging
 
@@ -10,6 +9,7 @@ import models
 
 # Set up logging
 logger = logging.getLogger("apps")
+
 
 #TODO: check for external errors like database access problems
 #TODO: This really, REALLY needs to be fixed - do not let this enter final
@@ -34,12 +34,14 @@ def playlists(request):
     else:
         return playlistlist(request)
 
+
 def playlistlist(request):
     """View method for data/playlists/ (GET). Returns list of playlists in JSON."""
     
     logger.info("Playlist list requested from {}".format(request.get_host()))
     lists = models.Playlist.getPlaylistList()
     return json_response(lists)
+
 
 def saveplaylist(request):
     """
@@ -79,6 +81,7 @@ def saveplaylist(request):
     
     return response
 
+
 def getplaylist(request, playlistID):
     """View method for data/playlists/<ID>/. Returns playlist matching ID."""
     
@@ -94,6 +97,7 @@ def getplaylist(request, playlistID):
     
     return response
 
+
 def library(request):
     """
     View method for data/library/. Returns information on every track in the library.
@@ -108,11 +112,13 @@ def library(request):
     response = json_response(models.Media.getFullLibrary())
     return response
 
+
 def library_albums(request):
     """View method for data/library/albums/. Returns list of albums in the library."""
     logger.info("Library albums request from {}".format(request.get_host()))
     response = json_response(models.Album.getAlbums())
     return response
+
 
 def library_get_album(request, albumID):
     """View method for data/library/albums/<ID>. Returns info on album matching ID."""
@@ -128,11 +134,13 @@ def library_get_album(request, albumID):
     
     return response
 
+
 def library_artists(request):
     """View method for data/library/artists/. Returns list of artists in the library."""
     logger.info("Library artists request from {}".format(request.get_host()))
     response = json_response(models.Artist.getArtists())
     return response
+
 
 def library_get_artist(request, artistID):
     """View method for data/library/artists/<ID>. Returns info on artist matching ID."""
@@ -148,11 +156,13 @@ def library_get_artist(request, artistID):
     
     return response
 
+
 def details(request, mediaID=1):
     """View method for details on a specific media item"""
     logger.info("Media details request from {}".format(request.get_host()))
     response = json_response(models.Media.getDetails(mediaID))
     return response
+
 
 # Utility methods
 #################

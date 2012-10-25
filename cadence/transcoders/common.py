@@ -70,7 +70,7 @@ class TranscodeManagerBase(object):
         # If no mime type given, base it on the file extension
         mimetype = self._mime_from_filename(filename)
         
-        self.sources.append( (filename, mimetype) )
+        self.sources.append((filename, mimetype))
     
     def queue_job(self, filename, mime=None):
         """
@@ -90,7 +90,7 @@ class TranscodeManagerBase(object):
         mimetype = self._mime_from_filename(filename)
         
         if os.path.exists(filename):
-            self.transcodes.append( (filename, mimetype) )
+            self.transcodes.append((filename, mimetype))
         else:
             # Otherwise add it to the job list
             self.pending_jobs.append(filename)
@@ -115,7 +115,7 @@ class TranscodeManagerBase(object):
             # If you wish to change this, rearrange the list order in setup() or
             # override convert() with your own code.
             encode(self.filenames[0], job, newmime)
-            self.transcodes.append( (job, newmime) )
+            self.transcodes.append((job, newmime))
     
     def make_transcode_name(self, path, newext, postfix_name=True):
         """
@@ -166,12 +166,12 @@ class TranscodeManagerBase(object):
         # Start with the source file(s)
         for source in self.sources:
             relname = source[0].replace(settings.AUDIO_ROOT, "")
-            output.append( (relname, self._fileurl(source[0]), source[1], False), )
+            output.append((relname, self._fileurl(source[0]), source[1], False),)
         
         # Then add the transcode(s)
         for transcode in self.transcodes:
             relname = transcode[0].replace(settings.TRANSCODE_ROOT, "")
-            output.append( (relname, self._transcodeurl(transcode[0]), transcode[1], True), )
+            output.append((relname, self._transcodeurl(transcode[0]), transcode[1], True),)
         
         return output
     

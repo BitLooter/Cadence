@@ -9,8 +9,6 @@ than nothing if you do not have a lossless source.
 """
 
 
-import os
-
 from django.conf import settings
 
 from common import TranscodeManagerBase
