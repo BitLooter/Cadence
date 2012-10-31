@@ -34,7 +34,7 @@ function serverRequest(url, callback, errorCallback, postdata) {
  Tries to recieve the playlist with the given id from the server.
  *************************************/
 function requestPlaylist(id, callback, errorCallback) {
-    serverRequest("data/playlists/"+id+"/", callback, errorCallback);
+    serverRequest("data/playlists/"+id+"/media/", callback, errorCallback);
 }
 
 /*************************************
@@ -52,43 +52,7 @@ function requestPlaylistList(callback, errorCallback) {
  Gets a list of media items in the library from the server
  *************************************/
 function requestLibraryItems(callback, errorCallback) {
-    serverRequest("data/library/", callback, errorCallback);
-}
-
-/*************************************
- requestAlbumList
- ----------------
- Gets a list of track's albums from the server
- *************************************/
-function requestAlbumList(callback, errorCallback) {
-    serverRequest("data/library/albums/", callback, errorCallback);
-}
-
-/*************************************
- requestAlbum
- ------------
- Gets an album from the server
- *************************************/
-function requestAlbum(id, callback, errorCallback) {
-    serverRequest("data/library/albums/" + id + "/", callback, errorCallback);
-}
-
-/*************************************
- requestArtistList
- ----------------
- Gets a list of artists from the server
- *************************************/
-function requestArtistList(callback, errorCallback) {
-    serverRequest("data/library/artists/", callback, errorCallback);
-}
-
-/*************************************
- requestArtist
- ------------
- Gets an artist's tracks from the server
- *************************************/
-function requestArtist(id, callback, errorCallback) {
-    serverRequest("data/library/artists/" + id + "/", callback, errorCallback);
+    serverRequest("data/media/", callback, errorCallback);
 }
 
 /*************************************
@@ -97,7 +61,43 @@ function requestArtist(id, callback, errorCallback) {
  Gets detailed information about a specific media item
  *************************************/
 function requestMediaDetails(id, callback, errorCallback) {
-    serverRequest("data/library/" + id + "/", callback, errorCallback);
+    serverRequest("data/media/" + id + "/", callback, errorCallback);
+}
+
+/*************************************
+ requestAlbumList
+ ----------------
+ Gets a list of track's albums from the server
+ *************************************/
+function requestAlbumList(callback, errorCallback) {
+    serverRequest("data/albums/", callback, errorCallback);
+}
+
+/*************************************
+ requestAlbum
+ ------------
+ Gets an album from the server
+ *************************************/
+function requestAlbum(id, callback, errorCallback) {
+    serverRequest("data/albums/" + id + "/media/", callback, errorCallback);
+}
+
+/*************************************
+ requestArtistList
+ ----------------
+ Gets a list of artists from the server
+ *************************************/
+function requestArtistList(callback, errorCallback) {
+    serverRequest("data/artists/", callback, errorCallback);
+}
+
+/*************************************
+ requestArtist
+ ------------
+ Gets an artist's tracks from the server
+ *************************************/
+function requestArtist(id, callback, errorCallback) {
+    serverRequest("data/artists/" + id + "/media/", callback, errorCallback);
 }
 
 /*************************************

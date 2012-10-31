@@ -15,31 +15,31 @@ REST API
 
 TODO: data formats
 
-library/
+media/
     List of all tracks in library (may be disabled in settings)
 
-library/audio/
-    Like `library/`, but restricted to audio files
-
-library/<Media ID>/
+media/<Media ID>/
     Details about the media with the given ID
 
-library/albums/
+#library/audio/
+#    Like `library/`, but restricted to audio files
+
+albums/
     List of albums in the library
 
-library/albums/<Album ID>/
+albums/<Album ID>/
     Tracks in the given album
 
-library/albums/<Album ID>/details/
+albums/<Album ID>/details/
     Detailed information about the specified album
 
-library/artists/
+artists/
     List of artists in the library
 
-library/artists/<Artist ID>/
+artists/<Artist ID>/
     List of tracks belonging to the given artist
 
-library/artists/<Artist ID>/details/
+artists/<Artist ID>/details/
     Detailed information about the specified artist
 
 playlists/
@@ -54,14 +54,15 @@ from django.conf.urls import patterns, url
 
 #TODO: xxID should be xx_id
 urlpatterns = patterns('cadence.apps.backend.views',
-    url(r"^library/(?P<mediaID>\d+)/$", "details"),
-    #url(r"^library/albums/(?P<albumID>\d+)/details/$", ""),
-    url(r"^library/albums/(?P<albumID>\d+)/$", "library_get_album"),
-    url(r"^library/albums/$", "library_albums"),
-    #url(r"^library/artists/(?P<artistID>\d+)/details/$", ""),
-    url(r"^library/artists/(?P<artistID>\d+)/$", "library_get_artist"),
-    url(r"^library/artists/$", "library_artists"),
-    url(r"^library/$", "library"),
-    url(r"^playlists/(?P<playlistID>\d+)/$", "getplaylist"),
+    url(r"^media/$", "media"),
+    url(r"^media/(?P<mediaID>\d+)/$", "media_details"),
+    url(r"^albums/(?P<albumID>\d+)/media/$", "album_media"),
+    #url(r"^albums/(?P<albumID>\d+)/$", "album_details"),
+    url(r"^albums/$", "albums"),
+    url(r"^artists/(?P<artistID>\d+)/media/$", "artist_media"),
+    #url(r"^artists/(?P<artistID>\d+)/$", "artist_details"),
+    url(r"^artists/$", "artists"),
+    url(r"^playlists/(?P<playlistID>\d+)/media/$", "playlist_media"),
+    #url(r"^playlists/(?P<playlistID>\d+)/$", "playlist_details"),
     url(r"^playlists/$", "playlists"),
 )

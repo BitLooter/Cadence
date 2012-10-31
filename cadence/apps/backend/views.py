@@ -1,8 +1,9 @@
+import json
+import logging
+
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseNotFound
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.decorators.csrf import csrf_exempt  # See note below on saveplaylist
-import json
-import logging
 
 import models
 
@@ -17,7 +18,7 @@ logger = logging.getLogger("apps")
 @csrf_exempt
 def playlists(request):
     """
-    Virtual view method for data/playlists/
+    Generic view for /data/playlists/, choosing a view function for the request type.
     
     Saves a playlist or returns a list of them, depending on request type. A GET
     request will return a list of available playlists in JSON format; a POST request
@@ -36,7 +37,7 @@ def playlists(request):
 
 
 def playlistlist(request):
-    """View method for data/playlists/ (GET). Returns list of playlists in JSON."""
+    """View method for list of playlists. Returns list of playlists in JSON."""
     
     logger.info("Playlist list requested from {}".format(request.get_host()))
     lists = models.Playlist.getPlaylistList()
@@ -45,7 +46,7 @@ def playlistlist(request):
 
 def saveplaylist(request):
     """
-    View method for data/playlists/ (POST)
+    View method for saving a playlist (POST).
     
     Saves a new playlist to the database. Data is in JSON format, and is expected
     to take the form of a dict with 'name' and 'tracks' fields, name being a
@@ -82,8 +83,8 @@ def saveplaylist(request):
     return response
 
 
-def getplaylist(request, playlistID):
-    """View method for data/playlists/<ID>/. Returns playlist matching ID."""
+def playlist_media(request, playlistID):
+    """View method for playlist tracklist. Returns playlist matching ID."""
     
     logger.info("Playlist #{} requested from {}".format(playlistID, request.get_host()))
     
@@ -98,9 +99,9 @@ def getplaylist(request, playlistID):
     return response
 
 
-def library(request):
+def media(request):
     """
-    View method for data/library/. Returns information on every track in the library.
+    View method for all media. Returns information on every track in the library.
     
     Note that for very large libraries, this could produce a great amount of data
     and load slowly on the client (not to mention "Holy crap Frank, how'd we go over
@@ -113,15 +114,22 @@ def library(request):
     return response
 
 
-def library_albums(request):
-    """View method for data/library/albums/. Returns list of albums in the library."""
+def media_details(request, mediaID=1):
+    """View method for details on a specific media item"""
+    logger.info("Media details request from {}".format(request.get_host()))
+    response = json_response(models.Media.getDetails(mediaID))
+    return response
+
+
+def albums(request):
+    """View method for albums list. Returns list of albums in the library."""
     logger.info("Library albums request from {}".format(request.get_host()))
     response = json_response(models.Album.getAlbums())
     return response
 
 
-def library_get_album(request, albumID):
-    """View method for data/library/albums/<ID>. Returns info on album matching ID."""
+def album_media(request, albumID):
+    """View method for album tracklist. Returns media for album matching ID."""
     logger.info("Album request from {}".format(request.get_host()))
     
     try:
@@ -135,15 +143,15 @@ def library_get_album(request, albumID):
     return response
 
 
-def library_artists(request):
-    """View method for data/library/artists/. Returns list of artists in the library."""
+def artists(request):
+    """View method for artists list. Returns list of artists in the library."""
     logger.info("Library artists request from {}".format(request.get_host()))
     response = json_response(models.Artist.getArtists())
     return response
 
 
-def library_get_artist(request, artistID):
-    """View method for data/library/artists/<ID>. Returns info on artist matching ID."""
+def artist_media(request, artistID):
+    """View method for artist tracklist. Returns media for artist matching ID."""
     logger.info("Artist request from {}".format(request.get_host()))
     
     try:
@@ -154,13 +162,6 @@ def library_get_artist(request, artistID):
         logger.error(error)
         response = HttpResponseNotFound(error, mimetype="text/plain")
     
-    return response
-
-
-def details(request, mediaID=1):
-    """View method for details on a specific media item"""
-    logger.info("Media details request from {}".format(request.get_host()))
-    response = json_response(models.Media.getDetails(mediaID))
     return response
 
 
