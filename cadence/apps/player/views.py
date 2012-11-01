@@ -1,11 +1,18 @@
-from django.shortcuts import render
-from django.conf import settings
 import logging
+from django.conf import settings
+from django.views.generic import TemplateView
 
 # Set up logging
 logger = logging.getLogger("apps")
 
 
-def index(request):
-    logger.info("Home page requested from {}".format(request.get_host()))
-    return render(request, "main.html.djt", {"title": settings.PLAYER_NAME})
+class PlayerView(TemplateView):
+    template_name = "main.html.djt"
+
+    def dispatch(self, request, *args, **kwargs):
+        logger.info("Home page requested from {}".format(request.get_host()))
+        return super(PlayerView, self).dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = {"title": settings.PLAYER_NAME}
+        return context

@@ -1,12 +1,13 @@
 from django.conf.urls import patterns, include, url
 from django.conf import settings
 
-# Uncomment the next two lines to enable the admin:
 from django.contrib import admin
+from cadence.apps.player.views import PlayerView
+
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r"^$", "cadence.apps.player.views.index"),
+    url(r"^$", PlayerView.as_view()),
     url(r"^data/", include("cadence.apps.backend.urls")),
 
     # Uncomment the admin/doc line below to enable admin documentation:
