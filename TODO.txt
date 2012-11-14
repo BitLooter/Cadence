@@ -16,6 +16,7 @@ Develop deployment code
 Reorganize /static
 Scan reports
 Use fabric and south for deployment
+Alphabet in filter pane to skip around in lists
 
 
 Future (post-1.0) goals
