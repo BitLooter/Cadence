@@ -83,7 +83,7 @@ def saveplaylist(request):
     return response
 
 
-def playlist_media(request, playlistID):
+def playlist_tracks(request, playlistID):
     """View method for playlist tracklist. Returns playlist matching ID."""
     
     logger.info("Playlist #{} requested from {}".format(playlistID, request.get_host()))
@@ -128,7 +128,7 @@ def albums(request):
     return response
 
 
-def album_media(request, albumID):
+def album_tracks(request, albumID):
     """View method for album tracklist. Returns media for album matching ID."""
     logger.info("Album request from {}".format(request.get_host()))
     
@@ -150,7 +150,7 @@ def artists(request):
     return response
 
 
-def artist_media(request, artistID):
+def artist_tracks(request, artistID):
     """View method for artist tracklist. Returns media for artist matching ID."""
     logger.info("Artist request from {}".format(request.get_host()))
     

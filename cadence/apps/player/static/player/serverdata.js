@@ -34,7 +34,7 @@ function serverRequest(url, callback, errorCallback, postdata) {
  Tries to recieve the playlist with the given id from the server.
  *************************************/
 function requestPlaylist(id, callback, errorCallback) {
-    serverRequest("data/playlists/"+id+"/media/", callback, errorCallback);
+    serverRequest("data/playlists/"+id+"/tracks/", callback, errorCallback);
 }
 
 /*************************************
@@ -79,7 +79,7 @@ function requestAlbumList(callback, errorCallback) {
  Gets an album from the server
  *************************************/
 function requestAlbum(id, callback, errorCallback) {
-    serverRequest("data/albums/" + id + "/media/", callback, errorCallback);
+    serverRequest("data/albums/" + id + "/tracks/", callback, errorCallback);
 }
 
 /*************************************
@@ -97,7 +97,7 @@ function requestArtistList(callback, errorCallback) {
  Gets an artist's tracks from the server
  *************************************/
 function requestArtist(id, callback, errorCallback) {
-    serverRequest("data/artists/" + id + "/media/", callback, errorCallback);
+    serverRequest("data/artists/" + id + "/tracks/", callback, errorCallback);
 }
 
 /*************************************
