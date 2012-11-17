@@ -51,6 +51,7 @@ In short, when writing a new transcoder module here's what needs to be done:
   to a list of valid input types
 * Define a :py:meth:`~cadence.transcoders.common.TranscodeManagerBase.setup`
   method on the class that prepares the encoder.
+
    * The input files are in a list in 
      :py:attr:`~cadence.transcoders.common.TranscodeManagerBase.filenames`.
      Usually there will be only a single file, but there may be more (e.g.
