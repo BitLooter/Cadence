@@ -10,7 +10,6 @@ log.txt
 cadence/settings_local.py
 doc/_build
 cadence.wsgi
-debug_toolbar
 cadence/conf/debug.py
 cadence/conf/prod.py
 *.bat
