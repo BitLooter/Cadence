@@ -83,16 +83,16 @@ def saveplaylist(request):
     return response
 
 
-def playlist_tracks(request, playlistID):
+def playlist_tracks(request, playlist_id):
     """View method for playlist tracklist. Returns playlist matching ID."""
     
-    logger.info("Playlist #{} requested from {}".format(playlistID, request.get_host()))
+    logger.info("Playlist #{} requested from {}".format(playlist_id, request.get_host()))
     
     try:
-        playlist = models.Playlist.getPlaylist(playlistID)
+        playlist = models.Playlist.getPlaylist(playlist_id)
         response = json_response(playlist)
     except ObjectDoesNotExist:
-        error = "Playlist #{} does not exist".format(playlistID)
+        error = "Playlist #{} does not exist".format(playlist_id)
         response = HttpResponseNotFound(error, mimetype="text/plain")
         logger.error(error)
     
@@ -114,10 +114,10 @@ def media(request):
     return response
 
 
-def media_details(request, mediaID=1):
+def media_details(request, media_id=1):
     """View method for details on a specific media item"""
     logger.info("Media details request from {}".format(request.get_host()))
-    response = json_response(models.Media.getDetails(mediaID))
+    response = json_response(models.Media.getDetails(media_id))
     return response
 
 
@@ -128,12 +128,12 @@ def albums(request):
     return response
 
 
-def album_tracks(request, albumID):
+def album_tracks(request, album_id):
     """View method for album tracklist. Returns media for album matching ID."""
     logger.info("Album request from {}".format(request.get_host()))
     
     try:
-        tracks = models.Album.getAlbumTracks(albumID)
+        tracks = models.Album.getAlbumTracks(album_id)
         response = json_response(tracks)
     except ObjectDoesNotExist as e:
         error = "Error: {}".format(e.message)
@@ -150,12 +150,12 @@ def artists(request):
     return response
 
 
-def artist_tracks(request, artistID):
+def artist_tracks(request, artist_id):
     """View method for artist tracklist. Returns media for artist matching ID."""
     logger.info("Artist request from {}".format(request.get_host()))
     
     try:
-        tracks = models.Artist.getArtistTracks(artistID)
+        tracks = models.Artist.getArtistTracks(artist_id)
         response = json_response(tracks)
     except ObjectDoesNotExist as e:
         error = "Error: {}".format(e.message)

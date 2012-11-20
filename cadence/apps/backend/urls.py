@@ -172,17 +172,17 @@ Tracklist
 
 from django.conf.urls import patterns, url
 
-#TODO: xxID should be xx_id
+
 urlpatterns = patterns('cadence.apps.backend.views',
     url(r"^media/$", "media"),
-    url(r"^media/(?P<mediaID>\d+)/$", "media_details"),
-    url(r"^albums/(?P<albumID>\d+)/tracks/$", "album_tracks"),
+    url(r"^media/(?P<media_id>\d+)/$", "media_details"),
+    url(r"^albums/(?P<album_id>\d+)/tracks/$", "album_tracks"),
     #url(r"^albums/(?P<albumID>\d+)/$", "album_details"),
     url(r"^albums/$", "albums"),
-    url(r"^artists/(?P<artistID>\d+)/tracks/$", "artist_tracks"),
+    url(r"^artists/(?P<artist_id>\d+)/tracks/$", "artist_tracks"),
     #url(r"^artists/(?P<artistID>\d+)/$", "artist_details"),
     url(r"^artists/$", "artists"),
-    url(r"^playlists/(?P<playlistID>\d+)/tracks/$", "playlist_tracks"),
+    url(r"^playlists/(?P<playlist_id>\d+)/tracks/$", "playlist_tracks"),
     #url(r"^playlists/(?P<playlistID>\d+)/$", "playlist_details"),
     url(r"^playlists/$", "playlists"),
 )

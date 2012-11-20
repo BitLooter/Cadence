@@ -19,15 +19,15 @@ class Artist(models.Model):
         return artists
     
     @staticmethod
-    def getArtistTracks(artistID):
+    def getArtistTracks(artist_id):
         # Check that the given artist exists - if it doesn't, raise an exception
-        if Artist.objects.filter(id=artistID).exists():
+        if Artist.objects.filter(id=artist_id).exists():
             items = []
-            for item in Media.objects.filter(artist=artistID):
+            for item in Media.objects.filter(artist=artist_id):
                 items.append(item.make_dict())
             return items
         else:
-            raise Artist.DoesNotExist("Artist #{} not found".format(artistID))
+            raise Artist.DoesNotExist("Artist #{} not found".format(artist_id))
 
 
 class Album(models.Model):
@@ -47,15 +47,15 @@ class Album(models.Model):
         return albums
     
     @staticmethod
-    def getAlbumTracks(albumID):
+    def getAlbumTracks(album_id):
         # Check that the given album exists - if it doesn't, raise an exception
-        if Album.objects.filter(id=albumID).exists():
+        if Album.objects.filter(id=album_id).exists():
             items = []
-            for item in Media.objects.filter(album=albumID):
+            for item in Media.objects.filter(album=album_id):
                 items.append(item.make_dict())
             return items
         else:
-            raise Album.DoesNotExist("Album #{} not found".format(albumID))
+            raise Album.DoesNotExist("Album #{} not found".format(album_id))
 
 
 class Media(models.Model):
@@ -93,9 +93,9 @@ class Media(models.Model):
         return items
     
     @staticmethod
-    def getDetails(mediaID):
+    def getDetails(media_id):
         # Get the common data and add all the rest of the data stored
-        media = Media.objects.get(pk=mediaID)
+        media = Media.objects.get(pk=media_id)
         details = media.make_dict()
         details.update({"scan_date": media.scan_date.isoformat()})
         return details
@@ -127,8 +127,8 @@ class Playlist(models.Model):
     
     # Data source API helper methods
     @staticmethod
-    def getPlaylist(playlistID):
-        playlistObj = Playlist.objects.get(pk=playlistID)
+    def getPlaylist(playlist_id):
+        playlistObj = Playlist.objects.get(pk=playlist_id)
         playlist = {"id": playlistObj.id,
                     "name": playlistObj.name,
                     "items": []}
