@@ -17,7 +17,7 @@ logger = logging.getLogger("apps")
 
 def log_request(f):
     """Records request info to the log file"""
-    
+
     def wrapper(*args, **kwargs):
         request = args[0]
         # Display simpler message if there are no view parameters
@@ -134,7 +134,7 @@ def media(request):
 
 
 @log_request
-def media_details(request, media_id=1):
+def media_details(request, media_id):
     """View method for details on a specific media item"""
 
     return json_response(models.Media.getDetails(media_id))
