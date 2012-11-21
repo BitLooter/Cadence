@@ -12,8 +12,8 @@ import models
 logger = logging.getLogger("apps")
 
 
-# View function wrappers
-########################
+# View function decorators
+##########################
 
 def log_request(f):
     """Records request info to the log file"""
@@ -27,6 +27,28 @@ def log_request(f):
             message = "{} {} request from {}".format(f.__name__, repr(kwargs), request.get_host())
         logger.info(message)
         return f(*args, **kwargs)
+
+    return wrapper
+
+
+def handle_not_found(f):
+    """
+    For views that request a specific object (e.g. a playlist), return a 404
+    page and log an error if the object was not found.
+
+    Assumes the object being looked for is passed as a kwarg named 'item_id'.
+    If this view does not fit this pattern, you will not be able to handle
+    404 errors for it with this decorator.
+    """
+
+    def wrapper(*args, **kwargs):
+        try:
+            return f(*args, **kwargs)
+        except ObjectDoesNotExist as e:
+            print e.message
+            error = "{} (#{})".format(e.message, kwargs["item_id"])
+            logger.error(error)
+            return HttpResponseNotFound(error, mimetype="text/plain")
 
     return wrapper
 
@@ -104,19 +126,12 @@ def saveplaylist(request):
     return response
 
 
+@handle_not_found
 @log_request
-def playlist_tracks(request, playlist_id):
+def playlist_tracks(request, item_id):
     """View method for playlist tracklist. Returns playlist matching ID."""
     
-    try:
-        playlist = models.Playlist.getPlaylist(playlist_id)
-        response = json_response(playlist)
-    except ObjectDoesNotExist as e:
-        error = "Playlist #{} does not exist".format(playlist_id)
-        response = HttpResponseNotFound(error, mimetype="text/plain")
-        logger.error(error)
-    
-    return response
+    return json_response(models.Playlist.getPlaylist(item_id))
 
 
 @log_request
@@ -133,11 +148,12 @@ def media(request):
     return json_response(models.Media.getFullLibrary())
 
 
+@handle_not_found
 @log_request
-def media_details(request, media_id):
+def media_details(request, item_id):
     """View method for details on a specific media item"""
 
-    return json_response(models.Media.getDetails(media_id))
+    return json_response(models.Media.getDetails(item_id))
 
 
 @log_request
@@ -147,19 +163,12 @@ def albums(request):
     return json_response(models.Album.getAlbums())
 
 
+@handle_not_found
 @log_request
-def album_tracks(request, album_id):
+def album_tracks(request, item_id):
     """View method for album tracklist. Returns media for album matching ID."""
     
-    try:
-        tracks = models.Album.getAlbumTracks(album_id)
-        response = json_response(tracks)
-    except ObjectDoesNotExist as e:
-        error = "Error: {}".format(e.message)
-        logger.error(error)
-        response = HttpResponseNotFound(error, mimetype="text/plain")
-    
-    return response
+    return json_response(models.Album.getAlbumTracks(item_id))
 
 
 @log_request
@@ -169,19 +178,12 @@ def artists(request):
     return json_response(models.Artist.getArtists())
 
 
+@handle_not_found
 @log_request
-def artist_tracks(request, artist_id):
+def artist_tracks(request, item_id):
     """View method for artist tracklist. Returns media for artist matching ID."""
     
-    try:
-        tracks = models.Artist.getArtistTracks(artist_id)
-        response = json_response(tracks)
-    except ObjectDoesNotExist as e:
-        error = "Error: {}".format(e.message)
-        logger.error(error)
-        response = HttpResponseNotFound(error, mimetype="text/plain")
-    
-    return response
+    return json_response(models.Artist.getArtistTracks(item_id))
 
 
 # Utility methods

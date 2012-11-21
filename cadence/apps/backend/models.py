@@ -27,7 +27,7 @@ class Artist(models.Model):
                 items.append(item.make_dict())
             return items
         else:
-            raise Artist.DoesNotExist("Artist #{} not found".format(artist_id))
+            raise Artist.DoesNotExist("Artist #{} not found.".format(artist_id))
 
 
 class Album(models.Model):
@@ -55,7 +55,7 @@ class Album(models.Model):
                 items.append(item.make_dict())
             return items
         else:
-            raise Album.DoesNotExist("Album #{} not found".format(album_id))
+            raise Album.DoesNotExist("Album #{} not found.".format(album_id))
 
 
 class Media(models.Model):
