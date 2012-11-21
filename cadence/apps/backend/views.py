@@ -23,6 +23,8 @@ def log_request(f):
         # Display simpler message if there are no view parameters
         if kwargs == {}:
             message = "{} request from {}".format(f.__name__, request.get_host())
+        elif "item_id" in kwargs:
+            message = "{} (#{}) request from {}".format(f.__name__, kwargs["item_id"], request.get_host())
         else:
             message = "{} {} request from {}".format(f.__name__, repr(kwargs), request.get_host())
         logger.info(message)
