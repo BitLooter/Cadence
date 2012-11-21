@@ -12,6 +12,28 @@ import models
 logger = logging.getLogger("apps")
 
 
+# View function wrappers
+########################
+
+def log_request(f):
+    """Records request info to the log file"""
+    
+    def wrapper(*args, **kwargs):
+        request = args[0]
+        # Display simpler message if there are no view parameters
+        if kwargs == {}:
+            message = "{} request from {}".format(f.__name__, request.get_host())
+        else:
+            message = "{} {} request from {}".format(f.__name__, repr(kwargs), request.get_host())
+        logger.info(message)
+        return f(*args, **kwargs)
+
+    return wrapper
+
+
+# View functions
+################
+
 #TODO: check for external errors like database access problems
 #TODO: This really, REALLY needs to be fixed - do not let this enter final
 # release without properly implementing CSRF protection.
@@ -36,14 +58,15 @@ def playlists(request):
         return playlistlist(request)
 
 
+@log_request
 def playlistlist(request):
     """View method for list of playlists. Returns list of playlists in JSON."""
     
-    logger.info("Playlist list requested from {}".format(request.get_host()))
     lists = models.Playlist.getPlaylistList()
     return json_response(lists)
 
 
+@log_request
 def saveplaylist(request):
     """
     View method for saving a playlist (POST).
@@ -58,8 +81,6 @@ def saveplaylist(request):
         }
     """
     
-    logger.info("Save playlist request from {}".format(request.get_host()))
-
     try:
         info = json.loads(request.raw_post_data)
     except ValueError:
@@ -83,15 +104,14 @@ def saveplaylist(request):
     return response
 
 
+@log_request
 def playlist_tracks(request, playlist_id):
     """View method for playlist tracklist. Returns playlist matching ID."""
-    
-    logger.info("Playlist #{} requested from {}".format(playlist_id, request.get_host()))
     
     try:
         playlist = models.Playlist.getPlaylist(playlist_id)
         response = json_response(playlist)
-    except ObjectDoesNotExist:
+    except ObjectDoesNotExist as e:
         error = "Playlist #{} does not exist".format(playlist_id)
         response = HttpResponseNotFound(error, mimetype="text/plain")
         logger.error(error)
@@ -99,6 +119,7 @@ def playlist_tracks(request, playlist_id):
     return response
 
 
+@log_request
 def media(request):
     """
     View method for all media. Returns information on every track in the library.
@@ -109,28 +130,26 @@ def media(request):
     on the current site settings.
     """
      
-    logger.info("Full library request from {}".format(request.get_host()))
-    response = json_response(models.Media.getFullLibrary())
-    return response
+    return json_response(models.Media.getFullLibrary())
 
 
+@log_request
 def media_details(request, media_id=1):
     """View method for details on a specific media item"""
-    logger.info("Media details request from {}".format(request.get_host()))
-    response = json_response(models.Media.getDetails(media_id))
-    return response
+
+    return json_response(models.Media.getDetails(media_id))
 
 
+@log_request
 def albums(request):
     """View method for albums list. Returns list of albums in the library."""
-    logger.info("Library albums request from {}".format(request.get_host()))
-    response = json_response(models.Album.getAlbums())
-    return response
+    
+    return json_response(models.Album.getAlbums())
 
 
+@log_request
 def album_tracks(request, album_id):
     """View method for album tracklist. Returns media for album matching ID."""
-    logger.info("Album request from {}".format(request.get_host()))
     
     try:
         tracks = models.Album.getAlbumTracks(album_id)
@@ -143,16 +162,16 @@ def album_tracks(request, album_id):
     return response
 
 
+@log_request
 def artists(request):
     """View method for artists list. Returns list of artists in the library."""
-    logger.info("Library artists request from {}".format(request.get_host()))
-    response = json_response(models.Artist.getArtists())
-    return response
+    
+    return json_response(models.Artist.getArtists())
 
 
+@log_request
 def artist_tracks(request, artist_id):
     """View method for artist tracklist. Returns media for artist matching ID."""
-    logger.info("Artist request from {}".format(request.get_host()))
     
     try:
         tracks = models.Artist.getArtistTracks(artist_id)
