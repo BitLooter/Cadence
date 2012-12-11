@@ -126,6 +126,12 @@ class TranscodeManagerBase(object):
         place, and also prevents name collisions. In addition to all this
         name mangling, it also replaces :py:const:`AUDIO_ROOT` with
         :py:const:`TRANSCODE_ROOT`.
+
+        Example: If your source media is in ``/source/media/dir/`` and your
+        transcodes are in ``/output/media/dir``, converting a FLAC named
+        ``/source/media/dir/Jonathan Coulton/Code Monkey.flac`` to an MP3
+        will result in an output filename of
+        ``/output/media/dir/Jonathan Coulton.Code Monkey.mp3``.
         
         :param string path: The path of the source file
         :param string newext: New extension (file type) for the transcoded file
