@@ -2,31 +2,31 @@
 <html>
     <head>
         <title>{{ title }}</title>
-        <script src="{{ STATIC_URL }}player/utils.js" type="text/javascript"></script>
-        <script src="{{ STATIC_URL }}player/serverdata.js" type="text/javascript"></script>
-        <script src="{{ STATIC_URL }}player/controls.js" type="text/javascript"></script>
-        <script src="{{ STATIC_URL }}player/playercontrols.js" type="text/javascript"></script>
-        <script src="{{ STATIC_URL }}player/theme.js" type="text/javascript"></script>
-        <script src="{{ STATIC_URL }}player/interface.js" type="text/javascript"></script>
-        <script src="{{ STATIC_URL }}player/init.js" type="text/javascript"></script>
-        <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}player/base.css" />
-        <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}player/theme.css" />
+        <script src="{{ STATIC_URL }}player/js/utils.js" type="text/javascript"></script>
+        <script src="{{ STATIC_URL }}player/js/serverdata.js" type="text/javascript"></script>
+        <script src="{{ STATIC_URL }}player/js/controls.js" type="text/javascript"></script>
+        <script src="{{ STATIC_URL }}player/js/playercontrols.js" type="text/javascript"></script>
+        <script src="{{ STATIC_URL }}player/js/theme.js" type="text/javascript"></script>
+        <script src="{{ STATIC_URL }}player/js/interface.js" type="text/javascript"></script>
+        <script src="{{ STATIC_URL }}player/js/init.js" type="text/javascript"></script>
+        <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}player/css/base.css" />
+        <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}player/css/theme.css" />
     </head>
     <body>
         <div id="playerPane" class="pane">
-            <img id="playerCover" src="{{ STATIC_URL }}player/nocover.svg" />
+            <img id="playerCover" src="{{ STATIC_URL }}player/img/nocover.svg" />
             <div id="playerControls">
                 <a id="playerPlay" class="playerButton">
-                    <img src="{{ STATIC_URL }}player/play.svg">
+                    <img src="{{ STATIC_URL }}player/img/play.svg">
                 </a>
                 <a id="playerStop" class="playerButton">
-                    <img src="{{ STATIC_URL }}player/stop.svg">
+                    <img src="{{ STATIC_URL }}player/img/stop.svg">
                 </a>
                 <a id="playerPrev" class="playerButton">
-                    <img src="{{ STATIC_URL }}player/prev.svg">
+                    <img src="{{ STATIC_URL }}player/img/prev.svg">
                 </a>
                 <a id="playerNext" class="playerButton">
-                    <img src="{{ STATIC_URL }}player/next.svg">
+                    <img src="{{ STATIC_URL }}player/img/next.svg">
                 </a>
             </div>
             <div id="playerMetadata">
@@ -38,7 +38,7 @@
                 D
             </a>
             <a id="playerMute" class="playerButton">
-                <img src="{{ STATIC_URL }}player/mute.svg">
+                <img src="{{ STATIC_URL }}player/img/mute.svg">
             </a>
             <div id="playerTimeline">
                 <div id="playerScrubber">
