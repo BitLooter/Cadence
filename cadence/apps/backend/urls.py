@@ -11,12 +11,16 @@ at ``yourawesomewebsite.com/cadence/``, these urls should be at
 API calls
 ---------
 
+All API calls return their data in JSON format.
+
 .. http:get:: media/
    
    Every track on the server, the whole shebang. May be disabled on some servers
-   depending on the configuration for performance or security reasons.
+   depending on the configuration for performance or security reasons - imagine
+   having a media server with 10,000 tracks and sending them all to anyone who
+   asks.
    
-   Returns data as a JSON tracklist.
+   Returns data as a JSON `Tracklist`_.
 
    :statuscode 200: No error
    :statuscode 403: Full library view disabled
@@ -51,7 +55,7 @@ API calls
    
    All tracks contained in an album matching the given album ID.
    
-   Returns data as a JSON tracklist.
+   Returns data as a JSON `Tracklist`_.
    
    :param album_id: Unique ID for the album
    :statuscode 200: No error
@@ -84,7 +88,7 @@ API calls
    
    All tracks by an artist matching the given artist ID.
    
-   Returns data as a JSON tracklist.
+   Returns data as a JSON `Tracklist`_.
    
    :param artist_id: Unique ID for the artist
    :statuscode 200: No error
@@ -117,7 +121,7 @@ API calls
    
    Tracklist for a playlist matching `playlist_id`.
    
-   Returns data as a JSON tracklist.
+   Returns data as a JSON `Tracklist`_.
    
    :param playlist_id: Unique ID for the playlist
    :statuscode 200: No error
