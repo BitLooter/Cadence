@@ -29,6 +29,7 @@ def log_request(f):
             message = "{} {} request from {}".format(f.__name__, repr(kwargs), request.get_host())
         logger.info(message)
         return f(*args, **kwargs)
+    wrapper.__doc__ = f.__doc__
 
     return wrapper
 
@@ -51,6 +52,7 @@ def handle_not_found(f):
             error = "{} (#{})".format(e.message, kwargs["item_id"])
             logger.error(error)
             return HttpResponseNotFound(error, mimetype="text/plain")
+    wrapper.__doc__ = f.__doc__
 
     return wrapper
 
