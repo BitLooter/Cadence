@@ -103,7 +103,6 @@ class Media(models.Model):
 
 class MediaSource(models.Model):
     media     = models.ForeignKey(Media)
-    #TODO: restrict field to media files
     url       = models.URLField()
     path      = models.FilePathField()
     mime      = models.CharField(max_length=100)
