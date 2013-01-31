@@ -85,4 +85,8 @@
             
         </div>
     </body>
+    <script>
+        // Configuration settings
+        DEFAULT_PLAYLIST = {{ default_playlist|default_if_none:"null" }};
+    </script>
 </html>

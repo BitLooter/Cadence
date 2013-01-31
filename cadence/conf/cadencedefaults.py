@@ -12,6 +12,8 @@ Settings you may need to manually configure
 PLAYER_NAME
     Name of the web site, or at least the Cadence player part if you're
     incorporating it into an existing site.
+DEFAULT_PLAYLIST
+    ID of the playlist to use on page load. `None` for no playlist.
 
 Path settings
 ~~~~~~~~~~~~~
@@ -72,6 +74,7 @@ import os
 
 
 PLAYER_NAME = "Cadence Media Player"
+DEFAULT_PLAYLIST = None
 
 AUDIO_ROOT = "/var/www/media/music/"
 AUDIO_URL = "media/music/"

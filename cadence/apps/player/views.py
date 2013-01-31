@@ -14,5 +14,6 @@ class PlayerView(TemplateView):
         return super(PlayerView, self).dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
-        context = {"title": settings.PLAYER_NAME}
+        context = {"title": settings.PLAYER_NAME,
+                   "default_playlist": settings.DEFAULT_PLAYLIST}
         return context

@@ -180,7 +180,7 @@ function QueueManager() {
         queue.enable();
         // Set the playlist just loaded as the new default
         //TODO: check for localStorage errors
-        localStorage.setItem("default_playlist", playlistID)
+        localStorage.setItem("last_playlist", playlistID)
     }
     QueueManager.prototype.playlistModified = function() {
         // No need to update modifed display if no playlist is loaded

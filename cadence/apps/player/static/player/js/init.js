@@ -18,13 +18,18 @@ function playerInit() {
     // Display the library
     library.populateAll();
     
-    // Get default playlist (last viewed playlist)
-    var playlistID = localStorage.getItem("default_playlist");
+    // Get default playlist
+    var playlistID = localStorage.getItem("last_playlist");
+    if (playlistID === null) {
+        // If no default playlist stored in the browser (e.g. first visit), use
+        // the playlist specified in the settings.
+        playlistID = DEFAULT_PLAYLIST;
+    }
     // Only load a default playlist from the server if one defined
     if (playlistID !== null)
     {
         queue.loadPlaylist(playlistID);
-    } //TODO: load a default default playist if one is configured
+    }
 }
 
 window.addEventListener("load", playerInit, false);
