@@ -14,7 +14,7 @@
 function serverRequest(url, callback, errorCallback, postdata) {
     try {
         makeRequest(url, function(r){
-            if (r.status == 200) {
+            if (r.status < 300) {
                 callback(JSON.parse(r.responseText));
             } else {
                 // Call the error callback if anything went wrong, if one was given
@@ -105,7 +105,7 @@ function requestArtist(id, callback, errorCallback) {
  ------------
  Sends a playlist to the server to save there.
  *************************************/
-function savePlaylist(tracks, name, errorCallback) {
+function savePlaylist(tracks, name, callback, errorCallback) {
     // First prepare the data to a JSON-ready server format
     var idList = [];
     for (var i = 0; i < tracks.length; i++) {

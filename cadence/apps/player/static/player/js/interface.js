@@ -192,8 +192,10 @@ function QueueManager() {
     QueueManager.prototype._savePlaylistClicked = function(e) {
         var defaultName = queue.currentPlaylist == null ? "<Unnamed>" : queue.currentPlaylist.name;
         var name = prompt("Enter a name for the playlist:", defaultName);
+        // TODO: update playlist display after saving playlist
         if (name != null) {
             savePlaylist(queue.tracks, name,
+                function(response){ alert(response) },
                 function(){ alert("Unable to save playlist") }
             );
         }

@@ -38,6 +38,21 @@ function makeRequest(url, callback, post) {
         }
     };
     var method = (post == undefined ? "GET" : "POST");
+    var csrftoken = getCookie("csrftoken");
     request.open(method, url, false);
+    request.setRequestHeader("X-CSRFToken", csrftoken);
     request.send(post);
+}
+
+// Gets a cookie with the given name
+function getCookie(name) {
+    var cookies = document.cookie.split("; ");
+    for (var i = 0; i < cookies.length; i++) {
+        var cookie = cookies[i].split("=");
+        if (cookie[0].trim() == name) {
+            return cookie[1];
+        }
+    }
+    // If we made it this far, the cookie was not found
+    return null;
 }

@@ -61,9 +61,6 @@ def handle_not_found(f):
 ################
 
 #TODO: check for external errors like database access problems
-#TODO: This really, REALLY needs to be fixed - do not let this enter final
-# release without properly implementing CSRF protection.
-@csrf_exempt
 def playlists(request):
     """
     Generic view for /data/playlists/, choosing a view function for the request type.
@@ -123,7 +120,8 @@ def saveplaylist(request):
             logger.error("Not saving playlist from {}, given data is invalid - POST data: '{}'".format(request.get_host(), request.raw_post_data))
         else:
             newID = models.Playlist.savePlaylist(info["tracks"], info["name"])
-            response = HttpResponse("Playlist created successfully", status=201, mimetype="text/plain")
+            # TODO: return information about the new playlist
+            response = HttpResponse(json.dumps("Playlist saved to {}".format(info["name"])), status=201, mimetype="text/plain")
             response["Location"] = "/cadence/data/playlist/{}/".format(newID)
             logger.info("Playlist from {} successfully saved as #{}".format(request.get_host(), newID))
     
