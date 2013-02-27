@@ -18,6 +18,9 @@ Usage
 
 [Scanner usage]
 
+.. toctree::
+   dirstruct
+
 Extending
 ---------
 
