@@ -61,19 +61,13 @@ In short, when writing a new transcoder module here's what needs to be done:
    * Call :py:meth:`~cadence.transcoders.common.TranscodeManagerBase.queue_job`
      for every new output (transcoded) file you want to create. Don't worry
      about reencoding existing files, :py:meth:`queue_job` is smart enough to
-     check for existing files first. Unless you use the --force-transcode
-     command line options, which will reencode every single file, so think
-     twice about using it on your 10,000 MP3s you're trying to serve up.
-     
-     .. todo::
-         Mark the command line switch here.
-     
+     check for existing files first. Unless you use the
+     :option:`--force-transcode` command line options, which will reencode
+     every single file, so think twice about using it on your 10,000 MP3s
+     you're trying to serve up.
      :py:meth:`~cadence.transcoders.common.TranscodeManagerBase.convert` is
      smart enough to figure out the codec and profile to use from the name, if
-     it follows the standard format.
-     
-     .. todo::
-         document standard format
+     it follows the :ref:`standard format <transcode-filenames>`.
 
 That's it, the rest should be automatic. Specifically, the default behaviour:
 
@@ -85,19 +79,14 @@ That's it, the rest should be automatic. Specifically, the default behaviour:
   list of files for the scanner to add to the database, normally some
   combination of the source files and the transcodes.
 
-.. todo:: document filename format
-.. todo:: pendingJobs may change at some point (its name or contents)
-.. todo:: document output filename format
+:py:class:`~cadence.transcoders.common.TranscodeManagerBase` includes
+a number of methods to simplify writing new transcoders, mostly to do with
+queue management and filename generation. Be sure to read the class's
+documentation so you don't end up rewriting the entire
+:py:mod:`~cadence.transcoders.common` module.
+
 .. todo:: fix docs when multiple source files are implemented
 .. todo:: add note about the encoder when overriding convert()
-
-Helper Functions
-^^^^^^^^^^^^^^^^
-
-The transcoder base class is equipped with helper methods for your convenience,
-to simplify some common tasks.
-
-.. todo:: document these functions
 
 
 .. _encoders:

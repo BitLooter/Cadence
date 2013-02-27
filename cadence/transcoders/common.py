@@ -145,6 +145,7 @@ class TranscodeManagerBase(object):
         else:
             postfix = ""
         
+        #TODO: add profile info
         outname = path.replace(settings.AUDIO_ROOT, "").replace(os.sep, ".")
         outname = os.path.join(settings.TRANSCODE_ROOT,
                                os.path.splitext(outname)[0] + postfix + newext)
@@ -152,13 +153,13 @@ class TranscodeManagerBase(object):
     
     @property
     def transcode_needed(self):
-        """Returns ``True`` if transcodes need to be performed."""
+        """Property that returns ``True`` if transcodes need to be performed."""
         return True if self.pending_jobs else False
     
     @property
     def files(self):
         """
-        Returns information about all files associated with the transcoder.
+        Property that returns filenames output by the transcoder.
         
         Data is in the form of a list of tuples, each tuple a triplet of three
         values containing the media's pathname (relative to its root defined
@@ -169,6 +170,7 @@ class TranscodeManagerBase(object):
         
         output = []
         
+        #TODO: what happends if the source types aren't used by the frontend (e.g. FLAC)?
         # Start with the source file(s)
         for source in self.sources:
             relname = source[0].replace(settings.AUDIO_ROOT, "")
