@@ -27,6 +27,9 @@ class Mediainfo(object):
         self.path = pathname
         self.relpath = pathname[len(settings.AUDIO_ROOT):]
     
+    def __str__(self):
+        return '<Metadata for "{}">'.format(self.path)
+
     @property
     def modified(self):
         """Returns True if the file has been modified since it was last scanned,
