@@ -2,7 +2,7 @@ import os
 import urllib   # NOTE: use urllib.parse in Python 3.x
 import logging
 import time
-from   django.conf import settings
+from django.conf import settings
 import mutagen
 
 import models
@@ -36,7 +36,7 @@ class Mediainfo(object):
            or False if not present in database"""
         try:
             return os.path.getmtime(self.path) > \
-                   time.mktime(models.MediaSource.objects.get(path=self.relpath).media.scan_date.timetuple())
+                time.mktime(models.MediaSource.objects.get(path=self.relpath).media.scan_date.timetuple())
         except models.MediaSource.DoesNotExist:
             return False
         except Exception as e:
@@ -68,8 +68,8 @@ class Scanner(object):
         
         # Create the album and artist database entries
         # Make a list of every item. Use a set to filter out duplicates.
-        albums = set([a.album for a in meta])
-        artists = set([a.artist for a in meta])
+        albums = {a.album for a in meta}
+        artists = {a.artist for a in meta}
         # Correct for blank tags
         if "" in albums:
             albums.remove("")
@@ -136,7 +136,7 @@ class Scanner(object):
             update_needed = False
         
         # Only update if this is new or modifed data
-        if update_needed == True:
+        if update_needed:
             # Save all the info to the database
             media.title = metadata.title
             media.artist = self.artistEntries[metadata.artist]

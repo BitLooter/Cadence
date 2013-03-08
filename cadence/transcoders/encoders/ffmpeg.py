@@ -25,14 +25,15 @@ logger = logging.getLogger("cadence.encoder")
 # nullfile is useful for passing to external commands as stdout
 nullfile = open(os.devnull)
 
-def encode(inputFilename, outputFilename, mime, subtype=None):
+
+def encode(input_filename, output_filename, mime, subtype=None):
     """
-    Encodes inputFilename to outputFilename, in the codec given in mime.
+    Encodes input_filename to output_filename, in the codec given in mime.
     If subtype does not equal None (e.g. you may have varients for iPhones,
     consoles, set-top boxes, etc.) use it as part of the profile name.
     
-    :param string inputFilename: File to encode
-    :param string outputFilename: File to output
+    :param string input_filename: File to encode
+    :param string output_filename: File to output
     :param string mime: Output type. Used to select profile.
     :param string subtype: Used to refine profile selection, if varients exist.
     """
@@ -41,11 +42,11 @@ def encode(inputFilename, outputFilename, mime, subtype=None):
     #TODO: Return success/fail/exceptions
     #TODO: Finish documenting this function
     command = 'ffmpeg -y -i "{}" -fpre "{}" "{}"'.format(
-                inputFilename,
-                os.path.join(settings.ENCODER_PROFILES_PATH,
-                             settings.ENCODER_PROFILE,
-                             mime.replace("/", "_") + ".ffpreset"),
-                outputFilename)
+        input_filename,
+        os.path.join(settings.ENCODER_PROFILES_PATH,
+                     settings.ENCODER_PROFILE,
+                     mime.replace("/", "_") + ".ffpreset"),
+        output_filename)
     
     try:
         subprocess.call(command, stdout=nullfile, stderr=subprocess.STDOUT)
