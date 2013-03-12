@@ -41,13 +41,11 @@ def encode(input_filename, output_filename, mime, subtype=None):
     #TODO: Implement subtypes
     #TODO: Return success/fail/exceptions
     #TODO: Finish documenting this function
-    command = 'ffmpeg -y -i "{}" -fpre "{}" "{}"'.format(
-        input_filename,
-        os.path.join(settings.ENCODER_PROFILES_PATH,
-                     settings.ENCODER_PROFILE,
-                     mime.replace("/", "_") + ".ffpreset"),
-        output_filename)
-    
+    preset = os.path.join(settings.ENCODER_PROFILES_PATH,
+                          settings.ENCODER_PROFILE,
+                          mime.replace("/", "_") + ".ffpreset")
+    command = ["ffmpeg", "-y", "-i", input_filename, "-fpre", preset, output_filename]
+
     try:
         subprocess.call(command, stdout=nullfile, stderr=subprocess.STDOUT)
     except OSError as e:

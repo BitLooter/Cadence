@@ -41,6 +41,7 @@ class TranscodeManagerBase(object):
     def __init__(self, filenames):
         #: Input filename.
         self.filenames = filenames
+        self.filename = filenames[0]
         #: List of transcoder output filenames to be processed.
         self.pending_jobs = []
         #: List of all found transcoded media files.
