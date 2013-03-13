@@ -1,17 +1,16 @@
 """Common code for all transcoders.
 
-If you area writing a new transcoder, you will generally want to extend
+If you are writing a new transcoder, you will generally want to extend
 :py:class:`TranscodeManagerBase`. Most of the time you will only need to set
 things up in :py:meth:`setup`, and the standard code will take care of
 everything else. Specifically, you will need to call
-:py:meth:`~TranscodeManagerBase.add_source()` for every input file you would
-like to make available as a streaming source, and
 :py:meth:`~TranscodeManagerBase.queue_job()` for each output transcode you
-want to create. :py:meth:`~TranscodeManagerBase.convert()` takes care of
-encoding and profiles, assuming you set the output filenames properly.
-You will also need to set the class attribute
-:py:attr:`~TranscodeManagerBase.source_types` to a list of file extensions the
-transcoder can take as input.
+want to create, and :py:meth:`~TranscodeManagerBase.add_source_file()` if you
+want to serve the source media file to users.
+:py:meth:`~TranscodeManagerBase.convert()` takes care of encoding and profiles,
+assuming you set the output filenames properly. You will also need to set the
+class attribute :py:attr:`~TranscodeManagerBase.source_types` to a list of file
+extensions the transcoder can take as input.
 
 See the :ref:`transcoders` documentation for more information.
 """
@@ -31,48 +30,39 @@ class TranscodeManagerBase(object):
     Code common to all (most?) transcoders. Not usable as-is, your subclasses
     define a ``setup()`` method to prepare the transcoder.
     
-    :param list filenames: List of source filenames.
+    :param str filename: Source filename.
     """
     
     #: Class attribute containing a list of file extensions the transcoder can
     #: handle.
     source_types = []
     
-    def __init__(self, filenames):
+    def __init__(self, filename, mime=None):
         #: Input filename.
-        self.filenames = filenames
-        self.filename = filenames[0]
+        self.filename = filename
         #: List of transcoder output filenames to be processed.
         self.pending_jobs = []
         #: List of all found transcoded media files.
         #: Formatted as (path, mimetype) pairs in a list.
         self.transcodes = []
-        #TODO: update these docs to reflect new role of transcodes/media
-        #: List of all given media source files.
-        #: Like :py:attr:`transcodes`, formatted as (path, mimetype) pairs.
-        self.sources = []
+        #: Source file for the media
+        self.source = filename
+        #: Source MIME type
+        self.source_mime = self._mime_from_filename(filename) if mime is None else mime
         
         # Prepare the transcoder
         self.setup()
-    
-    def add_source(self, filename, mime=None):
-        """
-        Adds a file to the list of media sources.
-        
-        Any files you add will be added to :py:attr:`sources` and used
-        unmodified in the final output file list. If no MIME type is specified,
-        it will be autodetected based on the file extension.
-        
-        :param string filename: Path of the file
-        :param string mime: MIME type of the file. Optional, will be autodetected
-            if nothing is given.
-        """
-        
-        # If no mime type given, base it on the file extension
-        mimetype = self._mime_from_filename(filename)
-        
-        self.sources.append((filename, mimetype))
-    
+
+    def add_source_file(self):
+        """Adds the source file as a media stream to serve"""
+
+        linkname = self.make_transcode_name(self.source,
+                                            os.path.splitext(self.source)[1],
+                                            postfix_name=False)
+        if not os.path.exists(linkname):
+            os.symlink(self.source, linkname)
+        self.transcodes.append((linkname, self.source_mime))
+
     def queue_job(self, filename, mime=None):
         """
         Prepares a file for transcoding.
@@ -88,13 +78,14 @@ class TranscodeManagerBase(object):
         """
         
         # If no mime type given, base it on the file extension
-        mimetype = self._mime_from_filename(filename)
+        mimetype = self._mime_from_filename(filename) if mime is None else mime
+        transcode_info = (filename, mimetype)
         
         if os.path.exists(filename):
-            self.transcodes.append((filename, mimetype))
+            self.transcodes.append(transcode_info)
         else:
             # Otherwise add it to the job list
-            self.pending_jobs.append(filename)
+            self.pending_jobs.append(transcode_info)
     
     def convert(self):
         """
@@ -105,18 +96,9 @@ class TranscodeManagerBase(object):
         based on the information passed to it.
         """
         
-        for job in self.pending_jobs:
-            #TODO: A more extensive and flexible MIME system
-            if job.endswith(".ogg"):
-                newmime = "audio/ogg"
-            elif job.endswith(".mp3"):
-                newmime = "audio/mp3"
-            
-            # By default uses the first given filename as the transcoding source.
-            # If you wish to change this, rearrange the list order in setup() or
-            # override convert() with your own code.
-            encode(self.filenames[0], job, newmime)
-            self.transcodes.append((job, newmime))
+        for outname, mimetype in self.pending_jobs:
+            encode(self.source, outname, mimetype)
+            self.transcodes.append((outname, mimetype))
     
     def make_transcode_name(self, path, newext, postfix_name=True):
         """
@@ -141,12 +123,12 @@ class TranscodeManagerBase(object):
         :returns: Output path
         """
         
+        #TODO: add profile info in postscript
         if postfix_name:
             postfix = ".transcode"
         else:
             postfix = ""
         
-        #TODO: add profile info
         outname = path.replace(settings.AUDIO_ROOT, "").replace(os.sep, ".")
         outname = os.path.join(settings.TRANSCODE_ROOT,
                                os.path.splitext(outname)[0] + postfix + newext)
@@ -169,24 +151,13 @@ class TranscodeManagerBase(object):
         :returns: List of all output files
         """
         
-        output = []
+        filelist = []
         
-        #TODO: what happends if the source types aren't used by the frontend (e.g. FLAC)?
-        # Start with the source file(s)
-        for source in self.sources:
-            relname = source[0].replace(settings.AUDIO_ROOT, "")
-            output.append((relname, self._fileurl(source[0]), source[1], False),)
-        
-        # Then add the transcode(s)
         for transcode in self.transcodes:
             relname = transcode[0].replace(settings.TRANSCODE_ROOT, "")
-            output.append((relname, self._transcodeurl(transcode[0]), transcode[1], True),)
+            filelist.append((relname, self._transcodeurl(transcode[0]), transcode[1], True),)
         
-        return output
-    
-    def _fileurl(self, path):
-        """Returns the URL used to access a given path (for source files)"""
-        return settings.AUDIO_URL + path.replace(settings.AUDIO_ROOT, "").replace(os.sep, "/")
+        return filelist
     
     def _transcodeurl(self, path):
         """Returns the URL used to access a given path (for transcoded files)"""
@@ -199,6 +170,8 @@ class TranscodeManagerBase(object):
             mime = "audio/mp3"
         elif extension == "ogg":
             mime = "audio/ogg"
+        elif extension == "flac":
+            mime = "audio/flac"
         else:
             mime = None
         

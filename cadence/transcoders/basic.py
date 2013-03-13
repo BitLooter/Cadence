@@ -22,24 +22,18 @@ class TranscodeManager(TranscodeManagerBase):
     def setup(self):
         """Prepares the transcoder for building OGGs and MP3s for all media"""
         
-        filename = self.filenames[0]
-        
-        if filename.endswith(".ogg"):
-            newtranscodes = (self.make_transcode_name(filename, ".mp3"), )
-            self.add_source(filename)
-        elif filename.endswith(".mp3"):
-            newtranscodes = (self.make_transcode_name(filename, ".ogg"), )
-            self.add_source(filename)
-        elif filename.endswith(".flac"):
-            transcodeOGG = self.make_transcode_name(filename, ".ogg", postfix_name=False)
-            transcodeMP3 = self.make_transcode_name(filename, ".mp3", postfix_name=False)
-            newtranscodes = (transcodeOGG, transcodeMP3)
+        if self.source.endswith(".ogg"):
+            self.queue_job(self.make_transcode_name(self.source, ".mp3"))
+            self.add_source_file()
+        elif self.source.endswith(".mp3"):
+            self.queue_job(self.make_transcode_name(self.source, ".ogg"))
+            self.add_source_file()
+        elif self.source.endswith(".flac"):
+            self.queue_job(self.make_transcode_name(self.source, ".ogg", postfix_name=False))
+            self.queue_job(self.make_transcode_name(self.source, ".mp3", postfix_name=False))
             # If the server is configured to serve lossless audio, make it a source
             if settings.SERVE_LOSSLESS:
-                self.add_source(filename)
+                self.add_source_file()
         else:
             #TODO: raise a better error here
             raise Exception()
-        
-        for trans in newtranscodes:
-            self.queue_job(trans)

@@ -21,17 +21,14 @@ Path settings
 Make sure all paths (filesystem and URL) end in a slash.
 
 AUDIO_ROOT
-    Filesystem path where your music file sources are located.
-AUDIO_URL
-    Root URL for the music files. Path structure is assumed to be the same as
-    that of `AUDIO_ROOT`.
+    Filesystem path where your source music file sources are located.
 TRANSCODE_ROOT
     Filesystem path where your media transcodes go. Your server doesn't need
     write privileges here, but the user running the transcoder/scanner does.
     Unless you enjoy watching things not work.
 TRANSCODE_URL
-    Root URL for the transcodes. Like `AUDIO_URL`, the filesystem structure here
-    should be the same as `TRANSCODE_ROOT`.
+    Root URL for the transcodes. The filesystem structure here should be the
+    same as `TRANSCODE_ROOT`.
 ALBUMART_ROOT
     Filesystem path for your album art.
 ALBUMART_URL
@@ -77,7 +74,6 @@ PLAYER_NAME = "Cadence Media Player"
 DEFAULT_PLAYLIST = None
 
 AUDIO_ROOT = "/var/www/media/music/"
-AUDIO_URL = "media/music/"
 TRANSCODE_ROOT = "/var/www/media/transcodes/"
 TRANSCODE_URL = "media/transcodes/"
 ALBUMART_ROOT = "/var/www/media/albumart/"
@@ -96,4 +92,4 @@ ENCODER_PROFILE = "default"
 # If you have rearranged things, naturally you will need to change this in the local settings.
 thisdir = os.path.dirname(os.path.abspath(__file__))
 ENCODER_PROFILES_PATH = os.path.normpath(
-                                os.path.join(thisdir, "..", "transcoders", "profiles"))
+    os.path.join(thisdir, "..", "transcoders", "profiles"))

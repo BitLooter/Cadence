@@ -148,7 +148,7 @@ class Scanner(object):
         return media
     
     def make_transcodes(self, filename, media):
-        transcoder = TranscodeManager([filename])
+        transcoder = TranscodeManager(filename)
         
         # By default transcode only if needed, but can be forced by command line
         if transcoder.transcode_needed or self.options["force_transcode"]:
