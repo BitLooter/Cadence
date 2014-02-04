@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+"""Django management tools for the project."""
+
 import os
 import sys
 
@@ -12,7 +14,7 @@ if __name__ == "__main__":
         # Default module if the debug settings module is not found
         print("Debug configuration not found, using defaultdebug instead")
         os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cadence.conf.defaultdebug")
-    
+
     from django.core.management import execute_from_command_line
-    
+
     execute_from_command_line(sys.argv)
