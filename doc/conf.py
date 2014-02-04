@@ -11,14 +11,12 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
-import sys, os
+import sys
+import os
 
-#print(os.path.abspath( os.path.join(os.path.dirname(__file__), "..") ))
 sys.path.append(os.path.abspath( os.path.join(os.path.dirname(__file__), "..") ))
 
-from cadence.conf import debug as settings
-from django.core.management import setup_environ
-setup_environ(settings)
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cadence.conf.debug")
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
