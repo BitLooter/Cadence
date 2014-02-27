@@ -1,0 +1,4 @@
+Django==1.6.1
+Sphinx==1.2.1
+mutagen==1.22
+sphinxcontrib-httpdomain==1.2.0
