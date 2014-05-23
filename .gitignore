@@ -14,4 +14,4 @@ cadence/conf/debug.py
 cadence/conf/prod.py
 *.bat
 rs
-
+.vagrant
