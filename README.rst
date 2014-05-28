@@ -45,3 +45,12 @@ Credits and thanks
 * The `Django <https://www.djangoproject.com/>`_ and `Python <http://python.org/>`_
   teams, without whose efforts I would be forced to use PHP.
 * Source code and bug tracker hosting provided by `GitHub <https://github.com/>`_.
+* 'Code Monkey' and 'I Feel Fantastic' are copyright
+  `Jonathan Coulton <http://www.jonathancoulton.com/>`_. All music he has written is
+  `CC BY-NC 3.0 licensed <http://www.jonathancoulton.com/faq/#Use>`_. Be sure to
+  visit his web site and listen to them in way better quality than the included
+  test tracks.
+* Goat sound effect is copyright reinsamba and is under the
+  `CC BY 3.0 license <http://creativecommons.org/licenses/by/3.0/>`_. Audio was
+  originally obtained from
+  `Freesound <https://www.freesound.org/people/reinsamba/sounds/57794/>`_.

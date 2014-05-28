@@ -472,7 +472,7 @@ function PlayerManager() {
         if (track.poster != "") {
             this.coverElement.src = track.poster;
         } else {
-            this.coverElement.src = "static/player/nocover.svg";
+            this.coverElement.src = "static/player/img/nocover.svg";
         }
     }
     PlayerManager.prototype.playTrack = function(track) {
