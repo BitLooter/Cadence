@@ -28,11 +28,12 @@ TRANSCODE_ROOT
     Unless you enjoy watching things not work.
 TRANSCODE_URL
     Root URL for the transcodes. The filesystem structure here should be the
-    same as `TRANSCODE_ROOT`.
+    same as `TRANSCODE_ROOT` - ideally, you're just serving the
+    `TRANSCODE_ROOT` directory.
 ALBUMART_ROOT
     Filesystem path for your album art.
 ALBUMART_URL
-    Root URL for Album art. Like the others, paths should map the same as
+    Root URL for Album art. Like `TRANSCODE_URL`, paths should map the same as
     `ALBUMART_ROOT` paths.
 
 Scanner settings
